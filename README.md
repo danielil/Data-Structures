@@ -1,4 +1,4 @@
-FTP-Client
+Data Structures
 ================
 
 A collection of C++ data structures (trees, graphs, sorts, etc.).
