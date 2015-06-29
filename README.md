@@ -12,4 +12,4 @@ author: `Daniel Sebastian Iliescu, http://dansil.net`
 Limitations
 ------------------
 
-No general solution with test files exist yet, however, the files have been successfully compiled with g++ under GNU/Linux, and tested by Valgrind for memory leaks.
+No testing files exist yet, but the files have been successfully compiled with g++ under GNU/Linux, and tested by Valgrind for memory leaks. As such, they can be used as libraries.

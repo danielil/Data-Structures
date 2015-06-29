@@ -1,33 +1,30 @@
 /**
  * @author Daniel Sebastian Iliescu
- * @file datasort.cpp
  *
- * This file contains the methods associated with the DataSorter class.
+ * This file contains the methods associated with the Sort class.
  */
 
-#include <cmath>
-#include <cstring>
 #include <iostream>
 
-#include "datasort.h"
+#include "sort.hpp"
 
 using namespace std;
 
 /**
- * DataSorter()
+ * Sort()
  *
  * Default constructor
  */
-DataSorter::DataSorter()
+Sort::Sort()
 {
 }
 
 /**
- * ~DataSorter()
+ * ~Sort()
  *
  * Destructor
  */
-DataSorter::~DataSorter()
+Sort::~Sort()
 {
 }
 
@@ -42,7 +39,7 @@ DataSorter::~DataSorter()
  * @post data array is sorted
  * @return True if data was sorted; false otherwise.
  */
-bool DataSorter::bubbleSort(int* data, int dataSize)
+bool Sort::bubbleSort(int* data, int dataSize)
 {
     // Not implemented in this class
     return false;
@@ -59,7 +56,7 @@ bool DataSorter::bubbleSort(int* data, int dataSize)
  * @post data array is sorted
  * @return True if data was sorted; false otherwise.
  */
-bool DataSorter::quickSort(int* data, int dataSize)
+bool Sort::quickSort(int* data, int dataSize)
 {
     // Not implemented in this class
     return false;
@@ -76,7 +73,7 @@ bool DataSorter::quickSort(int* data, int dataSize)
  * @post data array is sorted
  * @return True if data was sorted; false otherwise.
  */
-bool DataSorter::heapSort(int* data, int dataSize)
+bool Sort::heapSort(int* data, int dataSize)
 {
     // Not implemented in this class
     return false;
@@ -93,7 +90,7 @@ bool DataSorter::heapSort(int* data, int dataSize)
  * @post data array is sorted
  * @return True if data was sorted; false otherwise.
  */
-bool DataSorter::mergeSort(int* data, int dataSize)
+bool Sort::mergeSort(int* data, int dataSize)
 {
     // Not implemented in this class
     return false;
@@ -110,7 +107,7 @@ bool DataSorter::mergeSort(int* data, int dataSize)
  * @pre data array should be valid (not NULL)
  * @post data array is pushed into the stream.
  */
-void DataSorter::show(ostream& output, int* data, int dataSize)
+void Sort::show(ostream& output, int* data, int dataSize)
 {
     show(output, data, dataSize, 0, dataSize - 1);
 }
@@ -128,14 +125,14 @@ void DataSorter::show(ostream& output, int* data, int dataSize)
  * @pre data array should be valid (not NULL)
  * @post data array is pushed into the stream.
  */
-void DataSorter::show(
+void Sort::show(
     ostream& output,
     int* data,
     int dataSize,
     int start,
     int end)
 {
-    if ((data != NULL) && (dataSize > 0) && (start >= 0))
+    if ((data != nullptr) && (dataSize > 0) && (start >= 0))
     {
         output << "\tData size: " << dataSize;
         for (int i = 0, j = start; j < dataSize; i++, j++)
@@ -169,9 +166,9 @@ void DataSorter::show(
  * @pre data arrays should be valid (not NULL)
  * @post data is copied from one array to another.
  */
-void DataSorter::copy(int* dest, int* source, int start, int end)
+void Sort::copy(int* dest, int* source, int start, int end)
 {
-    if ((dest != NULL) && (source != NULL) && (start >= 0) && (start <= end)) 
+    if ((dest != nullptr) && (source != nullptr) && (start >= 0) && (start <= end))
     {
         for (int i = start; i <= end; i++)
         {
@@ -191,9 +188,9 @@ void DataSorter::copy(int* dest, int* source, int start, int end)
  * @pre data arrays should be valid (not NULL)
  * @post The array locations are swapped.
  */
-void DataSorter::swap(int* data, int index1, int index2)
+void Sort::swap(int* data, int index1, int index2)
 {
-    if ((data != NULL) && (index1 >= 0) && (index2 >= 0) && (index1 != index2))
+    if ((data != nullptr) && (index1 >= 0) && (index2 >= 0) && (index1 != index2))
     {
         int temp = data[index1];
         data[index1] = data[index2];
@@ -215,9 +212,9 @@ void DataSorter::swap(int* data, int index1, int index2)
  * @pre data arrays should be valid (not NULL)
  * @post data is merged and copied from one array to another.
  */
-void DataSorter::merge(int* source, int* dest, int start, int middle, int end)
+void Sort::merge(int* source, int* dest, int start, int middle, int end)
 {
-    if ((source != NULL) && (dest != NULL) &&
+    if ((source != nullptr) && (dest != nullptr) &&
         (start >= 0) && (start < middle) && (middle < end))
     {
         int j1 = start;
@@ -256,7 +253,7 @@ void DataSorter::merge(int* source, int* dest, int start, int middle, int end)
  * @post data array is sorted
  * @return The new position of the pivot element.
  */
-int DataSorter::partition(
+int Sort::partition(
     int* data,
     int dataSize,
     int start,
@@ -265,7 +262,7 @@ int DataSorter::partition(
 {
     int position = pivot;
 
-    if ((data != NULL) && (start >= 0) && (start < end) &&
+    if ((data != nullptr) && (start >= 0) && (start < end) &&
         (end < dataSize) && (pivot >= start) && (pivot <= end))
     {
         int pivotValue = data[pivot];
@@ -299,13 +296,13 @@ int DataSorter::partition(
  * @pre data array should be valid (not NULL)
  * @post data array is sorted
  */
-void DataSorter::recursiveQuickSort(
+void Sort::recursiveQuickSort(
     int* data,
     int dataSize,
     int start,
     int end)
 {
-    if ((data != NULL) && (start >= 0) && (start < end) && (end <= dataSize))
+    if ((data != nullptr) && (start >= 0) && (start < end) && (end <= dataSize))
     {
         int pivot = partition(data, dataSize, start, end, ((start + end) / 2));
         recursiveQuickSort(data, dataSize, start, pivot - 1);
@@ -325,9 +322,9 @@ void DataSorter::recursiveQuickSort(
  * @post source data array is sorted and its content
  * is transfered to destination array.
  */
-void DataSorter::bubbleSortHelper(int* source, int* dest, int dataSize)
+void Sort::bubbleSortHelper(int* source, int* dest, int dataSize)
 {
-    if ((source != NULL) && (dataSize > 0))
+    if ((source != nullptr) && (dataSize > 0))
     {
         if (dataSize > 1)
         {
@@ -346,7 +343,7 @@ void DataSorter::bubbleSortHelper(int* source, int* dest, int dataSize)
             }
         }
 
-        if (dest != NULL) 
+        if (dest != nullptr)
         {
             copy(dest, source, 0, dataSize - 1);
         }
