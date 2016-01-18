@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,20 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bubble_sort.cpp" />
-    <ClCompile Include="heap_sort.cpp" />
-    <ClCompile Include="iterative_merge_sort.cpp" />
-    <ClCompile Include="quick_sort.cpp" />
-    <ClCompile Include="recursive_merge_sort.cpp" />
-    <ClCompile Include="sort.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="bubble_sort.hpp" />
-    <ClInclude Include="heap_sort.hpp" />
-    <ClInclude Include="iterative_merge_sort.hpp" />
-    <ClInclude Include="quick_sort.hpp" />
-    <ClInclude Include="recursive_merge_sort.hpp" />
-    <ClInclude Include="sort.hpp" />
+    <ClInclude Include="BubbleSort.hpp" />
+    <ClInclude Include="BucketSort.hpp" />
+    <ClInclude Include="InsertionSort.hpp" />
+    <ClInclude Include="MergeSort.hpp" />
+    <ClInclude Include="QuickSort.hpp" />
+    <ClInclude Include="Sort.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{516F36D5-489D-493E-8DB5-413F46B7E25D}</ProjectGuid>
@@ -34,13 +26,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

@@ -15,22 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sort.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BubbleSort.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MergeSort.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuickSort.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InsertionSort.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BucketSort.hpp">
+    <ClInclude Include="HashTable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

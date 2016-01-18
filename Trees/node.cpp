@@ -30,7 +30,7 @@ Node::Node()
 }
 
 /**
- * Node(const Node& source)
+ * Node(const StackNode& source)
  *
  * Copy constructor
  * @param source Node to copy

@@ -225,7 +225,6 @@ void ThreadedBinarySearchTree::vineToTree()
     if (isVine())
     {
         int leaves = treeSize + 1;  // Nodes in incomplete bottom level (if any)
-        int vine = 0;               // nodes in main vine
 		bool run = true;
 
         while (run)
@@ -244,7 +243,8 @@ void ThreadedBinarySearchTree::vineToTree()
         leaves = treeSize + 1 - leaves;
         compress(0, leaves);
 
-        vine = treeSize - leaves;
+        // nodes in main vine
+        int vine = treeSize - leaves;
 
         if (vine > 1)
         {
@@ -1348,7 +1348,7 @@ void ThreadedBinarySearchTree::destroy(Node* node)
 }
 
 /**
- * traverseHelper(int traverseType, Node* node, Node** nodesList,
+ * traverseHelper(int traverseType, Node* node, StackNode** nodesList,
  *                int& currentPosition);
  *
  * Helpert method for recursive traversal starting from a reference node.
