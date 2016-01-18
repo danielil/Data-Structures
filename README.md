@@ -1,4 +1,4 @@
-Data Structures
+Data Structures and Algorithms
 ================
 
 A collection of C++ data structures and algorithms (trees, graphs, sorts, etc.). This collection is mostly intended for my own learning purposes and not for production use.
