@@ -1,7 +1,7 @@
 Data Structures
 ================
 
-A collection of C++ data structures (trees, graphs, sorts, etc.).
+A collection of C++ data structures and algorithms (trees, graphs, sorts, etc.). This collection is mostly intended for my own learning purposes and not for production use.
 
 About
 ------------------
@@ -12,4 +12,4 @@ author: `Daniel Sebastian Iliescu, http://dansil.net`
 Limitations
 ------------------
 
-No testing files exist yet, but the files have been successfully compiled with g++ under GNU/Linux, and tested by Valgrind for memory leaks. As such, they can be used as libraries.
+Limited testing files exist for Lists and Sorts. The testing files are native Visual Studio C++ tests. More tests will be added soon.
