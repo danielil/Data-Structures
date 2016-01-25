@@ -25,23 +25,35 @@ namespace Lists
     {
     public:
         Stack();
+        ~Stack() noexcept;
+
         Stack( const Stack& other );
         Stack( Stack&& other ) noexcept;
 
-        Stack& operator=( const Stack& other );
-        Stack& operator=( Stack&& other ) noexcept;
+        Stack& operator=( const Stack& rhs );
+        Stack& operator=( Stack&& rhs ) noexcept;
 
-        ~Stack() noexcept;
+        bool operator==( const Stack& rhs ) const;
+        bool operator!=( const Stack& rhs ) const;
+
+        friend std::ostream& operator<<( std::ostream& os, const Stack& stack )
+        {
+            os << stack.toString();
+
+            return os;
+        }
 
         void push( const T item );
         T pop();
+
+        void clear();
 
         std::size_t getSize() const;
         bool isEmpty() const;
 
         std::string toString() const;
     private:
-        void clear();
+        bool equals( const StackNode< T >& node1, const StackNode< T >& node2 ) const;
 
         StackNode< T >* head;
         StackNode< T >* tail;
@@ -58,18 +70,22 @@ namespace Lists
     }
 
     template < typename T >
-    Stack< T >::Stack( const Stack& other ) :
-        head( other.head ),
-        tail( other.tail ),
-        size( other.size )
+    Stack< T >::~Stack() noexcept
     {
         clear();
+    }
 
-        StackNode< T >* currentNodeOther = other.head;
+    template < typename T >
+    Stack< T >::Stack( const Stack& other ) :
+        head( nullptr ),
+        tail( nullptr ),
+        size( 0 )
+    {
+        StackNode< T >* currentNodeOther = other.tail;
 
-        while ( currentNodeOther )
+        while ( currentNodeOther != nullptr )
         {
-            push( currentNodeOther->data );
+            this->push( currentNodeOther->data );
 
             currentNodeOther = currentNodeOther->next;
         }
@@ -87,38 +103,49 @@ namespace Lists
     }
 
     template < typename T >
-    Stack< T >& Stack< T >::operator=( const Stack& other )
+    Stack< T >& Stack< T >::operator=( const Stack& rhs )
     {
-        if ( this != &other )
+        if ( this != &rhs )
         {
-            Stack< T > stack( other );
+            clear();
 
-            *this = std::move( stack );
+            Stack< T > temp( rhs );
+
+            *this = std::move( temp );
         }
 
         return *this;
     }
 
     template < typename T >
-    Stack< T >& Stack< T >::operator=( Stack&& other ) noexcept
+    Stack< T >& Stack< T >::operator=( Stack&& rhs ) noexcept
     {
-        clear();
+        if ( this != &rhs )
+        {
+            clear();
 
-        this->head = other.head;
-        this->tail = other.tail;
-        this->size = other.size;
+            this->head = rhs.head;
+            this->tail = rhs.tail;
+            this->size = rhs.size;
 
-        other.head = nullptr;
-        other.tail = nullptr;
-        other.size = nullptr;
+            rhs.head = nullptr;
+            rhs.tail = nullptr;
+            rhs.size = 0;
+        }
 
         return *this;
     }
 
     template < typename T >
-    Stack< T >::~Stack() noexcept
+    bool Stack< T >::operator==( const Stack& rhs ) const
     {
-        clear();
+        return this->equals( *( this->tail ), *( rhs.tail ) );
+    }
+
+    template < typename T >
+    bool Stack< T >::operator!=( const Stack& rhs ) const
+    {
+        return !( this->equals( *( this->tail ), *( rhs.tail ) ) );
     }
 
     template < typename T >
@@ -136,8 +163,8 @@ namespace Lists
             this->head = newNode;
             this->tail = this->head;
         }
-        // Push should be of O(1) complexity, since we are
-        // adding to the head, and not traversing from the tail.
+        // Push is of O(1) complexity, since we are adding 
+        // to the head, and not traversing from the tail.
         else
         {
             newNode->previous = this->head;
@@ -159,26 +186,24 @@ namespace Lists
         }
 
         T item = this->head->data;
+        StackNode< T >* previousNode = this->head->previous;
 
-        // List contains only head; no need to keep track of 
-        // previous and next node.
-        if ( this->size == 1 )
-        {
-            delete this->head;
+        delete this->head;
 
-            this->head = nullptr;
-            this->tail = nullptr;
-        }
-        // Pop should be of O(1) complexity, since we are
-        // removing the head, and not traversing from the tail.
-        else
+        // Pop is of O(1) complexity, since we are removing 
+        // the head, and not traversing from the tail.
+        if ( previousNode )
         {
-            StackNode< T >* previousNode = this->head->previous;
             previousNode->next = nullptr;
 
-            delete this->head;
-
             this->head = previousNode;
+        }
+        // List contains only head; no need to keep track of 
+        // previous and next node.
+        else
+        {
+            this->head = nullptr;
+            this->tail = nullptr;
         }
 
         --( this->size );
@@ -195,7 +220,7 @@ namespace Lists
     template < typename T >
     std::string Stack< T >::toString() const
     {
-        StackNode< T >* currentNode = head;
+        StackNode< T >* currentNode = this->head;
 
         std::stringstream list;
         while ( currentNode )
@@ -223,5 +248,27 @@ namespace Lists
         {
             pop();
         }
+    }
+
+    template < typename T >
+    bool Stack< T >::equals( const StackNode< T >& node1, const StackNode< T >& node2 ) const
+    {
+        // Both nodes are either nullptr or identical.
+        if ( &node1 == &node2 )
+        {
+            return true;
+        }
+
+        if ( ( &node1 != nullptr ) &&
+             ( &node2 != nullptr ) && 
+             ( node1.data == node2.data ) )
+        {
+            if ( this->equals( *( node1.next ), *( node2.next ) ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -5,6 +5,7 @@
 #include "..\Sorts\InsertionSort.hpp"
 #include "..\Sorts\MergeSort.hpp"
 #include "..\Sorts\QuickSort.hpp"
+#include <algorithm>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -30,10 +31,7 @@ namespace SortsTests
 
             Sorts::bubblesort( values, iterations );
 
-            for ( std::size_t idx = 0U; idx < iterations - 1; ++idx )
-            {
-                Assert::AreEqual( values[idx] < values[idx + 1], true );
-            }
+            Assert::AreEqual( true, std::is_sorted(values, values + iterations));
         }
 
         TEST_METHOD(InsertionSortTest)
@@ -47,10 +45,7 @@ namespace SortsTests
 
             Sorts::insertionsort( values, iterations );
 
-            for ( std::size_t idx = 0U; idx < iterations - 1; ++idx )
-            {
-                Assert::AreEqual( values[idx] < values[idx + 1], true );
-            }
+            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
         }
 
         TEST_METHOD(MergeSortTest)
@@ -64,10 +59,7 @@ namespace SortsTests
 
             Sorts::mergesort( values, iterations );
 
-            for ( std::size_t idx = 0U; idx < iterations - 1; ++idx )
-            {
-                Assert::AreEqual( values[idx] < values[idx + 1], true );
-            }
+            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
         }
 
         TEST_METHOD(QuickSortTest)
@@ -81,10 +73,7 @@ namespace SortsTests
 
             Sorts::quicksort( values, iterations );
 
-            for ( std::size_t idx = 0U; idx < iterations - 1; ++idx )
-            {
-                Assert::AreEqual( values[idx] < values[idx + 1], true );
-            }
+            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
         }
     };
 }
