@@ -15,6 +15,8 @@ namespace Lists
     struct QueueNode
     {
         T data;
+
+        QueueNode< T >* previous;
         QueueNode< T >* next;
     };
 
@@ -23,59 +25,152 @@ namespace Lists
     {
     public:
         Queue();
-        ~Queue();
+        ~Queue() noexcept;
 
-        void enqueue( T item );
+        Queue( const Queue& other );
+        Queue( Queue&& other ) noexcept;
+
+        Queue& operator=( const Queue& rhs );
+        Queue& operator=( Queue&& rhs ) noexcept;
+
+        bool operator==( const Queue& rhs ) const;
+        bool operator!=( const Queue& rhs ) const;
+
+        friend std::ostream& operator<<( std::ostream& os, const Queue& stack )
+        {
+            os << stack.toString();
+
+            return os;
+        }
+
+        void enqueue( const T item );
         T dequeue();
+
+        void clear();
 
         std::size_t getSize() const;
         bool isEmpty() const;
 
         std::string toString() const;
     private:
-        void clear();
+        bool equals( const QueueNode< T >& node1, const QueueNode< T >& node2 ) const;
 
         QueueNode< T >* head;
+        QueueNode< T >* tail;
+
         std::size_t size;
     };
 
     template < typename T >
     Queue< T >::Queue() :
         head( nullptr ),
-        size( 0U )
+        tail( nullptr ),
+        size( 0 )
     {
     }
 
     template < typename T >
-    Queue< T >::~Queue()
+    Queue< T >::~Queue() noexcept
     {
         clear();
     }
 
     template < typename T >
-    void Queue< T >::enqueue( T item )
+    Queue< T >::Queue( const Queue& other ) :
+        head( nullptr ),
+        tail( nullptr ),
+        size( 0 )
+    {
+        QueueNode< T >* currentNodeOther = other.head;
+
+        while ( currentNodeOther != nullptr )
+        {
+            this->enqueue( currentNodeOther->data );
+
+            currentNodeOther = currentNodeOther->previous;
+        }
+    }
+
+    template < typename T >
+    Queue< T >::Queue( Queue&& other ) noexcept :
+        head( other.head ),
+        tail( other.tail ),
+        size( other.size )
+    {
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
+    }
+
+    template < typename T >
+    Queue< T >& Queue< T >::operator=( const Queue& rhs )
+    {
+        if ( this != &rhs )
+        {
+            clear();
+
+            Queue< T > temp( rhs );
+
+            *this = std::move( temp );
+        }
+
+        return *this;
+    }
+
+    template < typename T >
+    Queue< T >& Queue< T >::operator=( Queue&& rhs ) noexcept
+    {
+        if ( this != &rhs )
+        {
+            clear();
+
+            this->head = rhs.head;
+            this->tail = rhs.tail;
+            this->size = rhs.size;
+
+            rhs.head = nullptr;
+            rhs.tail = nullptr;
+            rhs.size = 0;
+        }
+
+        return *this;
+    }
+
+    template < typename T >
+    bool Queue< T >::operator==( const Queue& rhs ) const
+    {
+        return this->equals( *( this->head ), *( rhs.head) );
+    }
+
+    template < typename T >
+    bool Queue< T >::operator!=( const Queue& rhs ) const
+    {
+        return !( this->equals( *( this->head), *( rhs.head) ) );
+    }
+
+    template < typename T >
+    void Queue< T >::enqueue( const T item )
     {
         QueueNode< T >* newNode = new QueueNode< T >();
-
         newNode->data = item;
-        newNode->next = nullptr;
+        newNode->previous = nullptr;
 
-        // List is empty; push head node.
+        // List is empty; head and tail node are identical.
         if ( isEmpty() )
         {
-            this->head = newNode;
+            newNode->next = nullptr;
+
+            this->tail = newNode;
+            this->head = this->tail;
         }
-        // Push attached nodes.
+        // Enqueue is of O(1) complexity, since we are adding 
+        // at the head.
         else
         {
-            QueueNode< T >* currentNode = head;
+            newNode->next = this->tail;
 
-            while ( currentNode->next )
-            {
-                currentNode = currentNode->next;
-            }
-
-            currentNode->next = newNode;
+            this->tail->previous = newNode;
+            this->tail = newNode;
         }
 
         ++( this->size );
@@ -90,15 +185,26 @@ namespace Lists
             return T();
         }
 
-        // List contains multiple nodes; need to keep track of current node and 
-        // next node for traversal.
-        QueueNode< T >* currentNode = this->head;
-        QueueNode< T >* nextNode = currentNode->next;
+        T item = this->head->data;
+        QueueNode< T >* previousNode = this->head->previous;
 
-        T item = currentNode->data;
+        delete this->head;
 
-        delete currentNode;
-        this->head = nextNode;
+        // Dequeue is of O(1) complexity, since we are removing 
+        // the head, and not traversing from the tail.
+        if ( previousNode != nullptr )
+        {
+            previousNode->next = nullptr;
+
+            this->head = previousNode;
+        }
+        // List contains only one node; no need to keep track of 
+        // previous and next node.
+        else
+        {
+            this->head = nullptr;
+            this->tail = nullptr;
+        }
 
         --( this->size );
 
@@ -114,10 +220,10 @@ namespace Lists
     template < typename T >
     std::string Queue< T >::toString() const
     {
-        QueueNode< T >* currentNode = head;
+        QueueNode< T >* currentNode = this->head;
 
         std::stringstream list;
-        while ( currentNode )
+        while ( currentNode != nullptr )
         {
             list << currentNode->data << std::endl;
 
@@ -131,22 +237,38 @@ namespace Lists
     bool Queue< T >::isEmpty() const
     {
         return ( ( this->head == nullptr ) &&
-                 ( this->size == 0U ) );
+                 ( this->tail == nullptr ) &&
+                 ( this->size == 0 ) );
     }
 
     template < typename T >
     void Queue< T >::clear()
     {
-        QueueNode< T >* nextNode;
-
-        while ( this->head )
+        while ( !isEmpty() )
         {
-            nextNode = this->head->next;
-
-            delete this->head;
-
-            this->head = nextNode;
+            dequeue();
         }
     }
-}
 
+    template < typename T >
+    bool Queue< T >::equals( const QueueNode< T >& node1, const QueueNode< T >& node2 ) const
+    {
+        // Both nodes are either nullptr or identical.
+        if ( &node1 == &node2 )
+        {
+            return true;
+        }
+
+        if ( ( &node1 != nullptr ) &&
+             ( &node2 != nullptr ) &&
+             ( node1.data == node2.data ) )
+        {
+            if ( this->equals( *( node1.next ), *( node2.next ) ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

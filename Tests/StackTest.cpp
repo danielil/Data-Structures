@@ -63,7 +63,7 @@ namespace ListsTests
             _CrtDumpMemoryLeaks();
         }
 
-        TEST_METHOD(EgalityTest)
+        TEST_METHOD(EqualityTest)
         {
             {
                 Lists::Stack< int > stack1;
@@ -114,19 +114,19 @@ namespace ListsTests
 
                 int values[iterations];
 
-                for ( std::size_t iteration = 0; iteration < iterations; ++iteration )
+                for ( std::size_t idx = 0; idx < iterations; ++idx )
                 {
-                    values[iteration] = std::rand();
-                    stack.push( values[iteration] );
+                    values[idx] = std::rand();
+                    stack.push( values[idx] );
 
-                    Assert::AreEqual( iteration + 1, stack.getSize() );
+                    Assert::AreEqual( idx + 1, stack.getSize() );
                 }
 
                 Assert::AreEqual( iterations, stack.getSize() );
 
-                for ( int iteration = iterations - 1; iteration >= 0; --iteration )
+                for ( int idx = iterations - 1; idx >= 0; --idx )
                 {
-                    Assert::AreEqual( values[iteration], stack.pop() );
+                    Assert::AreEqual( values[idx], stack.pop() );
                 }
 
                 Assert::AreEqual( true, stack.isEmpty() );

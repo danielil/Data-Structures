@@ -192,13 +192,13 @@ namespace Lists
 
         // Pop is of O(1) complexity, since we are removing 
         // the head, and not traversing from the tail.
-        if ( previousNode )
+        if ( previousNode != nullptr )
         {
             previousNode->next = nullptr;
 
             this->head = previousNode;
         }
-        // List contains only head; no need to keep track of 
+        // List contains only one node; no need to keep track of 
         // previous and next node.
         else
         {
@@ -223,7 +223,7 @@ namespace Lists
         StackNode< T >* currentNode = this->head;
 
         std::stringstream list;
-        while ( currentNode )
+        while ( currentNode != nullptr )
         {
             list << currentNode->data << std::endl;
 
