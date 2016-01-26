@@ -11,20 +11,24 @@ namespace Sorts
     template < typename T >
     void insertionsort( T* data, const std::size_t size )
     {
-        for ( std::size_t idx = 1; idx < size; ++idx )
+        if ( ( data != nullptr ) &&
+             ( size >= 0 ) )
         {
-            T current = data[idx];
-
-            int insertPos = idx;
-
-            while ( ( insertPos > 0 ) &&
-                    ( current < data[insertPos - 1] ) )
+            for ( std::size_t idx = 1; idx < size; ++idx )
             {
-                data[insertPos] = data[insertPos - 1];
-                --insertPos;
-            }
+                T current = data[idx];
 
-            data[insertPos] = current;
+                std::size_t insertPos = idx;
+
+                while ( ( insertPos != 0 ) &&
+                        ( current < data[insertPos - 1] ) )
+                {
+                    data[insertPos] = data[insertPos - 1];
+                    --insertPos;
+                }
+
+                data[insertPos] = current;
+            }
         }
     }
 }

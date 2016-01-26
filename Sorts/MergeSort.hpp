@@ -15,8 +15,8 @@ namespace Sorts
     template < typename T >
     void mergesort( T* data, const std::size_t size )
     {
-        if ( ( data ) &&
-             ( size >= 0U ) )
+        if ( ( data != nullptr ) &&
+             ( size >= 0 ) )
         {
             std::unique_ptr< T > dest( new T[size] );
 

@@ -13,8 +13,8 @@ namespace Sorts
     template < typename T >
     void quicksort( T* data, const std::size_t size )
     {
-        if ( ( data ) &&
-             ( size >= 0U ) )
+        if ( ( data != nullptr ) &&
+             ( size >= 0 ) )
         {
             quicksort( data, 0, size - 1 );
         }

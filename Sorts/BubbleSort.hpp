@@ -13,13 +13,17 @@ namespace Sorts
     template < typename T >
     void bubblesort( T* data, const std::size_t size )
     {
-        for ( std::size_t idx = 0; idx < size; ++idx )
+        if ( ( data != nullptr ) &&
+             ( size >= 0 ) )
         {
-            for ( std::size_t shiftIdx = 0; shiftIdx < size - 1; ++shiftIdx )
+            for ( std::size_t idx = 0; idx < size; ++idx )
             {
-                if ( data[shiftIdx] > data[shiftIdx + 1] )
+                for ( std::size_t shiftIdx = 0; shiftIdx < size - 1; ++shiftIdx )
                 {
-                    swap( data, shiftIdx, shiftIdx + 1 );
+                    if ( data[shiftIdx] > data[shiftIdx + 1] )
+                    {
+                        swap( data, shiftIdx, shiftIdx + 1 );
+                    }
                 }
             }
         }

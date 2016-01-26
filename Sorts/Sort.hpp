@@ -11,8 +11,8 @@ namespace Sorts
     template < typename T >
     void copy( T* source, T* dest, const std::size_t start, const std::size_t end )
     {
-        if ( ( dest ) &&
-             ( source ) &&
+        if ( ( dest != nullptr ) &&
+             ( source != nullptr ) &&
              ( start < end ) )
         {
             for ( std::size_t idx = start; idx < end; ++idx )
@@ -25,7 +25,7 @@ namespace Sorts
     template < typename T >
     void swap( T* data, const std::size_t index1, const std::size_t index2 )
     {
-        if ( ( data ) &&
+        if ( ( data != nullptr ) &&
              ( index1 != index2 ) )
         {
             T temp = data[index1];
@@ -37,8 +37,8 @@ namespace Sorts
     template < typename T >
     void merge( T* source, T* dest, const std::size_t start, const std::size_t middle, const std::size_t end )
     {
-        if ( ( source ) &&
-             ( dest ) &&
+        if ( ( source != nullptr ) &&
+             ( dest != nullptr ) &&
              ( start < middle ) &&
              ( middle < end ) )
         {
@@ -68,7 +68,7 @@ namespace Sorts
     {
         std::size_t position = pivot;
 
-        if ( ( data ) &&
+        if ( ( data != nullptr ) &&
              ( start < end ) &&
              ( pivot >= start ) &&
              ( pivot <= end ) )
@@ -79,11 +79,11 @@ namespace Sorts
             swap( data, pivot, end );
             position = start;
 
-            for ( std::size_t i = start; i <= ( end - 1 ); i++ )
+            for ( std::size_t idx = start; idx <= ( end - 1 ); idx++ )
             {
-                if ( data[i] <= pivotValue )
+                if ( data[idx] <= pivotValue )
                 {
-                    swap( data, i, position );
+                    swap( data, idx, position );
                     ++position;
                 }
             }
