@@ -50,9 +50,9 @@ namespace Lists
 
         std::size_t getSize() const;
         bool isEmpty() const;
-    private:
-        std::string toString() const;
 
+        std::string toString() const;
+    private:
         bool equals( const StackNode< T >& node1, const StackNode< T >& node2 ) const;
 
         StackNode< T >* head;
