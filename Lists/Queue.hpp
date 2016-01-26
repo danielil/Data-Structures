@@ -50,9 +50,9 @@ namespace Lists
 
         std::size_t getSize() const;
         bool isEmpty() const;
-
-        std::string toString() const;
     private:
+        std::string toString() const;
+
         bool equals( const QueueNode< T >& node1, const QueueNode< T >& node2 ) const;
 
         QueueNode< T >* head;
