@@ -2,14 +2,10 @@
 
 #include "CppUnitTest.h"
 
+#include "TestsConsts.hpp"
 #include "..\Lists\Queue.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
-namespace
-{
-    const std::size_t iterations = 10;
-}
 
 namespace ListsTests
 {
@@ -32,7 +28,7 @@ namespace ListsTests
         {
             {
                 Lists::Queue< int > queue1;
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     queue1.enqueue( std::rand() );
                 }
@@ -49,7 +45,7 @@ namespace ListsTests
         {
             {
                 Lists::Queue< int > queue1;
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     queue1.enqueue( std::rand() );
                 }
@@ -69,7 +65,7 @@ namespace ListsTests
                 Lists::Queue< int > queue1;
                 Lists::Queue< int > queue2;
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     int value = std::rand();
 
@@ -82,7 +78,7 @@ namespace ListsTests
                 queue1.clear();
                 queue2.clear();
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     queue1.enqueue( std::rand() );
                     queue2.enqueue( std::rand() );
@@ -112,9 +108,9 @@ namespace ListsTests
             {
                 Lists::Queue< int > queue;
 
-                int values[iterations];
+                int values[ITERATIONS];
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     values[idx] = std::rand();
                     queue.enqueue( values[idx] );
@@ -122,9 +118,9 @@ namespace ListsTests
                     Assert::AreEqual( idx + 1, queue.getSize() );
                 }
 
-                Assert::AreEqual( iterations, queue.getSize() );
+                Assert::AreEqual( ITERATIONS, queue.getSize() );
 
-                for ( int idx = 0; idx < iterations; ++idx )
+                for ( int idx = 0; idx < ITERATIONS; ++idx )
                 {
                     Assert::AreEqual( values[idx], queue.dequeue() );
                 }

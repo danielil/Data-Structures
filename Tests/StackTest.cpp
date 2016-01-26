@@ -2,14 +2,10 @@
 
 #include "CppUnitTest.h"
 
+#include "TestsConsts.hpp"
 #include "..\Lists\Stack.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
-namespace
-{
-    const std::size_t iterations = 10;
-}
 
 namespace ListsTests
 {
@@ -32,7 +28,7 @@ namespace ListsTests
         {
             {
                 Lists::Stack< int > stack1;
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     stack1.push( std::rand() );
                 }
@@ -49,7 +45,7 @@ namespace ListsTests
         {
             {
                 Lists::Stack< int > stack1;
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     stack1.push( std::rand() );
                 }
@@ -69,7 +65,7 @@ namespace ListsTests
                 Lists::Stack< int > stack1;
                 Lists::Stack< int > stack2;
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     int value = std::rand();
 
@@ -82,7 +78,7 @@ namespace ListsTests
                 stack1.clear();
                 stack2.clear();
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     stack1.push( std::rand() );
                     stack2.push( std::rand() );
@@ -112,9 +108,9 @@ namespace ListsTests
             {
                 Lists::Stack< int > stack;
 
-                int values[iterations];
+                int values[ITERATIONS];
 
-                for ( std::size_t idx = 0; idx < iterations; ++idx )
+                for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     values[idx] = std::rand();
                     stack.push( values[idx] );
@@ -122,9 +118,9 @@ namespace ListsTests
                     Assert::AreEqual( idx + 1, stack.getSize() );
                 }
 
-                Assert::AreEqual( iterations, stack.getSize() );
+                Assert::AreEqual( ITERATIONS, stack.getSize() );
 
-                for ( int idx = iterations - 1; idx >= 0; --idx )
+                for ( int idx = ITERATIONS - 1; idx >= 0; --idx )
                 {
                     Assert::AreEqual( values[idx], stack.pop() );
                 }
