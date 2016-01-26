@@ -139,13 +139,13 @@ namespace Lists
     template < typename T >
     bool Queue< T >::operator==( const Queue& rhs ) const
     {
-        return this->equals( *( this->head ), *( rhs.head) );
+        return this->equals( *( this->head ), *( rhs.head ) );
     }
 
     template < typename T >
     bool Queue< T >::operator!=( const Queue& rhs ) const
     {
-        return !( this->equals( *( this->head), *( rhs.head) ) );
+        return !( this->equals( *( this->head ), *( rhs.head ) ) );
     }
 
     template < typename T >
@@ -164,7 +164,7 @@ namespace Lists
             this->head = this->tail;
         }
         // Enqueue is of O(1) complexity, since we are adding 
-        // at the head.
+        // at the tail.
         else
         {
             newNode->next = this->tail;
