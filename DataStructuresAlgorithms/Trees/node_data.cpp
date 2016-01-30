@@ -1,5 +1,3 @@
-#include <string>
-
 #include "node_data.hpp"
 
 //------------------- constructors/destructor  -------------------------------
@@ -58,4 +56,3 @@ ostream& operator<<(ostream& output, const NodeData& nd) {
    output << nd.data;
    return output;
 }
-

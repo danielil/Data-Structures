@@ -1,18 +1,17 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
-#include "..\Sorts\BubbleSort.hpp"
-#include "..\Sorts\InsertionSort.hpp"
-#include "..\Sorts\MergeSort.hpp"
-#include "..\Sorts\QuickSort.hpp"
+#include "TestsConsts.hpp"
+
+#include "..\DataStructuresAlgorithms\Sorts\BubbleSort.hpp"
+#include "..\DataStructuresAlgorithms\Sorts\InsertionSort.hpp"
+#include "..\DataStructuresAlgorithms\Sorts\MergeSort.hpp"
+#include "..\DataStructuresAlgorithms\Sorts\QuickSort.hpp"
+
 #include <algorithm>
+#include <random>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
-namespace
-{
-    const std::size_t iterations = 10U;
-}
 
 namespace SortsTests
 {
@@ -22,58 +21,62 @@ namespace SortsTests
 
         TEST_METHOD(BubbleSortTest)
         {
-            int values[iterations];
+            std::minstd_rand generator;
 
-            for ( std::size_t idx = 0U; idx < iterations; ++idx )
+            unsigned int values[ITERATIONS];
+            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
             {
-                values[idx] = std::rand();
+                values[idx] = generator();
             }
 
-            Sorts::bubblesort( values, iterations );
+            Sorts::bubblesort( values, ITERATIONS );
 
-            Assert::AreEqual( true, std::is_sorted(values, values + iterations));
+            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(InsertionSortTest)
         {
-            int values[iterations];
+            std::minstd_rand generator;
 
-            for ( std::size_t idx = 0U; idx < iterations; ++idx )
+            unsigned int values[ITERATIONS];
+            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
             {
-                values[idx] = std::rand();
+                values[idx] = generator();
             }
 
-            Sorts::insertionsort( values, iterations );
+            Sorts::insertionsort( values, ITERATIONS );
 
-            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
+            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(MergeSortTest)
         {
-            int values[iterations];
+            std::minstd_rand generator;
 
-            for ( std::size_t idx = 0U; idx < iterations; ++idx )
+            unsigned int values[ITERATIONS];
+            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
             {
-                values[idx] = std::rand();
+                values[idx] = generator();
             }
 
-            Sorts::mergesort( values, iterations );
+            Sorts::mergesort( values, ITERATIONS );
 
-            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
+            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(QuickSortTest)
         {
-            int values[iterations];
+            std::minstd_rand generator;
 
-            for ( std::size_t idx = 0U; idx < iterations; ++idx )
+            unsigned int values[ITERATIONS];
+            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
             {
-                values[idx] = std::rand();
+                values[idx] = generator();
             }
 
-            Sorts::quicksort( values, iterations );
+            Sorts::quicksort( values, ITERATIONS );
 
-            Assert::AreEqual(true, std::is_sorted(values, values + iterations));
+            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
         }
     };
 }

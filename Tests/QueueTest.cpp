@@ -3,7 +3,9 @@
 #include "CppUnitTest.h"
 
 #include "TestsConsts.hpp"
-#include "..\Lists\Queue.hpp"
+#include "..\DataStructuresAlgorithms\Lists\Queue.hpp"
+
+#include <random>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -16,7 +18,7 @@ namespace ListsTests
         TEST_METHOD(ConstructorTest)
         {
             {
-                Lists::Queue< int > queue;
+                Lists::Queue< unsigned int > queue;
 
                 Assert::AreEqual( true, queue.isEmpty() );
             }
@@ -27,13 +29,15 @@ namespace ListsTests
         TEST_METHOD(CopyConstructorTest)
         {
             {
-                Lists::Queue< int > queue1;
+                std::minstd_rand generator;
+
+                Lists::Queue< unsigned int > queue1;
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
-                    queue1.enqueue( std::rand() );
+                    queue1.enqueue( generator() );
                 }
 
-                Lists::Queue< int > queue2( queue1 );
+                Lists::Queue< unsigned int > queue2( queue1 );
 
                 Assert::AreEqual( true, queue1 == queue2 );
             }
@@ -44,13 +48,15 @@ namespace ListsTests
         TEST_METHOD(CopyAssignmentTest)
         {
             {
-                Lists::Queue< int > queue1;
+                std::minstd_rand generator;
+
+                Lists::Queue< unsigned int > queue1;
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
-                    queue1.enqueue( std::rand() );
+                    queue1.enqueue( generator() );
                 }
 
-                Lists::Queue< int > queue2;
+                Lists::Queue< unsigned int > queue2;
                 queue2 = queue1;
 
                 Assert::AreEqual( true, queue1 == queue2 );
@@ -62,12 +68,14 @@ namespace ListsTests
         TEST_METHOD(EqualityTest)
         {
             {
-                Lists::Queue< int > queue1;
-                Lists::Queue< int > queue2;
+                std::minstd_rand generator;
+
+                Lists::Queue< unsigned int > queue1;
+                Lists::Queue< unsigned int > queue2;
 
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
-                    int value = std::rand();
+                    unsigned int value = generator();
 
                     queue1.enqueue( value );
                     queue2.enqueue( value );
@@ -80,8 +88,8 @@ namespace ListsTests
 
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
-                    queue1.enqueue( std::rand() );
-                    queue2.enqueue( std::rand() );
+                    queue1.enqueue( generator() );
+                    queue2.enqueue( generator() );
                 }
 
                 Assert::AreEqual( true, queue1 != queue2 );
@@ -93,7 +101,7 @@ namespace ListsTests
         TEST_METHOD(EmptyDequeueTest)
         {
             {
-                Lists::Queue< int > queue;
+                Lists::Queue< unsigned int > queue;
 
                 queue.dequeue();
 
@@ -106,13 +114,14 @@ namespace ListsTests
         TEST_METHOD(EnqueueDequeueTest)
         {
             {
-                Lists::Queue< int > queue;
+                std::minstd_rand generator;
 
-                int values[ITERATIONS];
+                Lists::Queue< unsigned int > queue;
+                unsigned int values[ITERATIONS];
 
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
-                    values[idx] = std::rand();
+                    values[idx] = generator();
                     queue.enqueue( values[idx] );
 
                     Assert::AreEqual( idx + 1, queue.getSize() );
@@ -120,9 +129,9 @@ namespace ListsTests
 
                 Assert::AreEqual( ITERATIONS, queue.getSize() );
 
-                for ( int idx = 0; idx < ITERATIONS; ++idx )
+                for ( auto value : values )
                 {
-                    Assert::AreEqual( values[idx], queue.dequeue() );
+                    Assert::AreEqual( value, queue.dequeue() );
                 }
 
                 Assert::AreEqual( true, queue.isEmpty() );
@@ -132,3 +141,4 @@ namespace ListsTests
         }
     };
 }
+

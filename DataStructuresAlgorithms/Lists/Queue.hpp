@@ -1,7 +1,7 @@
 /**
  * Daniel Sebastian Iliescu
  *
- * An implementation of the Stack (LIFO) data structure.
+ * A doubly linked implementation of the Queue (FIFO) data structure.
  */
 
 #pragma once
@@ -12,39 +12,39 @@
 namespace Lists
 {
     template < typename T >
-    struct StackNode
+    struct QueueNode
     {
-        T data;
+        T item;
 
-        StackNode< T >* previous;
-        StackNode< T >* next;
+        QueueNode< T >* previous;
+        QueueNode< T >* next;
     };
 
     template < typename T >
-    class Stack
+    class Queue
     {
     public:
-        Stack();
-        ~Stack() noexcept;
+        Queue();
+        ~Queue() noexcept;
 
-        Stack( const Stack& other );
-        Stack( Stack&& other ) noexcept;
+        Queue( const Queue& other );
+        Queue( Queue&& other ) noexcept;
 
-        Stack& operator=( const Stack& rhs );
-        Stack& operator=( Stack&& rhs ) noexcept;
+        Queue& operator=( const Queue& rhs );
+        Queue& operator=( Queue&& rhs ) noexcept;
 
-        bool operator==( const Stack& rhs ) const;
-        bool operator!=( const Stack& rhs ) const;
+        bool operator==( const Queue& rhs ) const;
+        bool operator!=( const Queue& rhs ) const;
 
-        friend std::ostream& operator<<( std::ostream& os, const Stack& stack )
+        friend std::ostream& operator<<( std::ostream& os, const Queue& stack )
         {
             os << stack.toString();
 
             return os;
         }
 
-        void push( const T item );
-        T pop();
+        void enqueue( const T item );
+        T dequeue();
 
         void clear();
 
@@ -53,16 +53,16 @@ namespace Lists
     private:
         std::string toString() const;
 
-        bool equals( const StackNode< T >& node1, const StackNode< T >& node2 ) const;
+        bool equals( const QueueNode< T >& node1, const QueueNode< T >& node2 ) const;
 
-        StackNode< T >* head;
-        StackNode< T >* tail;
+        QueueNode< T >* head;
+        QueueNode< T >* tail;
 
         std::size_t size;
     };
 
     template < typename T >
-    Stack< T >::Stack() :
+    Queue< T >::Queue() :
         head( nullptr ),
         tail( nullptr ),
         size( 0 )
@@ -70,29 +70,29 @@ namespace Lists
     }
 
     template < typename T >
-    Stack< T >::~Stack() noexcept
+    Queue< T >::~Queue() noexcept
     {
         clear();
     }
 
     template < typename T >
-    Stack< T >::Stack( const Stack& other ) :
+    Queue< T >::Queue( const Queue& other ) :
         head( nullptr ),
         tail( nullptr ),
         size( 0 )
     {
-        StackNode< T >* currentNodeOther = other.tail;
+        QueueNode< T >* currentNodeOther = other.head;
 
         while ( currentNodeOther != nullptr )
         {
-            this->push( currentNodeOther->data );
+            this->enqueue( currentNodeOther->item );
 
-            currentNodeOther = currentNodeOther->next;
+            currentNodeOther = currentNodeOther->previous;
         }
     }
 
     template < typename T >
-    Stack< T >::Stack( Stack&& other ) noexcept :
+    Queue< T >::Queue( Queue&& other ) noexcept :
         head( other.head ),
         tail( other.tail ),
         size( other.size )
@@ -103,13 +103,13 @@ namespace Lists
     }
 
     template < typename T >
-    Stack< T >& Stack< T >::operator=( const Stack& rhs )
+    Queue< T >& Queue< T >::operator=( const Queue& rhs )
     {
         if ( this != &rhs )
         {
             clear();
 
-            Stack< T > temp( rhs );
+            Queue< T > temp( rhs );
 
             *this = std::move( temp );
         }
@@ -118,7 +118,7 @@ namespace Lists
     }
 
     template < typename T >
-    Stack< T >& Stack< T >::operator=( Stack&& rhs ) noexcept
+    Queue< T >& Queue< T >::operator=( Queue&& rhs ) noexcept
     {
         if ( this != &rhs )
         {
@@ -137,47 +137,47 @@ namespace Lists
     }
 
     template < typename T >
-    bool Stack< T >::operator==( const Stack& rhs ) const
+    bool Queue< T >::operator==( const Queue& rhs ) const
     {
-        return this->equals( *( this->tail ), *( rhs.tail ) );
+        return this->equals( *( this->head ), *( rhs.head ) );
     }
 
     template < typename T >
-    bool Stack< T >::operator!=( const Stack& rhs ) const
+    bool Queue< T >::operator!=( const Queue& rhs ) const
     {
-        return !( this->equals( *( this->tail ), *( rhs.tail ) ) );
+        return !( *this == rhs );
     }
 
     template < typename T >
-    void Stack< T >::push( const T item )
+    void Queue< T >::enqueue( const T item )
     {
-        StackNode< T >* newNode = new StackNode< T >();
-        newNode->data = item;
-        newNode->next = nullptr;
+        QueueNode< T >* newNode = new QueueNode< T >();
+        newNode->item = item;
+        newNode->previous = nullptr;
 
         // List is empty; head and tail node are identical.
         if ( isEmpty() )
         {
-            newNode->previous = nullptr;
+            newNode->next = nullptr;
 
-            this->head = newNode;
-            this->tail = this->head;
+            this->tail = newNode;
+            this->head = this->tail;
         }
-        // Push is of O(1) complexity, since we are adding 
-        // to the head, and not traversing from the tail.
+        // Enqueue is of O(1) complexity, since we are adding 
+        // at the tail.
         else
         {
-            newNode->previous = this->head;
+            newNode->next = this->tail;
 
-            this->head->next = newNode;
-            this->head = newNode;
+            this->tail->previous = newNode;
+            this->tail = newNode;
         }
 
         ++( this->size );
     }
 
     template < typename T >
-    T Stack< T >::pop()
+    T Queue< T >::dequeue()
     {
         // List is empty; return the default value for the type.
         if ( isEmpty() )
@@ -185,12 +185,12 @@ namespace Lists
             return T();
         }
 
-        T item = this->head->data;
-        StackNode< T >* previousNode = this->head->previous;
+        T item = this->head->item;
+        QueueNode< T >* previousNode = this->head->previous;
 
         delete this->head;
 
-        // Pop is of O(1) complexity, since we are removing 
+        // Dequeue is of O(1) complexity, since we are removing 
         // the head, and not traversing from the tail.
         if ( previousNode != nullptr )
         {
@@ -212,15 +212,15 @@ namespace Lists
     }
 
     template < typename T >
-    std::size_t Stack< T >::getSize() const
+    std::size_t Queue< T >::getSize() const
     {
         return this->size;
     }
 
     template < typename T >
-    std::string Stack< T >::toString() const
+    std::string Queue< T >::toString() const
     {
-        StackNode< T >* currentNode = this->head;
+        QueueNode< T >* currentNode = this->head;
 
         std::stringstream list;
         while ( currentNode != nullptr )
@@ -234,7 +234,7 @@ namespace Lists
     }
 
     template < typename T >
-    bool Stack< T >::isEmpty() const
+    bool Queue< T >::isEmpty() const
     {
         return ( ( this->head == nullptr ) &&
                  ( this->tail == nullptr ) &&
@@ -242,16 +242,16 @@ namespace Lists
     }
 
     template < typename T >
-    void Stack< T >::clear()
+    void Queue< T >::clear()
     {
         while ( !isEmpty() )
         {
-            pop();
+            dequeue();
         }
     }
 
     template < typename T >
-    bool Stack< T >::equals( const StackNode< T >& node1, const StackNode< T >& node2 ) const
+    bool Queue< T >::equals( const QueueNode< T >& node1, const QueueNode< T >& node2 ) const
     {
         // Both nodes are either nullptr or identical.
         if ( &node1 == &node2 )
@@ -260,8 +260,8 @@ namespace Lists
         }
 
         if ( ( &node1 != nullptr ) &&
-             ( &node2 != nullptr ) && 
-             ( node1.data == node2.data ) )
+             ( &node2 != nullptr ) &&
+             ( node1.item == node2.item ) )
         {
             if ( this->equals( *( node1.next ), *( node2.next ) ) )
             {

@@ -159,6 +159,7 @@
     <ClInclude Include="TestsConsts.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BinarySearchTreeTests.cpp" />
     <ClCompile Include="QueueTest.cpp" />
     <ClCompile Include="SortsTest.cpp" />
     <ClCompile Include="StackTest.cpp" />

@@ -1,21 +1,28 @@
 /**
- * @author Daniel Sebastian Iliescu
- * @file Matrix.h
- * @instructor Clark Olson
- * @course CSS 487
- * @due 2015-04-08
- *
- * This file contains the header definition for the Matrix class.
+ * This file contains the header definition for a Matrix class.
  */
 
 #pragma once
 #include <iostream>
 
+template <typename T>
 class Matrix
 {
 public:
-	static double** CreateMatrix(int rows, int columns);
-	static void DeleteMatrix(double** matrix, int rows);
+    Matrix(const std::size_t rows, const std::size_t columns);
+    ~Matrix() noexcept;
+
+    Matrix(const Matrix& other);
+    Matrix(Matrix&& other) noexcept;
+
+    Matrix& operator=(const Matrix& rhs);
+    Matrix& operator=(Matrix&& rhs) noexcept;
+
+    Matrix& operator+(const Matrix& rhs) noexcept;
+    Matrix& operator+(Matrix&& rhs) noexcept;
+
+    bool operator==(const Matrix& rhs) const;
+    bool operator!=(const Matrix& rhs) const;
 
 	static double** GetAddition(double** leftMatrix, 
 								double** rightMatrix, 
@@ -36,46 +43,40 @@ public:
 	static double** GetInverse(double** matrix);
 
 	static double GetDeterminant(double** matrix);
+private:
+    T* matrix;
+
+    std::size_t rows;
+    std::size_t columns;
 };
 
-double** Matrix::CreateMatrix(int rows,
-    int columns)
+template <typename T>
+Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns) :
+    rows(rows),
+    columns(columns)
 {
-    double** matrix = NULL;
+    this->matrix = new T[rows];
 
-    if (rows > 0 && columns > 0)
+    for (std::size_t row = 0; row < rows; ++row)
     {
-        matrix = new double*[rows];
+        this->matrix[row] = new T[columns];
 
-        for (int row = 0; row < rows; row++)
+        for (std::size_t column = 0; column < columns; ++column)
         {
-            matrix[row] = new double[columns];
-
-            for (int column = 0; column < columns; column++)
-            {
-                matrix[row][column] = 0;
-            }
+            this->matrix[row][column] = 0;
         }
     }
-
-    return matrix;
 }
 
-/**
-* Deletes the multidimensional array representing a matrix.
-*/
-void Matrix::DeleteMatrix(double** matrix,
-    int rows)
+template <typename T>
+Matrix<T>::~Matrix()
 {
-    if (matrix)
+    for (std::size_t row = 0; row < this->rows; ++row)
     {
-        for (int row = 0; row < rows; row++)
-        {
-            delete[] matrix[row];
-        }
-
-        delete[] matrix;
+        delete[] this->matrix[row];
     }
+
+    delete[] this->matrix;
 }
 
 /**
