@@ -19,7 +19,7 @@ namespace ListsTests
         TEST_METHOD(ConstructorTest)
         {
             {
-                Lists::DoublyLinkedList< unsigned int > list;
+                Lists::doubly_linked_list< unsigned int > list;
 
                 Assert::IsTrue( list.empty() );
 
@@ -36,13 +36,13 @@ namespace ListsTests
             {
                 std::default_random_engine generator;
 
-                Lists::DoublyLinkedList< unsigned int > list1;
+                Lists::doubly_linked_list< unsigned int > list1;
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     list1.push_front( generator() );
                 }
 
-                Lists::DoublyLinkedList< unsigned int > list2( list1 );
+                Lists::doubly_linked_list< unsigned int > list2( list1 );
 
                 Assert::IsTrue( list1 == list2 );
             }
@@ -55,13 +55,13 @@ namespace ListsTests
             {
                 std::default_random_engine generator;
 
-                Lists::DoublyLinkedList< unsigned int > list1;
+                Lists::doubly_linked_list< unsigned int > list1;
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
                     list1.push_front( generator() );
                 }
 
-                Lists::DoublyLinkedList< unsigned int > list2;
+                Lists::doubly_linked_list< unsigned int > list2;
                 list2 = list1;
 
                 Assert::IsTrue( list1 == list2 );
@@ -75,8 +75,8 @@ namespace ListsTests
             {
                 std::default_random_engine generator;
 
-                Lists::DoublyLinkedList< unsigned int > list1;
-                Lists::DoublyLinkedList< unsigned int > list2;
+                Lists::doubly_linked_list< unsigned int > list1;
+                Lists::doubly_linked_list< unsigned int > list2;
 
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
                 {
@@ -107,13 +107,13 @@ namespace ListsTests
         {
             std::default_random_engine generator;
 
-            Lists::DoublyLinkedList< unsigned int > list1;
+            Lists::doubly_linked_list< unsigned int > list1;
             for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
             {
                 list1.push_front(generator());
             }
 
-            //for (Lists::DoublyLinkedList<unsigned int>::iterator it = list1.rbegin(); it != list1.rend(); it--)
+            //for (Lists::doubly_linked_list<unsigned int>::iterator it = list1.rbegin(); it != list1.rend(); it--)
             //{
                 //Assert::IsTrue(  )
             //}
@@ -123,7 +123,7 @@ namespace ListsTests
         TEST_METHOD(EmptyPopTest)
         {
             {
-                Lists::DoublyLinkedList< unsigned int > list;
+                Lists::doubly_linked_list< unsigned int > list;
 
                 list.pop_front();
 
@@ -138,7 +138,7 @@ namespace ListsTests
             {
                 std::default_random_engine generator;
 
-                Lists::DoublyLinkedList< unsigned int > list;
+                Lists::doubly_linked_list< unsigned int > list;
                 unsigned int values[ITERATIONS];
 
                 for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )

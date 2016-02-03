@@ -17,16 +17,16 @@
 namespace Lists
 {
     template < typename T >
-    struct DoublyLinkedNode
+    struct doubly_linked_node
     {
         T item;
 
-        DoublyLinkedNode< T >* previous;
-        DoublyLinkedNode< T >* next;
+        doubly_linked_node< T >* previous;
+        doubly_linked_node< T >* next;
     };
 
     template < typename T >
-    class DoublyLinkedList
+    class doubly_linked_list
     {
     public:
         typedef T value_type;
@@ -38,10 +38,10 @@ namespace Lists
         class iterator : public std::iterator<std::bidirectional_iterator_tag, T>
         {
         public:
-            friend class DoublyLinkedList;
+            friend class doubly_linked_list;
             friend class const_iterator;
 
-            inline iterator(DoublyLinkedNode< T >* node = nullptr) :
+            inline iterator(doubly_linked_node< T >* node = nullptr) :
                 node(node)
             {
             }
@@ -108,16 +108,16 @@ namespace Lists
                          ( this->currentNode != it.currentNode ) );
             }
         private:
-            DoublyLinkedNode<T>* node;
+            doubly_linked_node<T>* node;
         };
 
         class const_iterator : public std::iterator<std::bidirectional_iterator_tag, const T>
         {
         public:
-            friend class DoublyLinkedList;
+            friend class doubly_linked_list;
             friend class const_iterator;
 
-            inline const_iterator(const DoublyLinkedNode< T >* node = nullptr) :
+            inline const_iterator(const doubly_linked_node< T >* node = nullptr) :
                 node(node)
             {
             }
@@ -180,24 +180,24 @@ namespace Lists
                          ( this->currentNode != it.currentNode ) );
             }
         private:
-            DoublyLinkedNode<T>* node;
-        }
+            doubly_linked_node<T>* node;
+        };
 
-        DoublyLinkedList();
-        ~DoublyLinkedList() noexcept;
+        doubly_linked_list();
+        ~doubly_linked_list() noexcept;
 
-        DoublyLinkedList( const DoublyLinkedList& other );
-        DoublyLinkedList( DoublyLinkedList&& other ) noexcept;
+        doubly_linked_list( const doubly_linked_list& other );
+        doubly_linked_list( doubly_linked_list&& other ) noexcept;
 
         // Operators
-        DoublyLinkedList& operator=( const DoublyLinkedList& rhs );
-        DoublyLinkedList& operator=( DoublyLinkedList&& rhs ) noexcept;
+        doubly_linked_list& operator=( const doubly_linked_list& rhs );
+        doubly_linked_list& operator=( doubly_linked_list&& rhs ) noexcept;
 
-        DoublyLinkedList& operator+( const DoublyLinkedList& rhs );
-        DoublyLinkedList& operator+=( const DoublyLinkedList& rhs );
+        doubly_linked_list& operator+( const doubly_linked_list& rhs );
+        doubly_linked_list& operator+=( const doubly_linked_list& rhs );
 
-        bool operator==( const DoublyLinkedList& rhs ) const;
-        bool operator!=( const DoublyLinkedList& rhs ) const;
+        bool operator==( const doubly_linked_list& rhs ) const;
+        bool operator!=( const doubly_linked_list& rhs ) const;
 
         // Operations
         void push_front( const T item );
@@ -213,10 +213,10 @@ namespace Lists
         bool empty() const;
 
         // Iterator operations
-        DoublyLinkedNode< T >* first() const;
-        DoublyLinkedNode< T >* last() const;
-        DoublyLinkedNode< T >* next( DoublyLinkedNode< T >* current ) const;
-        DoublyLinkedNode< T >* previous( DoublyLinkedNode< T >* current ) const;
+        doubly_linked_node< T >* first() const;
+        doubly_linked_node< T >* last() const;
+        doubly_linked_node< T >* next( doubly_linked_node< T >* current ) const;
+        doubly_linked_node< T >* previous( doubly_linked_node< T >* current ) const;
         DoublyLinkedListIterator< T > begin();
         DoublyLinkedListIterator< T > rbegin();
         DoublyLinkedListIterator< T > end();
@@ -225,17 +225,17 @@ namespace Lists
         void blank_pop_front();
         void blank_pop_back();
 
-        bool equals( const DoublyLinkedNode< T >* node1, const DoublyLinkedNode< T >* node2 ) const;
+        bool equals( const doubly_linked_node< T >* node1, const doubly_linked_node< T >* node2 ) const;
         std::string to_string() const;
 
-        DoublyLinkedNode< T >* front;
-        DoublyLinkedNode< T >* back;
+        doubly_linked_node< T >* front;
+        doubly_linked_node< T >* back;
 
         std::size_t nodes;
     };
 
     template < typename T >
-    DoublyLinkedList< T >::DoublyLinkedList() :
+    doubly_linked_list< T >::doubly_linked_list() :
         front( nullptr ),
         back( nullptr ),
         nodes( 0 )
@@ -243,18 +243,18 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedList< T >::~DoublyLinkedList() noexcept
+    doubly_linked_list< T >::~doubly_linked_list() noexcept
     {
         clear();
     }
 
     template < typename T >
-    DoublyLinkedList< T >::DoublyLinkedList( const DoublyLinkedList& other ) :
+    doubly_linked_list< T >::doubly_linked_list( const doubly_linked_list& other ) :
         front( nullptr ),
         back( nullptr ),
         nodes( 0 )
     {
-        DoublyLinkedNode<T>* node = other.back;
+        doubly_linked_node<T>* node = other.back;
 
         while(node != nullptr)
         {
@@ -264,7 +264,7 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedList< T >::DoublyLinkedList( DoublyLinkedList&& other ) noexcept :
+    doubly_linked_list< T >::doubly_linked_list( doubly_linked_list&& other ) noexcept :
         front( other.front ),
         back( other.back ),
         nodes( other.nodes )
@@ -275,13 +275,13 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedList< T >& DoublyLinkedList< T >::operator=( const DoublyLinkedList& rhs )
+    doubly_linked_list< T >& doubly_linked_list< T >::operator=( const doubly_linked_list& rhs )
     {
         if ( this != &rhs )
         {
             clear();
 
-            DoublyLinkedList< T > temp( rhs );
+            doubly_linked_list< T > temp( rhs );
 
             *this = std::move( temp );
         }
@@ -290,7 +290,7 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedList< T >& DoublyLinkedList< T >::operator=( DoublyLinkedList&& rhs ) noexcept
+    doubly_linked_list< T >& doubly_linked_list< T >::operator=( doubly_linked_list&& rhs ) noexcept
     {
         if ( this != &rhs )
         {
@@ -309,25 +309,25 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedList< T >& DoublyLinkedList< T >::operator+( const DoublyLinkedList& rhs )
+    doubly_linked_list< T >& doubly_linked_list< T >::operator+( const doubly_linked_list& rhs )
     {
         return *this += rhs;
     }
 
     template < typename T >
-    DoublyLinkedList< T > operator+(const DoublyLinkedList<T>& lhs, const DoublyLinkedList<T>& rhs)
+    doubly_linked_list< T > operator+(const doubly_linked_list<T>& lhs, const doubly_linked_list<T>& rhs)
     {
-        DoublyLinkedList<T> result(lhs);
+        doubly_linked_list<T> result(lhs);
         
         return lhs += rhs;
     }
 
     template < typename T >
-    DoublyLinkedList< T >& DoublyLinkedList< T >::operator+=( const DoublyLinkedList& rhs )
+    doubly_linked_list< T >& doubly_linked_list< T >::operator+=( const doubly_linked_list& rhs )
     {
         if ( !rhs.empty() )
         {
-            DoublyLinkedNode< T >* currentNodeOther = rhs.back;
+            doubly_linked_node< T >* currentNodeOther = rhs.back;
 
             while ( currentNodeOther != nullptr )
             {
@@ -341,27 +341,27 @@ namespace Lists
     }
 
     template < typename T >
-    bool DoublyLinkedList< T >::operator==( const DoublyLinkedList& rhs ) const
+    bool doubly_linked_list< T >::operator==( const doubly_linked_list& rhs ) const
     {
         return this->equals( this->back, rhs.back );
     }
 
     template < typename T >
-    bool DoublyLinkedList< T >::operator!=( const DoublyLinkedList& rhs ) const
+    bool doubly_linked_list< T >::operator!=( const doubly_linked_list& rhs ) const
     {
         return !( *this == rhs );
     }
 
     template < typename T >
-    std::ostream& operator<<( std::ostream& os, const DoublyLinkedList< T >& stack )
+    std::ostream& operator<<( std::ostream& os, const doubly_linked_list< T >& stack )
     {
         return ( os << stack.to_string() );
     }
 
     template < typename T >
-    void DoublyLinkedList< T >::push_front( const T item )
+    void doubly_linked_list< T >::push_front( const T item )
     {
-        DoublyLinkedNode< T >* newNode = new DoublyLinkedNode< T >();
+        doubly_linked_node< T >* newNode = new doubly_linked_node< T >();
         newNode->item = item;
         newNode->next = nullptr;
 
@@ -384,9 +384,9 @@ namespace Lists
     }
 
     template < typename T >
-    void DoublyLinkedList< T >::push_back( const T item )
+    void doubly_linked_list< T >::push_back( const T item )
     {
-        DoublyLinkedNode< T >* newNode = new DoublyLinkedNode< T >();
+        doubly_linked_node< T >* newNode = new doubly_linked_node< T >();
         newNode->item = item;
         newNode->previous = nullptr;
 
@@ -409,7 +409,7 @@ namespace Lists
     }
 
     template < typename T >
-    T DoublyLinkedList< T >::pop_front()
+    T doubly_linked_list< T >::pop_front()
     {
         if ( empty() )
         {
@@ -417,7 +417,7 @@ namespace Lists
         }
 
         T item = this->front->item;
-        DoublyLinkedNode< T >* previousNode = this->front->previous;
+        doubly_linked_node< T >* previousNode = this->front->previous;
 
         delete this->front;
 
@@ -439,7 +439,7 @@ namespace Lists
     }
 
     template < typename T >
-    T DoublyLinkedList< T >::pop_back()
+    T doubly_linked_list< T >::pop_back()
     {
         if ( empty() )
         {
@@ -447,7 +447,7 @@ namespace Lists
         }
 
         T item = this->back->item;
-        DoublyLinkedNode< T >* nextNode = this->back->next;
+        doubly_linked_node< T >* nextNode = this->back->next;
 
         delete this->back;
 
@@ -469,7 +469,7 @@ namespace Lists
     }
 
     template < typename T >
-    void DoublyLinkedList< T >::clear()
+    void doubly_linked_list< T >::clear()
     {
         while (!empty())
         {
@@ -478,7 +478,7 @@ namespace Lists
     }
 
     template < typename T >
-    T DoublyLinkedList< T >::peek_front() const
+    T doubly_linked_list< T >::peek_front() const
     {
         if ( empty() )
         {
@@ -489,7 +489,7 @@ namespace Lists
     }
 
     template < typename T >
-    T DoublyLinkedList< T >::peek_back() const
+    T doubly_linked_list< T >::peek_back() const
     {
         if ( empty() )
         {
@@ -500,13 +500,13 @@ namespace Lists
     }
 
     template < typename T >
-    std::size_t DoublyLinkedList< T >::size() const
+    std::size_t doubly_linked_list< T >::size() const
     {
         return this->nodes;
     }
 
     template < typename T >
-    bool DoublyLinkedList< T >::empty() const
+    bool doubly_linked_list< T >::empty() const
     {
         return ( ( this->front == nullptr ) &&
                  ( this->back == nullptr ) &&
@@ -514,31 +514,31 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedNode< T >* DoublyLinkedList< T >::first() const
+    doubly_linked_node< T >* doubly_linked_list< T >::first() const
     {
         return this->back;
     }
 
     template < typename T >
-    DoublyLinkedNode< T >* DoublyLinkedList< T >::last() const
+    doubly_linked_node< T >* doubly_linked_list< T >::last() const
     {
         return this->front;
     }
 
     template < typename T >
-    DoublyLinkedNode< T >* DoublyLinkedList< T >::next( DoublyLinkedNode< T >* current ) const
+    doubly_linked_node< T >* doubly_linked_list< T >::next( doubly_linked_node< T >* current ) const
     {
         return current->next;
     }
 
     template < typename T >
-    DoublyLinkedNode< T >* DoublyLinkedList< T >::previous( DoublyLinkedNode< T >* current ) const
+    doubly_linked_node< T >* doubly_linked_list< T >::previous( doubly_linked_node< T >* current ) const
     {
         return current->previous;
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > DoublyLinkedList< T >::begin()
+    DoublyLinkedListIterator< T > doubly_linked_list< T >::begin()
     {
         DoublyLinkedListIterator< T > iterator( this );
         iterator.currentNode = first();
@@ -547,7 +547,7 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > DoublyLinkedList< T >::rbegin()
+    DoublyLinkedListIterator< T > doubly_linked_list< T >::rbegin()
     {
         DoublyLinkedListIterator< T > iterator( this );
         iterator.currentNode = last();
@@ -556,7 +556,7 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > DoublyLinkedList< T >::end()
+    DoublyLinkedListIterator< T > doubly_linked_list< T >::end()
     {
         DoublyLinkedListIterator< T > iterator( this );
         iterator.currentNode = next( last() );
@@ -565,7 +565,7 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > DoublyLinkedList< T >::rend()
+    DoublyLinkedListIterator< T > doubly_linked_list< T >::rend()
     {
         DoublyLinkedListIterator< T > iterator( this );
         iterator.currentNode = previous( first() );
@@ -574,11 +574,11 @@ namespace Lists
     }
 
     template < typename T >
-    void DoublyLinkedList< T >::blank_pop_front()
+    void doubly_linked_list< T >::blank_pop_front()
     {
         if (!empty())
         {
-            DoublyLinkedNode< T >* previousNode = this->front->previous;
+            doubly_linked_node< T >* previousNode = this->front->previous;
 
             delete this->front;
 
@@ -599,11 +599,11 @@ namespace Lists
     }
 
     template < typename T >
-    void DoublyLinkedList< T >::blank_pop_back()
+    void doubly_linked_list< T >::blank_pop_back()
     {
         if (!empty())
         {
-            DoublyLinkedNode< T >* nextNode = this->back->next;
+            doubly_linked_node< T >* nextNode = this->back->next;
 
             delete this->back;
 
@@ -624,7 +624,7 @@ namespace Lists
     }
 
     template < typename T >
-    bool DoublyLinkedList< T >::equals( const DoublyLinkedNode< T >* node1, const DoublyLinkedNode< T >* node2 ) const
+    bool doubly_linked_list< T >::equals( const doubly_linked_node< T >* node1, const doubly_linked_node< T >* node2 ) const
     {
         if ( node1 == node2 )
         {
@@ -642,9 +642,9 @@ namespace Lists
     }
 
     template < typename T >
-    std::string DoublyLinkedList< T >::to_string() const
+    std::string doubly_linked_list< T >::to_string() const
     {
-        DoublyLinkedNode< T >* currentNode = this->front;
+        doubly_linked_node< T >* currentNode = this->front;
 
         std::stringstream list;
         while ( currentNode != nullptr )
