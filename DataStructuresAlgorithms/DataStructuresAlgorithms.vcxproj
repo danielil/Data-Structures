@@ -23,9 +23,7 @@
     <ClInclude Include="Graphs\graphm.hpp" />
     <ClInclude Include="Graphs\node_data.hpp" />
     <ClInclude Include="HashTable\HashTable.hpp" />
-    <ClInclude Include="Lists\Queue.hpp" />
-    <ClInclude Include="Lists\Stack.hpp" />
-    <ClInclude Include="Matrix\Matrix.hpp" />
+    <ClInclude Include="Lists\DoublyLinkedList.hpp" />
     <ClInclude Include="Sorts\BubbleSort.hpp" />
     <ClInclude Include="Sorts\BucketSort.hpp" />
     <ClInclude Include="Sorts\InsertionSort.hpp" />

@@ -21,7 +21,7 @@ namespace SortsTests
 
         TEST_METHOD(BubbleSortTest)
         {
-            std::minstd_rand generator;
+            std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
             for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
@@ -31,12 +31,12 @@ namespace SortsTests
 
             Sorts::bubblesort( values, ITERATIONS );
 
-            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(InsertionSortTest)
         {
-            std::minstd_rand generator;
+            std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
             for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
@@ -46,12 +46,12 @@ namespace SortsTests
 
             Sorts::insertionsort( values, ITERATIONS );
 
-            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(MergeSortTest)
         {
-            std::minstd_rand generator;
+            std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
             for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
@@ -61,12 +61,12 @@ namespace SortsTests
 
             Sorts::mergesort( values, ITERATIONS );
 
-            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
 
         TEST_METHOD(QuickSortTest)
         {
-            std::minstd_rand generator;
+            std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
             for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
@@ -76,7 +76,7 @@ namespace SortsTests
 
             Sorts::quicksort( values, ITERATIONS );
 
-            Assert::AreEqual( true, std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
     };
 }

@@ -160,9 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BinarySearchTreeTests.cpp" />
-    <ClCompile Include="QueueTest.cpp" />
     <ClCompile Include="SortsTest.cpp" />
-    <ClCompile Include="StackTest.cpp" />
+    <ClCompile Include="DoublyLinkedTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

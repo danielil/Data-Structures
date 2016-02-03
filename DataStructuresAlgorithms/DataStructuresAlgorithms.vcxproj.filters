@@ -13,20 +13,11 @@
     <Filter Include="HashTable">
       <UniqueIdentifier>{594effc0-0193-4470-8ea5-db8dea441937}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Matrix">
-      <UniqueIdentifier>{e3021b0a-10fc-4f55-bc2a-7fa9c0a624cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphs">
       <UniqueIdentifier>{823029ad-01c6-4001-86ef-9207748c2fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lists\Queue.hpp">
-      <Filter>Lists</Filter>
-    </ClInclude>
-    <ClInclude Include="Lists\Stack.hpp">
-      <Filter>Lists</Filter>
-    </ClInclude>
     <ClInclude Include="Trees\binary_tree.hpp">
       <Filter>Trees</Filter>
     </ClInclude>
@@ -63,9 +54,6 @@
     <ClInclude Include="HashTable\HashTable.hpp">
       <Filter>HashTable</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix\Matrix.hpp">
-      <Filter>Matrix</Filter>
-    </ClInclude>
     <ClInclude Include="Graphs\graphl.hpp">
       <Filter>Graphs</Filter>
     </ClInclude>
@@ -77,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="Trees\node.hpp">
       <Filter>Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Lists\DoublyLinkedList.hpp">
+      <Filter>Lists</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

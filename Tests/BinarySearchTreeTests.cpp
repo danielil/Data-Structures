@@ -12,7 +12,7 @@ namespace ListsTests
     TEST_CLASS(BinarySearchTreeTests)
     {
     public:
-
+        /*
         TEST_METHOD(ConstructorTest)
         {
             {
@@ -29,5 +29,6 @@ namespace ListsTests
 
             _CrtDumpMemoryLeaks();
         }
+        */
     };
 }

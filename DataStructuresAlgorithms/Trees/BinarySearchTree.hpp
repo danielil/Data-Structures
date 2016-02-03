@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 namespace Trees
 {
     template <typename T>
@@ -17,25 +18,44 @@ namespace Trees
     public:
         BinarySearchTree();
         ~BinarySearchTree();
+        
+        BinarySearchTree(const BinarySearchTree& other);
+        BinarySearchTree(BinarySearchTree&& other) noexcept;
+
+        BinarySearchTree& operator=(const BinarySearchTree& rhs);
+        BinarySearchTree& operator=(BinarySearchTree&& rhs) noexcept;
+
+        bool operator==(const BinarySearchTree& rhs) const;
+        bool operator!=(const BinarySearchTree& rhs) const;
+
+        friend std::ostream& operator<<(std::ostream& os, const BinarySearchTree& bst)
+        {
+            return (os << bst.toString());
+        }
 
         void insert( const T& item );
         void remove(const T& item );
-        bool contains( const T& item ) const;
+
+        void clear();
+
         BSTNode<T>* findNode(const T& item) const;
         BSTNode<T>* findMin(const T& item) const;
-        BSTNode<T>* findMax(const T& item) const;
 
         T preorderTraverse();
         T inorderTraverse();
         T postorderTraverse();
+
+        bool isEmpty() const;
     private:
         BSTNode<T>* createNode(const T item);
 
         void insert(BSTNode<T>* root, const T& item);
         void remove(BSTNode<T>* root, const T& item);
+        void destroySubtree(BSTNode<T>* node);
+
         BSTNode<T>* findNode(BSTNode<T>* root, const T& item) const;
 
-        void empty();
+        std::string toString() const;
 
         BSTNode<T>* root;
         std::size_t nodes;
@@ -51,7 +71,7 @@ namespace Trees
     template <typename T>
     BinarySearchTree<T>::~BinarySearchTree()
     {
-        //empty();
+        clear();
     }
 
     template <typename T>
@@ -80,6 +100,15 @@ namespace Trees
             remove(foundNode, item);
 
             --(this->nodes);
+        }
+    }
+
+    template < typename T >
+    void BinarySearchTree< T >::clear()
+    {
+        if (!isEmpty())
+        {
+            destroySubtree(this->root);
         }
     }
 
@@ -166,9 +195,22 @@ namespace Trees
         }
     }
 
+    template < typename T >
+    void BinarySearchTree< T >::destroySubtree(BSTNode<T>* node)
+    {
+        if (node != nullptr)
+        {
+            destroySubtree(node->leftNode);
+            destroySubtree(node->rightNode);
+
+            delete node;
+        }
+    }
+
     template <typename T>
     BSTNode<T>* BinarySearchTree< T >::findNode(BSTNode<T>* root, const T& item) const
     {
         return nullptr;
     }
 }
+*/
