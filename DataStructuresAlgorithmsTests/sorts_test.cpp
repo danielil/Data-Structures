@@ -1,17 +1,20 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
-#include "TestsConsts.hpp"
-
-#include "..\DataStructuresAlgorithms\Sorts\BubbleSort.hpp"
-#include "..\DataStructuresAlgorithms\Sorts\InsertionSort.hpp"
-#include "..\DataStructuresAlgorithms\Sorts\MergeSort.hpp"
-#include "..\DataStructuresAlgorithms\Sorts\QuickSort.hpp"
+#include "..\DataStructuresAlgorithms\sorts\bubble_sort.hpp"
+#include "..\DataStructuresAlgorithms\sorts\insertion_sort.hpp"
+#include "..\DataStructuresAlgorithms\sorts\merge_sort.hpp"
+#include "..\DataStructuresAlgorithms\sorts\quick_sort.hpp"
 
 #include <algorithm>
 #include <random>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace
+{
+    const std::size_t ITERATIONS = 10;
+}
 
 namespace SortsTests
 {
@@ -29,7 +32,7 @@ namespace SortsTests
                 values[idx] = generator();
             }
 
-            Sorts::bubblesort( values, ITERATIONS );
+            dsa::bubblesort( values, ITERATIONS );
 
             Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
@@ -44,7 +47,7 @@ namespace SortsTests
                 values[idx] = generator();
             }
 
-            Sorts::insertionsort( values, ITERATIONS );
+            dsa::insertionsort( values, ITERATIONS );
 
             Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
@@ -59,7 +62,7 @@ namespace SortsTests
                 values[idx] = generator();
             }
 
-            Sorts::mergesort( values, ITERATIONS );
+            dsa::mergesort( values, ITERATIONS );
 
             Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }
@@ -74,7 +77,7 @@ namespace SortsTests
                 values[idx] = generator();
             }
 
-            Sorts::quicksort( values, ITERATIONS );
+            dsa::quicksort( values, ITERATIONS );
 
             Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
         }

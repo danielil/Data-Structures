@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "Sort.hpp"
+#include "sort.hpp"
 
-namespace Sorts
+namespace dsa
 {
     template < typename T >
     void quicksort( T* data, const std::size_t size )

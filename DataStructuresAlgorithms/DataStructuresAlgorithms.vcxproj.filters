@@ -1,99 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Lists">
-      <UniqueIdentifier>{739d66e5-1bbb-4441-9b00-362aff3530fe}</UniqueIdentifier>
+    <Filter Include="graphs">
+      <UniqueIdentifier>{823029ad-01c6-4001-86ef-9207748c2fc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Trees">
-      <UniqueIdentifier>{faec1062-8f14-45d4-b83a-6ee1b61032bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sorts">
-      <UniqueIdentifier>{8f9f74c5-98cd-429b-9a5c-e7a272b7a119}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HashTable">
+    <Filter Include="hash_table">
       <UniqueIdentifier>{594effc0-0193-4470-8ea5-db8dea441937}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphs">
-      <UniqueIdentifier>{823029ad-01c6-4001-86ef-9207748c2fc4}</UniqueIdentifier>
+    <Filter Include="lists">
+      <UniqueIdentifier>{739d66e5-1bbb-4441-9b00-362aff3530fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="matrix">
+      <UniqueIdentifier>{a6ea6da4-696c-4df0-a8b4-6e8d794860ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sorts">
+      <UniqueIdentifier>{8f9f74c5-98cd-429b-9a5c-e7a272b7a119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="trees">
+      <UniqueIdentifier>{faec1062-8f14-45d4-b83a-6ee1b61032bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Trees\binary_tree.hpp">
-      <Filter>Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="Trees\BinarySearchTree.hpp">
-      <Filter>Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="Trees\node_data.hpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
     </ClInclude>
     <ClInclude Include="Trees\tbst.hpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
     </ClInclude>
     <ClInclude Include="Trees\tbst_node_data.hpp">
-      <Filter>Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\BucketSort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\InsertionSort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\MergeSort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\QuickSort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\Sort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sorts\BubbleSort.hpp">
-      <Filter>Sorts</Filter>
-    </ClInclude>
-    <ClInclude Include="HashTable\HashTable.hpp">
-      <Filter>HashTable</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphs\graphl.hpp">
-      <Filter>Graphs</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphs\graphm.hpp">
-      <Filter>Graphs</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphs\node_data.hpp">
-      <Filter>Graphs</Filter>
+      <Filter>trees</Filter>
     </ClInclude>
     <ClInclude Include="Trees\node.hpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
     </ClInclude>
-    <ClInclude Include="Lists\DoublyLinkedList.hpp">
-      <Filter>Lists</Filter>
+    <ClInclude Include="Lists\doubly_linked_list.hpp">
+      <Filter>lists</Filter>
+    </ClInclude>
+    <ClInclude Include="hashing\hash_table.hpp">
+      <Filter>hash_table</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix\matrix.hpp">
+      <Filter>matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\bubble_sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\bucket_sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\insertion_sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\merge_sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\quick_sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="sorts\sort.hpp">
+      <Filter>sorts</Filter>
+    </ClInclude>
+    <ClInclude Include="graphs\graphm.hpp">
+      <Filter>graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="graphs\node_data.hpp">
+      <Filter>graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="graphs\graphl.hpp">
+      <Filter>graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="trees\binary_search_tree.hpp">
+      <Filter>trees</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Trees\node_data.cpp">
-      <Filter>Trees</Filter>
-    </ClCompile>
     <ClCompile Include="Trees\tbst.cpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
     </ClCompile>
     <ClCompile Include="Trees\tbst_node_data.cpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
     </ClCompile>
     <ClCompile Include="Trees\binary_tree.cpp">
-      <Filter>Trees</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphs\graphl.cpp">
-      <Filter>Graphs</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphs\graphm.cpp">
-      <Filter>Graphs</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphs\node_data.cpp">
-      <Filter>Graphs</Filter>
+      <Filter>trees</Filter>
     </ClCompile>
     <ClCompile Include="Trees\node.cpp">
-      <Filter>Trees</Filter>
+      <Filter>trees</Filter>
+    </ClCompile>
+    <ClCompile Include="graphs\graphm.cpp">
+      <Filter>graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="graphs\node_data.cpp">
+      <Filter>graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="graphs\graphl.cpp">
+      <Filter>graphs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,8 +2,7 @@
 
 #include "CppUnitTest.h"
 
-#include "TestsConsts.hpp"
-#include "..\DataStructuresAlgorithms\Trees\BinarySearchTree.hpp"
+#include "..\DataStructuresAlgorithms\trees\binary_search_tree.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

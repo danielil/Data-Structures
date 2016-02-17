@@ -14,7 +14,7 @@
 #include <string>
 #include <sstream>
 
-namespace Lists
+namespace dsa
 {
     template < typename T >
     struct doubly_linked_node
@@ -29,14 +29,16 @@ namespace Lists
     class doubly_linked_list
     {
     public:
+
         typedef T value_type;
         typedef T& reference;
         typedef T* pointer;
-        typedef int difference_type;
+        typedef std::ptrdiff_t difference_type;
         typedef std::bidirectional_iterator_tag iterator_category;
 
-        class iterator : public std::iterator<std::bidirectional_iterator_tag, T>
+        class iterator : public std::iterator<iterator_category, value_type>
         {
+
         public:
             friend class doubly_linked_list;
             friend class const_iterator;
@@ -51,15 +53,16 @@ namespace Lists
             {
             }
 
-            inline iterator& operator=(const iterator& it) :
-                node(it.node)
+            inline iterator& operator=(const iterator& it)
             {
+                node = it.node;
+
                 return *this;
             }
 
             inline iterator& operator++()
             {
-                this->currentNode = this->list->next(this->currentNode);
+                this->node = this->node->next;
 
                 return *this;
             }
@@ -67,14 +70,14 @@ namespace Lists
             iterator operator++(int)
             {
                 iterator iterator(*this);
-                operator++();
+                ++iterator;
 
                 return iterator;
             }
 
             inline iterator& operator--()
             {
-                this->currentNode = this->list->previous(this->currentNode);
+                this->node = this->node->previous;
 
                 return *this;
             }
@@ -82,40 +85,38 @@ namespace Lists
             inline iterator operator--(int)
             {
                 iterator iterator(*this);
-                operator--();
+                --iterator;
 
                 return iterator;
             }
 
             inline reference operator*() const
             {
-                return this->node->next->item;
+                return this->node->item;
             }
 
             inline pointer operator->() const
             {
-                return this->node->next;
+                return this->node;
             }
 
             bool operator==(const iterator& it)
             {
-                return ( ( this->list == it.list ) &&
-                         ( this->currentNode == it.currentNode ) );
+                return (this->node == it.node);
             }
             bool operator!=(const iterator& it)
             {
-                return ( ( this->list != it.list ) ||
-                         ( this->currentNode != it.currentNode ) );
+                return (this->node != it.node);
             }
         private:
             doubly_linked_node<T>* node;
         };
 
-        class const_iterator : public std::iterator<std::bidirectional_iterator_tag, const T>
+        class const_iterator : public std::iterator<iterator_category, const value_type>
         {
         public:
             friend class doubly_linked_list;
-            friend class const_iterator;
+            friend class iterator;
 
             inline const_iterator(const doubly_linked_node< T >* node = nullptr) :
                 node(node)
@@ -132,21 +133,23 @@ namespace Lists
             {
             }
 
-            inline const_iterator& operator=(const const_iterator& it) :
-                node(it.node)
+            inline const_iterator& operator=(const const_iterator& it)
             {
+                node = it.node;
+
                 return *this;
             }
             
-            inline const_iterator& operator=(const iterator& it) :
-                node(it.node)
+            inline const_iterator& operator=(const iterator& it)
             {
+                node = it.node;
+
                 return *this;
             }
 
             inline const_iterator& operator++()
             {
-                this->currentNode = this->list->next(this->currentNode);
+                this->node = this->node->next;
 
                 return *this;
             }
@@ -154,30 +157,206 @@ namespace Lists
             inline const_iterator operator++(int)
             {
                 const_iterator iterator(*this);
-                operator++();
+                ++iterator;
+
+                return iterator;
+            }
+
+            inline const_iterator& operator--()
+            {
+                this->node = this->node->previous;
+
+                return *this;
+            }
+
+            inline const_iterator operator--(int)
+            {
+                const_iterator iterator(*this);
+                --iterator;
 
                 return iterator;
             }
 
             inline reference operator*() const
             {
-                return this->node->next->item;
+                return *(this->node);
             }
 
             inline pointer operator->() const
             {
-                return this->node->next;
+                return this->node;
             }
 
             inline bool operator==(const const_iterator& it) const
             {
-                return ( ( this->list == it.list ) &&
-                         ( this->currentNode == it.currentNode ) );
+                return ( this->node == it.node );
             }
             inline bool operator!=(const const_iterator& it) const
             {
-                return ( ( this->list != it.list ) ||
-                         ( this->currentNode != it.currentNode ) );
+                return ( this->node != it.node );
+            }
+        private:
+            doubly_linked_node<T>* node;
+        };
+
+        class reverse_iterator : public std::iterator<iterator_category, value_type>
+        {
+        public:
+            friend class doubly_linked_list;
+            friend class const_reverse_iterator;
+
+            inline reverse_iterator(doubly_linked_node< T >* node = nullptr) :
+                node(node)
+            {
+            }
+
+            inline reverse_iterator(const reverse_iterator& it) :
+                node(it.node)
+            {
+            }
+
+            inline reverse_iterator& operator=(const reverse_iterator& it)
+            {
+                node = it.node;
+
+                return *this;
+            }
+
+            inline reverse_iterator& operator++()
+            {
+                this->node = this->node->previous;
+
+                return *this;
+            }
+
+            reverse_iterator operator++(int)
+            {
+                reverse_iterator iterator(*this);
+                ++iterator;
+
+                return iterator;
+            }
+
+            inline reverse_iterator& operator--()
+            {
+                this->node = this->node->next;
+
+                return *this;
+            }
+
+            inline reverse_iterator operator--(int)
+            {
+                iterator iterator(*this);
+                --iterator;
+
+                return iterator;
+            }
+
+            inline reference operator*() const
+            {
+                return this->node->item;
+            }
+
+            inline pointer operator->() const
+            {
+                return this->node;
+            }
+
+            bool operator==(const reverse_iterator& it)
+            {
+                return (this->node == it.node);
+            }
+            bool operator!=(const reverse_iterator& it)
+            {
+                return (this->node != it.node);
+            }
+        private:
+            doubly_linked_node<T>* node;
+        };
+
+        class const_reverse_iterator : public std::iterator<iterator_category, const value_type>
+        {
+        public:
+            friend class doubly_linked_list;
+            friend class iterator;
+
+            inline const_reverse_iterator(const doubly_linked_node< T >* node = nullptr) :
+                node(node)
+            {
+            }
+
+            inline const_reverse_iterator(const const_reverse_iterator& it) :
+                node(it.node)
+            {
+            }
+
+            inline const_reverse_iterator(const reverse_iterator& it) :
+                node(it.node)
+            {
+            }
+
+            inline const_reverse_iterator& operator=(const const_reverse_iterator& it)
+            {
+                node = it.node;
+
+                return *this;
+            }
+
+            inline const_reverse_iterator& operator=(const reverse_iterator& it)
+            {
+                node = it.node;
+
+                return *this;
+            }
+
+            inline const_reverse_iterator& operator++()
+            {
+                this->node = this->node->previous;
+
+                return *this;
+            }
+
+            inline const_reverse_iterator operator++(int)
+            {
+                const_reverse_iterator iterator(*this);
+                ++iterator;
+
+                return iterator;
+            }
+
+            inline const_reverse_iterator& operator--()
+            {
+                this->node = this->node->next;
+
+                return *this;
+            }
+
+            inline const_reverse_iterator operator--(int)
+            {
+                const_reverse_iterator iterator(*this);
+                --iterator;
+
+                return iterator;
+            }
+
+
+            inline reference operator*() const
+            {
+                return *(this->node);
+            }
+
+            inline pointer operator->() const
+            {
+                return this->node;
+            }
+
+            inline bool operator==(const const_reverse_iterator& it) const
+            {
+                return (this->node == it.node);
+            }
+            inline bool operator!=(const const_reverse_iterator& it) const
+            {
+                return (this->node != it.node);
             }
         private:
             doubly_linked_node<T>* node;
@@ -200,8 +379,8 @@ namespace Lists
         bool operator!=( const doubly_linked_list& rhs ) const;
 
         // Operations
-        void push_front( const T item );
-        void push_back( const T item );
+        [[noreturn]] void push_front( const T item );
+        [[noreturn]] void push_back( const T item );
         T pop_front();
         T pop_back();
         void clear();
@@ -217,13 +396,16 @@ namespace Lists
         doubly_linked_node< T >* last() const;
         doubly_linked_node< T >* next( doubly_linked_node< T >* current ) const;
         doubly_linked_node< T >* previous( doubly_linked_node< T >* current ) const;
-        DoublyLinkedListIterator< T > begin();
-        DoublyLinkedListIterator< T > rbegin();
-        DoublyLinkedListIterator< T > end();
-        DoublyLinkedListIterator< T > rend();
+        iterator begin();
+        iterator end();
+        reverse_iterator rbegin();
+        reverse_iterator rend();
+        const_iterator begin() const;
+        const_iterator end() const;
+        const_reverse_iterator rbegin() const;
+        const_reverse_iterator rend() const;
     private:
-        void blank_pop_front();
-        void blank_pop_back();
+        [[noreturn]] void blank_pop_front();
 
         bool equals( const doubly_linked_node< T >* node1, const doubly_linked_node< T >* node2 ) const;
         std::string to_string() const;
@@ -538,39 +720,51 @@ namespace Lists
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > doubly_linked_list< T >::begin()
+    typename doubly_linked_list<T>::iterator doubly_linked_list< T >::begin()
     {
-        DoublyLinkedListIterator< T > iterator( this );
-        iterator.currentNode = first();
-
-        return iterator;
+        return iterator(first());
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > doubly_linked_list< T >::rbegin()
+    typename doubly_linked_list<T>::iterator doubly_linked_list< T >::end()
     {
-        DoublyLinkedListIterator< T > iterator( this );
-        iterator.currentNode = last();
-
-        return iterator;
+        return iterator(next(last()));
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > doubly_linked_list< T >::end()
+    typename doubly_linked_list<T>::reverse_iterator doubly_linked_list<T>::rbegin()
     {
-        DoublyLinkedListIterator< T > iterator( this );
-        iterator.currentNode = next( last() );
-
-        return iterator;
+        return reverse_iterator(last());
     }
 
     template < typename T >
-    DoublyLinkedListIterator< T > doubly_linked_list< T >::rend()
+    typename doubly_linked_list<T>::reverse_iterator doubly_linked_list< T >::rend()
     {
-        DoublyLinkedListIterator< T > iterator( this );
-        iterator.currentNode = previous( first() );
+        return reverse_iterator(previous(first()));
+    }
 
-        return iterator;
+    template < typename T >
+    typename doubly_linked_list<T>::const_iterator doubly_linked_list< T >::begin() const
+    {
+        return const_iterator(first());
+    }
+
+    template < typename T >
+    typename doubly_linked_list<T>::const_iterator doubly_linked_list< T >::end() const
+    {
+        return const_iterator(next(last()));
+    }
+
+    template < typename T >
+    typename doubly_linked_list<T>::const_reverse_iterator doubly_linked_list<T>::rbegin() const
+    {
+        return const_reverse_iterator(last());
+    }
+
+    template < typename T >
+    typename doubly_linked_list<T>::const_reverse_iterator doubly_linked_list< T >::rend() const
+    {
+        return const_reverse_iterator(previous(first()));
     }
 
     template < typename T >
@@ -592,31 +786,6 @@ namespace Lists
                 previousNode->next = nullptr;
 
                 this->front = previousNode;
-            }
-
-            --(this->nodes);
-        }
-    }
-
-    template < typename T >
-    void doubly_linked_list< T >::blank_pop_back()
-    {
-        if (!empty())
-        {
-            doubly_linked_node< T >* nextNode = this->back->next;
-
-            delete this->back;
-
-            if (nextNode == nullptr)
-            {
-                this->front = nullptr;
-                this->back = nullptr;
-            }
-            else
-            {
-                nextNode->previous = nullptr;
-
-                this->back = nextNode;
             }
 
             --(this->nodes);

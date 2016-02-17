@@ -9,13 +9,13 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\Lists">
+    <Filter Include="Source Files\lists">
       <UniqueIdentifier>{61441978-e2d1-436f-8c5c-1872380558ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Sorts">
+    <Filter Include="Source Files\sorts">
       <UniqueIdentifier>{847e001f-ad36-4821-84e0-0fbf91e6ec8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Trees">
+    <Filter Include="Source Files\trees">
       <UniqueIdentifier>{ee0eaa7d-827e-4aae-8e8f-eb8532b0baf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -26,22 +26,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestsConsts.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SortsTest.cpp">
-      <Filter>Source Files\Sorts</Filter>
-    </ClCompile>
     <ClCompile Include="BinarySearchTreeTests.cpp">
-      <Filter>Source Files\Trees</Filter>
+      <Filter>Source Files\trees</Filter>
     </ClCompile>
-    <ClCompile Include="DoublyLinkedTest.cpp">
-      <Filter>Source Files\Lists</Filter>
+    <ClCompile Include="doubly_linked_list_test.cpp">
+      <Filter>Source Files\lists</Filter>
+    </ClCompile>
+    <ClCompile Include="sorts_test.cpp">
+      <Filter>Source Files\sorts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

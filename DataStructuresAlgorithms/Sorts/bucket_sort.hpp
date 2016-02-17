@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace Sorts
+namespace dsa
 {
     template < typename T >
     void bucketsort( T* data, const std::size_t size, const T largestValue )
