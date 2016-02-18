@@ -28,7 +28,7 @@ namespace dsa
             const std::size_t mid = ( low + high ) / 2;
             std::size_t pivot = partition( data, low, high, mid );
 
-            quicksort( data, low, pivot - 1 );
+            quicksort( data, low, pivot );
             quicksort( data, pivot + 1, high );
         }
     }
