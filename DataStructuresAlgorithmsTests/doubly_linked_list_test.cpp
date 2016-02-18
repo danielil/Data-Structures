@@ -5,7 +5,6 @@
 #include "..\DataStructuresAlgorithms\lists\doubly_linked_list.hpp"
 
 #include <random>
-#include <algorithm>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -32,7 +31,7 @@ namespace dsa
             std::default_random_engine generator;
 
             dsa::doubly_linked_list< unsigned int > list1;
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_front( generator() );
             }
@@ -47,7 +46,7 @@ namespace dsa
             std::default_random_engine generator;
 
             dsa::doubly_linked_list< unsigned int > list1;
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_back( generator() );
             }
@@ -62,7 +61,7 @@ namespace dsa
             std::default_random_engine generator;
 
             dsa::doubly_linked_list< unsigned int > list1;
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_front( generator() );
             }
@@ -77,7 +76,7 @@ namespace dsa
             std::default_random_engine generator;
 
             dsa::doubly_linked_list< unsigned int > list1;
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_back( generator() );
             }
@@ -94,7 +93,7 @@ namespace dsa
             dsa::doubly_linked_list< unsigned int > list1;
             dsa::doubly_linked_list< unsigned int > list2;
 
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 auto value = generator();
 
@@ -107,7 +106,7 @@ namespace dsa
             list1.clear();
             list2.clear();
 
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_front( generator() );
                 list2.push_front( generator() );
@@ -123,7 +122,7 @@ namespace dsa
             dsa::doubly_linked_list< unsigned int > list1;
             dsa::doubly_linked_list< unsigned int > list2;
 
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 auto value = generator();
 
@@ -136,7 +135,7 @@ namespace dsa
             list1.clear();
             list2.clear();
 
-            for ( auto idx = 0; idx < ITERATIONS; ++idx )
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 list1.push_back( generator() );
                 list2.push_back( generator() );
