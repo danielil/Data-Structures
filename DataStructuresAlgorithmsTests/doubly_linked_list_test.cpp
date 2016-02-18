@@ -162,6 +162,55 @@ namespace dsa
             Assert::IsTrue( list.empty() );
         }
 
+        TEST_METHOD(clear_test)
+        {
+            std::default_random_engine generator;
+
+            dsa::doubly_linked_list< unsigned int > list;
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+            {
+                list.push_back( generator() );
+            }
+
+            list.clear();
+
+            Assert::IsTrue( list.empty() );
+        }
+
+        TEST_METHOD(empty_peek_front_test)
+        {
+            std::default_random_engine generator;
+
+            dsa::doubly_linked_list< unsigned int > list;
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+            {
+                list.push_back( generator() );
+            }
+
+            auto size = list.size();
+            auto value = list.peek_front();
+
+            Assert::AreEqual( size, list.size() );
+            Assert::AreEqual( value, list.pop_front() );
+        }
+
+        TEST_METHOD(empty_peek_back_test)
+        {
+            std::default_random_engine generator;
+
+            dsa::doubly_linked_list< unsigned int > list;
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+            {
+                list.push_back( generator() );
+            }
+
+            auto size = list.size();
+            auto value = list.peek_back();
+
+            Assert::AreEqual( size, list.size() );
+            Assert::AreEqual( value, list.pop_back() );
+        }
+
         TEST_METHOD(push_front_pop_front_test)
         {
             std::default_random_engine generator;
