@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "Sort.hpp"
+#include "sort.hpp"
 
 #include <memory>
 
-namespace Sorts
+namespace dsa
 {
     template < typename T >
     void mergesort( T* data, const std::size_t size )

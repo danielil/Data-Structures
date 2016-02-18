@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace Hash
+namespace dsa
 {
     template < typename T >
     class HashTable

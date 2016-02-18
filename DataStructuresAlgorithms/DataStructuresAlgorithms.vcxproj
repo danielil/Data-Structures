@@ -19,35 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphs\graphl.hpp" />
-    <ClInclude Include="Graphs\graphm.hpp" />
-    <ClInclude Include="Graphs\node_data.hpp" />
-    <ClInclude Include="HashTable\HashTable.hpp" />
-    <ClInclude Include="Lists\Queue.hpp" />
-    <ClInclude Include="Lists\Stack.hpp" />
-    <ClInclude Include="Matrix\Matrix.hpp" />
-    <ClInclude Include="Sorts\BubbleSort.hpp" />
-    <ClInclude Include="Sorts\BucketSort.hpp" />
-    <ClInclude Include="Sorts\InsertionSort.hpp" />
-    <ClInclude Include="Sorts\MergeSort.hpp" />
-    <ClInclude Include="Sorts\QuickSort.hpp" />
-    <ClInclude Include="Sorts\Sort.hpp" />
-    <ClInclude Include="Trees\BinarySearchTree.hpp" />
-    <ClInclude Include="Trees\binary_tree.hpp" />
-    <ClInclude Include="Trees\node.hpp" />
-    <ClInclude Include="Trees\node_data.hpp" />
-    <ClInclude Include="Trees\tbst.hpp" />
-    <ClInclude Include="Trees\tbst_node_data.hpp" />
+    <ClInclude Include="graphs\graphl.hpp" />
+    <ClInclude Include="graphs\graphm.hpp" />
+    <ClInclude Include="graphs\node_data.hpp" />
+    <ClInclude Include="hashing\hash_table.hpp" />
+    <ClInclude Include="lists\doubly_linked_list.hpp" />
+    <ClInclude Include="matrix\matrix.hpp" />
+    <ClInclude Include="sorts\bubble_sort.hpp" />
+    <ClInclude Include="sorts\bucket_sort.hpp" />
+    <ClInclude Include="sorts\insertion_sort.hpp" />
+    <ClInclude Include="sorts\merge_sort.hpp" />
+    <ClInclude Include="sorts\quick_sort.hpp" />
+    <ClInclude Include="sorts\sort.hpp" />
+    <ClInclude Include="trees\binary_search_tree.hpp" />
+    <ClInclude Include="trees\binary_tree.hpp" />
+    <ClInclude Include="trees\node.hpp" />
+    <ClInclude Include="trees\tbst.hpp" />
+    <ClInclude Include="trees\tbst_node_data.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graphs\graphl.cpp" />
-    <ClCompile Include="Graphs\graphm.cpp" />
-    <ClCompile Include="Graphs\node_data.cpp" />
-    <ClCompile Include="Trees\binary_tree.cpp" />
-    <ClCompile Include="Trees\node.cpp" />
-    <ClCompile Include="Trees\node_data.cpp" />
-    <ClCompile Include="Trees\tbst.cpp" />
-    <ClCompile Include="Trees\tbst_node_data.cpp" />
+    <ClCompile Include="graphs\graphl.cpp" />
+    <ClCompile Include="graphs\graphm.cpp" />
+    <ClCompile Include="graphs\node_data.cpp" />
+    <ClCompile Include="trees\binary_tree.cpp" />
+    <ClCompile Include="trees\node.cpp" />
+    <ClCompile Include="trees\tbst.cpp" />
+    <ClCompile Include="trees\tbst_node_data.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2C4673F4-52A7-44D2-AD0B-3445FFF61C65}</ProjectGuid>
@@ -102,7 +99,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
@@ -112,14 +109,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -133,7 +130,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

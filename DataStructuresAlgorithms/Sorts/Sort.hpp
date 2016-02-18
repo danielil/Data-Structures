@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace Sorts
+namespace dsa
 {
     template < typename T >
     void copy( T* source, T* dest, const std::size_t start, const std::size_t end )

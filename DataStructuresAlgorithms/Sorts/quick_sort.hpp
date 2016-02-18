@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "Sort.hpp"
+#include "sort.hpp"
 
-namespace Sorts
+namespace dsa
 {
     template < typename T >
     void quicksort( T* data, const std::size_t size )
@@ -28,7 +28,7 @@ namespace Sorts
             const std::size_t mid = ( low + high ) / 2;
             std::size_t pivot = partition( data, low, high, mid );
 
-            quicksort( data, low, pivot - 1 );
+            quicksort( data, low, pivot );
             quicksort( data, pivot + 1, high );
         }
     }
