@@ -168,13 +168,13 @@ namespace dsa
     // buildGraph
     // Populates the Graph with data from an input stream.
     // Stream data is assumed to be organized as follows:
-    //      First line has an integer telling the number of nodes, say n.
-    //      Following is a text description of each of the 1 through n nodes.
-    //      After that, each line consists of 2 integer representing an edge.
+    //      FirstÂ lineÂ has an integer tellingÂ theÂ numberÂ ofÂ nodes,Â sayÂ n.
+    //      FollowingÂ isÂ aÂ textÂ descriptionÂ ofÂ eachÂ ofÂ theÂ 1Â throughÂ nÂ nodes.
+    //      AfterÂ that, eachÂ lineÂ consistsÂ ofÂ 2Â integerÂ representingÂ anÂ edge.
     //          {fromNode toNode}
-    //      A zero for any of the integers signifies the end of the data for
-    //      that one graph.
-    // A graph has at most 100 nodes.
+    //      AÂ zeroÂ forÂ any of the integersÂ signifies theÂ endÂ ofÂ theÂ dataÂ for
+    //      thatÂ oneÂ graph.
+    // A graph has atÂ mostÂ 100Â nodes.
     void GraphL::buildGraph( std::istream& infile)
     {
         int noNodes = 0;            // number of nodes
