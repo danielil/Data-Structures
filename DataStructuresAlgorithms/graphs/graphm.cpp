@@ -119,13 +119,13 @@ namespace dsa
     // buildGraph
     // Populates the Graph with data from an input stream.
     // Stream data is assumed to be organized as follows:
-    //      First line has an integer telling the number of nodes, say n.
-    //      Following is a text description of each of the 1 through n nodes.
-    //      After that, each line consists of 3 integers representing an edge.
+    //      FirstÂ lineÂ has an integer tellingÂ theÂ numberÂ ofÂ nodes,Â sayÂ n.
+    //      FollowingÂ isÂ aÂ textÂ descriptionÂ ofÂ eachÂ ofÂ theÂ 1Â throughÂ nÂ nodes.
+    //      AfterÂ that, eachÂ lineÂ consistsÂ ofÂ 3Â integersÂ representingÂ anÂ edge.
     //          {fromNode toNode label}
-    //      A zero for any of the node index integers signifies the end of the
-    //      data for that one graph.
-    // A graph has at most 100 nodes.
+    //      AÂ zeroÂ forÂ any of the node indexÂ integersÂ signifies theÂ endÂ ofÂ the
+    //      dataÂ for thatÂ oneÂ graph.
+    // A graph has atÂ mostÂ 100Â nodes.
     void GraphM::buildGraph( std::istream& infile)
     {
         int noNodes = 0;            // number of nodes
@@ -205,7 +205,7 @@ namespace dsa
     //---------------------------------------------------------------------------
     // findShortestPath
     // Calculates the shortest path between any two vertices within the Graph
-    // by implementing Dijkstra's shortest path algorithm. 
+    // by implementingÂ Dijkstra'sÂ shortestÂ pathÂ algorithm.Â 
     void GraphM::findShortestPath()
     {
         clearShortestPath();        // Clear previous data (if any)
