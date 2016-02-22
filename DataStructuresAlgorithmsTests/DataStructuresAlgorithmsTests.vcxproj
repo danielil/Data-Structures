@@ -158,7 +158,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BinarySearchTreeTests.cpp" />
+    <ClCompile Include="binary_search_tree_tests.cpp" />
     <ClCompile Include="sorts_test.cpp" />
     <ClCompile Include="doubly_linked_list_test.cpp" />
     <ClCompile Include="stdafx.cpp">

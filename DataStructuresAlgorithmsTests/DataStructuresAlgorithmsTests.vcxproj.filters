@@ -31,14 +31,14 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinarySearchTreeTests.cpp">
-      <Filter>Source Files\trees</Filter>
-    </ClCompile>
     <ClCompile Include="doubly_linked_list_test.cpp">
       <Filter>Source Files\lists</Filter>
     </ClCompile>
     <ClCompile Include="sorts_test.cpp">
       <Filter>Source Files\sorts</Filter>
+    </ClCompile>
+    <ClCompile Include="binary_search_tree_tests.cpp">
+      <Filter>Source Files\trees</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <memory>
+
 namespace dsa
 {
     template < typename T >
@@ -18,8 +20,8 @@ namespace dsa
     {
         T item;
 
-        doubly_linked_node< T >* previous;
-        doubly_linked_node< T >* next;
+        std::shared_ptr< doubly_linked_node< T > > previous;
+        std::shared_ptr< doubly_linked_node< T > > next;
     };
 
     template < typename T >
@@ -32,7 +34,7 @@ namespace dsa
             friend class doubly_linked_list;
             friend class const_iterator;
 
-            inline iterator( doubly_linked_node< T >* node = nullptr ) :
+            inline iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
                 node( node )
             {
             }
@@ -51,7 +53,7 @@ namespace dsa
 
             inline iterator& operator++()
             {
-                this->node = this->node->next;
+                this->node = this->node.lock()->next;
 
                 return *this;
             }
@@ -66,7 +68,7 @@ namespace dsa
 
             inline iterator& operator--()
             {
-                this->node = this->node->previous;
+                this->node = this->node.lock()->previous;
 
                 return *this;
             }
@@ -81,26 +83,26 @@ namespace dsa
 
             inline typename std::iterator_traits< iterator >::reference operator*() const
             {
-                return this->node->item;
+                return this->node.lock()->item;
             }
 
             inline typename std::iterator_traits< iterator >::pointer operator->() const
             {
-                return this->node;
+                return this->node.lock().get();
             }
 
             bool operator==( const iterator& it )
             {
-                return ( this->node == it.node );
+                return ( this->node.lock() == it.node.lock() );
             }
 
             bool operator!=( const iterator& it )
             {
-                return ( this->node != it.node );
+                return ( this->node.lock() != it.node.lock() );
             }
 
         private:
-            doubly_linked_node< T >* node;
+            std::weak_ptr< doubly_linked_node< T > > node;
         };
 
         class const_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -109,7 +111,7 @@ namespace dsa
             friend class doubly_linked_list;
             friend class iterator;
 
-            inline const_iterator( const doubly_linked_node< T >* node = nullptr ) :
+            inline const_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
                 node( node )
             {
             }
@@ -140,7 +142,7 @@ namespace dsa
 
             inline const_iterator& operator++()
             {
-                this->node = this->node->next;
+                this->node = this->node.lock()->next;
 
                 return *this;
             }
@@ -155,7 +157,7 @@ namespace dsa
 
             inline const_iterator& operator--()
             {
-                this->node = this->node->previous;
+                this->node = this->node.lock()->previous;
 
                 return *this;
             }
@@ -170,26 +172,26 @@ namespace dsa
 
             inline typename std::iterator_traits< const_iterator >::reference operator*() const
             {
-                return *( this->node );
+                return this->node.lock()->item;
             }
 
             inline typename std::iterator_traits< const_iterator >::pointer operator->() const
             {
-                return this->node;
+                return this->node.lock().get();
             }
 
             inline bool operator==( const const_iterator& it ) const
             {
-                return ( this->node == it.node );
+                return ( this->node.lock() == it.node.lock() );
             }
 
             inline bool operator!=( const const_iterator& it ) const
             {
-                return ( this->node != it.node );
+                return ( this->node.lock() != it.node.lock() );
             }
 
         private:
-            doubly_linked_node< T >* node;
+            std::weak_ptr< doubly_linked_node< T > > node;
         };
 
         class reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -198,7 +200,7 @@ namespace dsa
             friend class doubly_linked_list;
             friend class const_reverse_iterator;
 
-            inline reverse_iterator( doubly_linked_node< T >* node = nullptr ) :
+            inline reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
                 node( node )
             {
             }
@@ -217,7 +219,7 @@ namespace dsa
 
             inline reverse_iterator& operator++()
             {
-                this->node = this->node->previous;
+                this->node = this->node.lock()->previous;
 
                 return *this;
             }
@@ -232,7 +234,7 @@ namespace dsa
 
             inline reverse_iterator& operator--()
             {
-                this->node = this->node->next;
+                this->node = this->node.lock()->next;
 
                 return *this;
             }
@@ -247,26 +249,26 @@ namespace dsa
 
             inline typename std::iterator_traits< reverse_iterator >::reference operator*() const
             {
-                return this->node->item;
+                return this->node.lock()->item;
             }
 
             inline typename std::iterator_traits< reverse_iterator >::pointer operator->() const
             {
-                return this->node;
+                return this->node.lock().get();
             }
 
             bool operator==( const reverse_iterator& it )
             {
-                return ( this->node == it.node );
+                return ( this->node.lock() == it.node.lock() );
             }
 
             bool operator!=( const reverse_iterator& it )
             {
-                return ( this->node != it.node );
+                return ( this->node.lock() != it.node.lock() );
             }
 
         private:
-            doubly_linked_node< T >* node;
+            std::weak_ptr< doubly_linked_node< T > > node;
         };
 
         class const_reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -275,7 +277,7 @@ namespace dsa
             friend class doubly_linked_list;
             friend class iterator;
 
-            inline const_reverse_iterator( const doubly_linked_node< T >* node = nullptr ) :
+            inline const_reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
                 node( node )
             {
             }
@@ -306,7 +308,7 @@ namespace dsa
 
             inline const_reverse_iterator& operator++()
             {
-                this->node = this->node->previous;
+                this->node = this->node.lock()->previous;
 
                 return *this;
             }
@@ -321,7 +323,7 @@ namespace dsa
 
             inline const_reverse_iterator& operator--()
             {
-                this->node = this->node->next;
+                this->node = this->node.lock()->next;
 
                 return *this;
             }
@@ -334,29 +336,28 @@ namespace dsa
                 return iterator;
             }
 
-
             inline typename std::iterator_traits< const_reverse_iterator >::reference operator*() const
             {
-                return *( this->node );
+                return this->node.lock()->item;
             }
 
             inline typename std::iterator_traits< const_reverse_iterator >::reference operator->() const
             {
-                return this->node;
+                return this->node.lock().get();
             }
 
             inline bool operator==( const const_reverse_iterator& it ) const
             {
-                return ( this->node == it.node );
+                return ( this->node.lock() == it.node.lock() );
             }
 
             inline bool operator!=( const const_reverse_iterator& it ) const
             {
-                return ( this->node != it.node );
+                return ( this->node.lock() != it.node.lock() );
             }
 
         private:
-            doubly_linked_node< T >* node;
+            std::weak_ptr< doubly_linked_node< T > > node;
         };
 
         doubly_linked_list();
@@ -389,10 +390,6 @@ namespace dsa
         bool empty() const;
 
         // Iterator operations
-        doubly_linked_node< T >* first() const;
-        doubly_linked_node< T >* last() const;
-        doubly_linked_node< T >* next( doubly_linked_node< T >* current ) const;
-        doubly_linked_node< T >* previous( doubly_linked_node< T >* current ) const;
         iterator begin();
         iterator end();
         reverse_iterator rbegin();
@@ -404,18 +401,23 @@ namespace dsa
     private:
         void blank_pop_front();
 
-        bool equals( const doubly_linked_node< T >* node1, const doubly_linked_node< T >* node2 ) const;
+        bool equals( const std::weak_ptr< doubly_linked_node< T > > node1, std::weak_ptr< doubly_linked_node< T > > node2 ) const;
 
-        doubly_linked_node< T >* front;
-        doubly_linked_node< T >* back;
+        std::weak_ptr< doubly_linked_node< T > > first() const;
+        std::weak_ptr< doubly_linked_node< T > > last() const;
+        std::weak_ptr< doubly_linked_node< T > > next( const std::weak_ptr< doubly_linked_node< T > > current ) const;
+        std::weak_ptr< doubly_linked_node< T > > previous( const std::weak_ptr< doubly_linked_node< T > > current ) const;
+
+        std::shared_ptr< doubly_linked_node< T > > front;
+        std::shared_ptr< doubly_linked_node< T > > back;
 
         std::size_t nodes;
     };
 
     template < typename T >
     doubly_linked_list< T >::doubly_linked_list() :
-        front( nullptr ),
-        back( nullptr ),
+        front(),
+        back(),
         nodes( 0 )
     {
     }
@@ -428,13 +430,13 @@ namespace dsa
 
     template < typename T >
     doubly_linked_list< T >::doubly_linked_list( const doubly_linked_list& other ) :
-        front( nullptr ),
-        back( nullptr ),
+        front(),
+        back(),
         nodes( 0 )
     {
-        doubly_linked_node< T >* node = other.back;
+        std::shared_ptr< doubly_linked_node< T > > node = other.back;
 
-        while ( node != nullptr )
+        while ( node )
         {
             this->push_front( node->item );
             node = node->next;
@@ -443,12 +445,10 @@ namespace dsa
 
     template < typename T >
     doubly_linked_list< T >::doubly_linked_list( doubly_linked_list&& other ) noexcept :
-        front( other.front ),
-        back( other.back ),
+        front( std::move( other.front ) ),
+        back( std::move( other.back ) ),
         nodes( other.nodes )
     {
-        other.front = nullptr;
-        other.back = nullptr;
         other.nodes = 0;
     }
 
@@ -472,14 +472,12 @@ namespace dsa
     {
         if ( this != &rhs )
         {
-            clear();
+            this->clear();
 
-            this->front = rhs.front;
-            this->back = rhs.back;
+            this->front = std::move( rhs.front );
+            this->back = std::move( rhs.back );
             this->nodes = rhs.nodes;
 
-            rhs.front = nullptr;
-            rhs.back = nullptr;
             rhs.nodes = 0;
         }
 
@@ -497,7 +495,7 @@ namespace dsa
     {
         doubly_linked_list< T > result( lhs );
 
-        return lhs += rhs;
+        return result += rhs;
     }
 
     template < typename T >
@@ -505,13 +503,13 @@ namespace dsa
     {
         if ( !rhs.empty() )
         {
-            doubly_linked_node< T >* currentNodeOther = rhs.back;
+            std::shared_ptr< doubly_linked_node< T > > node = rhs.back;
 
-            while ( currentNodeOther != nullptr )
+            while ( node )
             {
-                this->push_front( currentNodeOther->item );
+                this->push_front( node->item );
 
-                currentNodeOther = currentNodeOther->next;
+                node = node->next;
             }
         }
 
@@ -533,14 +531,11 @@ namespace dsa
     template < typename T >
     void doubly_linked_list< T >::push_front( const T item )
     {
-        doubly_linked_node< T >* newNode = new doubly_linked_node< T >();
+        std::shared_ptr< doubly_linked_node< T > > newNode( new doubly_linked_node< T >() );
         newNode->item = item;
-        newNode->next = nullptr;
 
         if ( this->empty() )
         {
-            newNode->previous = nullptr;
-
             this->front = newNode;
             this->back = newNode;
         }
@@ -558,14 +553,11 @@ namespace dsa
     template < typename T >
     void doubly_linked_list< T >::push_back( const T item )
     {
-        doubly_linked_node< T >* newNode = new doubly_linked_node< T >();
+        std::shared_ptr< doubly_linked_node< T > > newNode( new doubly_linked_node< T >() );
         newNode->item = item;
-        newNode->previous = nullptr;
 
         if ( this->empty() )
         {
-            newNode->next = nullptr;
-
             this->back = newNode;
             this->front = newNode;
         }
@@ -589,20 +581,18 @@ namespace dsa
         }
 
         T item = this->front->item;
-        doubly_linked_node< T >* previousNode = this->front->previous;
+        std::shared_ptr< doubly_linked_node< T > > previousNode = std::move( this->front->previous );
 
-        delete this->front;
-
-        if ( previousNode == nullptr )
+        if ( previousNode )
         {
-            this->front = nullptr;
-            this->back = nullptr;
+            previousNode->next.reset();
+
+            this->front = std::move( previousNode );
         }
         else
         {
-            previousNode->next = nullptr;
-
-            this->front = previousNode;
+            this->front.reset();
+            this->back.reset();
         }
 
         --( this->nodes );
@@ -619,20 +609,18 @@ namespace dsa
         }
 
         T item = this->back->item;
-        doubly_linked_node< T >* nextNode = this->back->next;
+        std::shared_ptr< doubly_linked_node< T > > nextNode = std::move( this->back->next );
 
-        delete this->back;
-
-        if ( nextNode == nullptr )
+        if ( nextNode )
         {
-            this->front = nullptr;
-            this->back = nullptr;
+            nextNode->previous.reset();
+
+            this->back = std::move( nextNode );
         }
         else
         {
-            nextNode->previous = nullptr;
-
-            this->back = nextNode;
+            this->front.reset();
+            this->back.reset();
         }
 
         --( this->nodes );
@@ -680,33 +668,9 @@ namespace dsa
     template < typename T >
     bool doubly_linked_list< T >::empty() const
     {
-        return ( ( this->front == nullptr ) &&
-                 ( this->back == nullptr ) &&
+        return ( ( !this->front ) &&
+                 ( !this->back ) &&
                  ( this->nodes == 0 ) );
-    }
-
-    template < typename T >
-    doubly_linked_node< T >* doubly_linked_list< T >::first() const
-    {
-        return this->back;
-    }
-
-    template < typename T >
-    doubly_linked_node< T >* doubly_linked_list< T >::last() const
-    {
-        return this->front;
-    }
-
-    template < typename T >
-    doubly_linked_node< T >* doubly_linked_list< T >::next( doubly_linked_node< T >* current ) const
-    {
-        return current->next;
-    }
-
-    template < typename T >
-    doubly_linked_node< T >* doubly_linked_list< T >::previous( doubly_linked_node< T >* current ) const
-    {
-        return current->previous;
     }
 
     template < typename T >
@@ -762,20 +726,18 @@ namespace dsa
     {
         if ( !this->empty() )
         {
-            doubly_linked_node< T >* previousNode = this->front->previous;
+            std::shared_ptr< doubly_linked_node< T > > previousNode = std::move( this->front->previous );
 
-            delete this->front;
-
-            if ( previousNode == nullptr )
+            if ( previousNode )
             {
-                this->front = nullptr;
-                this->back = nullptr;
+                previousNode->next.reset();
+
+                this->front = std::move( previousNode );
             }
             else
             {
-                previousNode->next = nullptr;
-
-                this->front = previousNode;
+                this->front.reset();
+                this->back.reset();
             }
 
             --( this->nodes );
@@ -783,20 +745,44 @@ namespace dsa
     }
 
     template < typename T >
-    bool doubly_linked_list< T >::equals( const doubly_linked_node< T >* node1, const doubly_linked_node< T >* node2 ) const
+    bool doubly_linked_list< T >::equals( const std::weak_ptr< doubly_linked_node< T > > node1, const std::weak_ptr< doubly_linked_node< T > > node2 ) const
     {
-        if ( node1 == node2 )
+        if ( node1.lock() == node2.lock() )
         {
             return true;
         }
 
-        if ( ( node1 != nullptr ) &&
-             ( node2 != nullptr ) &&
-             ( node1->item == node2->item ) )
+        if ( ( node1.lock() ) &&
+             ( node2.lock() ) &&
+             ( node1.lock()->item == node2.lock()->item ) )
         {
-            return this->equals( node1->next, node2->next );
+            return this->equals( node1.lock()->next, node2.lock()->next );
         }
 
         return false;
+    }
+
+    template < typename T >
+    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::first() const
+    {
+        return this->back;
+    }
+
+    template < typename T >
+    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::last() const
+    {
+        return this->front;
+    }
+
+    template < typename T >
+    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::next( const std::weak_ptr< doubly_linked_node< T > > current ) const
+    {
+        return current.lock()->next;
+    }
+
+    template < typename T >
+    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::previous( const std::weak_ptr< doubly_linked_node< T > > current ) const
+    {
+        return current.lock()->previous;
     }
 }

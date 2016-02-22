@@ -1,4 +1,6 @@
 /**
+ * Daniel Sebastian Iliescu
+ * 
  * This file contains the header definition for a Matrix class.
  */
 
@@ -12,13 +14,14 @@ namespace dsa
     {
     public:
         Matrix(const std::size_t rows, const std::size_t columns);
-        ~Matrix() noexcept;
 
         Matrix(const Matrix& other);
         Matrix(Matrix&& other) noexcept;
 
         Matrix& operator=(const Matrix& rhs);
         Matrix& operator=(Matrix&& rhs) noexcept;
+
+        ~Matrix() noexcept;
 
         Matrix& operator+(const Matrix& rhs);
         Matrix& operator+(Matrix&& rhs);
@@ -44,6 +47,8 @@ namespace dsa
         bool operator==(const Matrix& rhs) const;
         bool operator!=(const Matrix& rhs) const;
 
+        T determinant() const;
+
         double** GetAddition(double** leftMatrix,
             double** rightMatrix,
             int rows,
@@ -61,10 +66,8 @@ namespace dsa
             int leftMatrixColumns,
             int rightMatrixRows);
         double** GetInverse(double** matrix);
-
-        double GetDeterminant(double** matrix);
     private:
-        T* matrix;
+        T** matrix;
 
         std::size_t rows;
         std::size_t columns;
@@ -99,20 +102,15 @@ namespace dsa
         delete[] this->matrix;
     }
 
-    /**
-    * Returns the determinant of a 2x2 matrix.
-    */
     template <typename T>
-    double Matrix<T>::GetDeterminant(double** matrix)
+    T Matrix<T>::determinant() const
     {
-        if (matrix)
+        if (this->matrix)
         {
-            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            return this->matrix[0][0] * this->matrix[1][1] - this->matrix[0][1] * this->matrix[1][0];
         }
-        else
-        {
-            return 0;
-        }
+        
+        return 0;
     }
 
     /**
