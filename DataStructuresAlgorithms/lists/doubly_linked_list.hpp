@@ -401,7 +401,7 @@ namespace dsa
     private:
         void blank_pop_front();
 
-        bool equals( const std::weak_ptr< doubly_linked_node< T > > node1, std::weak_ptr< doubly_linked_node< T > > node2 ) const;
+        bool equals( const std::weak_ptr< doubly_linked_node< T > > node1, const std::weak_ptr< doubly_linked_node< T > > node2 ) const;
 
         std::weak_ptr< doubly_linked_node< T > > first() const;
         std::weak_ptr< doubly_linked_node< T > > last() const;
@@ -531,7 +531,7 @@ namespace dsa
     template < typename T >
     void doubly_linked_list< T >::push_front( const T item )
     {
-        std::shared_ptr< doubly_linked_node< T > > newNode( new doubly_linked_node< T >() );
+        std::shared_ptr< doubly_linked_node< T > > newNode = std::make_shared< doubly_linked_node< T > >();
         newNode->item = item;
 
         if ( this->empty() )
@@ -553,7 +553,7 @@ namespace dsa
     template < typename T >
     void doubly_linked_list< T >::push_back( const T item )
     {
-        std::shared_ptr< doubly_linked_node< T > > newNode( new doubly_linked_node< T >() );
+        std::shared_ptr< doubly_linked_node< T > > newNode = std::make_shared< doubly_linked_node< T > >();
         newNode->item = item;
 
         if ( this->empty() )
