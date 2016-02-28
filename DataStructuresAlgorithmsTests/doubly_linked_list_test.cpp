@@ -86,7 +86,29 @@ namespace dsa
             Assert::IsTrue( list1 == list2 );
         }
 
-        TEST_METHOD(addition_operator_test)
+        TEST_METHOD(addition_operator_push_front_test)
+        {
+            std::default_random_engine generator;
+
+            dsa::doubly_linked_list< unsigned int > list1;
+            dsa::doubly_linked_list< unsigned int > list2;
+            unsigned int values[ITERATIONS];
+
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+            {
+                values[idx] = generator();
+
+                list1.push_front( values[idx] );
+                list2.push_front( values[idx] );
+            }
+
+            auto list3 = list1 + list2;
+
+            Assert::IsTrue( std::equal( std::begin( list3 ), std::end( list1 ), std::begin( list1 ), std::end( list1 ) ) );
+            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
+        }
+
+        TEST_METHOD(addition_operator_push_back_test)
         {
             std::default_random_engine generator;
 
@@ -108,7 +130,29 @@ namespace dsa
             Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
         }
 
-        TEST_METHOD(addition_equal_operator_test)
+        TEST_METHOD(addition_equal_operator_push_front_test)
+        {
+            std::default_random_engine generator;
+
+            dsa::doubly_linked_list< unsigned int > list1;
+            dsa::doubly_linked_list< unsigned int > list2;
+            unsigned int values[ITERATIONS];
+
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+            {
+                values[idx] = generator();
+
+                list1.push_front( values[idx] );
+                list2.push_front( values[idx] );
+            }
+
+            list2 += list1;
+
+            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list1 ), std::begin( list2 ), std::end( list2 ) ) );
+            Assert::IsTrue( std::equal( std::begin( list1 ), std::end( list2 ), std::begin( list1 ), std::end( list1 ) ) );
+        }
+
+        TEST_METHOD(addition_equal_operator_push_back_test)
         {
             std::default_random_engine generator;
 
@@ -266,8 +310,6 @@ namespace dsa
             {
                 values[idx] = generator();
                 list.push_front( values[idx] );
-
-                Assert::AreEqual( idx + 1, list.size() );
             }
 
             Assert::AreEqual( ITERATIONS, list.size() );
@@ -293,8 +335,6 @@ namespace dsa
             {
                 values[idx] = generator();
                 list.push_front( values[idx] );
-
-                Assert::AreEqual( idx + 1, list.size() );
             }
 
             Assert::AreEqual( ITERATIONS, list.size() );
@@ -318,8 +358,6 @@ namespace dsa
             {
                 values[idx] = generator();
                 list.push_back( values[idx] );
-
-                Assert::AreEqual( idx + 1, list.size() );
             }
 
             Assert::AreEqual( ITERATIONS, list.size() );
@@ -343,8 +381,6 @@ namespace dsa
             {
                 values[idx] = generator();
                 list.push_back( values[idx] );
-
-                Assert::AreEqual( idx + 1, list.size() );
             }
 
             Assert::AreEqual( ITERATIONS, list.size() );
