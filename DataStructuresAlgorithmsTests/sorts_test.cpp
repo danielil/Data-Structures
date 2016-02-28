@@ -16,70 +16,70 @@ namespace
     const std::size_t ITERATIONS = 10;
 }
 
-namespace SortsTests
+namespace dsa
 {
-    TEST_CLASS(SortsTest)
+    TEST_CLASS(sorts_test)
     {
     public:
 
-        TEST_METHOD(BubbleSortTest)
+        TEST_METHOD(bubble_sort_test)
         {
             std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
-            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 values[idx] = generator();
             }
 
             dsa::bubblesort( values, ITERATIONS );
 
-            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( std::begin( values ), std::end( values ) ) );
         }
 
-        TEST_METHOD(InsertionSortTest)
+        TEST_METHOD(insertion_sort_test)
         {
             std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
-            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 values[idx] = generator();
             }
 
             dsa::insertionsort( values, ITERATIONS );
 
-            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( std::begin( values ), std::end( values ) ) );
         }
 
-        TEST_METHOD(MergeSortTest)
+        TEST_METHOD(merge_sort_test)
         {
             std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
-            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 values[idx] = generator();
             }
 
             dsa::mergesort( values, ITERATIONS );
 
-            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( std::begin( values ), std::end( values ) ) );
         }
 
-        TEST_METHOD(QuickSortTest)
+        TEST_METHOD(quick_sort_test)
         {
             std::default_random_engine generator;
 
             unsigned int values[ITERATIONS];
-            for (std::size_t idx = 0; idx < ITERATIONS; ++idx)
+            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
             {
                 values[idx] = generator();
             }
 
             dsa::quicksort( values, ITERATIONS );
 
-            Assert::IsTrue( std::is_sorted( values, values + ITERATIONS ) );
+            Assert::IsTrue( std::is_sorted( std::begin( values ), std::end( values ) ) );
         }
     };
 }
