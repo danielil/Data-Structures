@@ -1,462 +1,453 @@
-#include "stdafx.h"
+#include "lists/doubly_linked_list.hpp"
 
-#include "CppUnitTest.h"
-
-#include "..\DataStructuresAlgorithms\lists\doubly_linked_list.hpp"
+#include <gtest/gtest.h>
 
 #include <random>
 
-using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
 namespace
 {
-    const std::size_t ITERATIONS = 10;
+	const std::size_t ITERATIONS = 10;
 }
 
 namespace dsa
 {
-    TEST_CLASS(doubly_linked_list_test)
-    {
-    public:
+	TEST(constructor_test)
+	{
+		dsa::doubly_linked_list< unsigned int > list;
 
-        TEST_METHOD(constructor_test)
-        {
-            dsa::doubly_linked_list< unsigned int > list;
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(copy_constructor_push_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(copy_constructor_push_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_front( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_front( generator() );
-            }
+		auto list2( list1 );
 
-            auto list2( list1 );
+		ASSERT_TRUE( list1 == list2 );
+	}
 
-            Assert::IsTrue( list1 == list2 );
-        }
+	TEST(copy_constructor_push_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(copy_constructor_push_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_back( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_back( generator() );
-            }
+		auto list2( list1 );
 
-            auto list2( list1 );
+		ASSERT_TRUE( list1 == list2 );
+	}
 
-            Assert::IsTrue( list1 == list2 );
-        }
+	TEST(copy_assignment_push_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(copy_assignment_push_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_front( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_front( generator() );
-            }
+		auto list2 = list1;
 
-            auto list2 = list1;
+		ASSERT_TRUE( list1 == list2 );
+	}
 
-            Assert::IsTrue( list1 == list2 );
-        }
+	TEST(copy_assignment_push_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(copy_assignment_push_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_back( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_back( generator() );
-            }
+		auto list2 = list1;
 
-            auto list2 = list1;
+		ASSERT_TRUE( list1 == list2 );
+	}
 
-            Assert::IsTrue( list1 == list2 );
-        }
+	TEST(addition_operator_push_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(addition_operator_push_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
+			list1.push_front( values[idx] );
+			list2.push_front( values[idx] );
+		}
 
-                list1.push_front( values[idx] );
-                list2.push_front( values[idx] );
-            }
+		auto list3 = list1 + list2;
 
-            auto list3 = list1 + list2;
+		ASSERT_TRUE( std::equal( std::begin( list3 ), std::end( list1 ), std::begin( list1 ), std::end( list1 ) ) );
+		ASSERT_TRUE( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::begin( list3 ), std::end( list1 ), std::begin( list1 ), std::end( list1 ) ) );
-            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
-        }
+	TEST(addition_operator_push_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(addition_operator_push_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
+			list1.push_back( values[idx] );
+			list2.push_back( values[idx] );
+		}
 
-                list1.push_back( values[idx] );
-                list2.push_back( values[idx] );
-            }
+		auto list3 = list1 + list2;
 
-            auto list3 = list1 + list2;
+		ASSERT_TRUE( std::equal( std::begin( list3 ), std::end( list1 ), std::begin( list1 ), std::end( list1 ) ) );
+		ASSERT_TRUE( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::begin( list3 ), std::end( list1 ), std::begin( list1 ), std::end( list1 ) ) );
-            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list3 ), std::begin( list2 ), std::end( list2 ) ) );
-        }
+	TEST(addition_equal_operator_push_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(addition_equal_operator_push_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
+			list1.push_front( values[idx] );
+			list2.push_front( values[idx] );
+		}
 
-                list1.push_front( values[idx] );
-                list2.push_front( values[idx] );
-            }
+		list2 += list1;
 
-            list2 += list1;
+		ASSERT_TRUE( std::equal( std::begin( list2 ), std::end( list1 ), std::begin( list2 ), std::end( list2 ) ) );
+		ASSERT_TRUE( std::equal( std::begin( list1 ), std::end( list2 ), std::begin( list1 ), std::end( list1 ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list1 ), std::begin( list2 ), std::end( list2 ) ) );
-            Assert::IsTrue( std::equal( std::begin( list1 ), std::end( list2 ), std::begin( list1 ), std::end( list1 ) ) );
-        }
+	TEST(addition_equal_operator_push_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(addition_equal_operator_push_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
+			list1.push_back( values[idx] );
+			list2.push_back( values[idx] );
+		}
 
-                list1.push_back( values[idx] );
-                list2.push_back( values[idx] );
-            }
+		list2 += list1;
 
-            list2 += list1;
+		ASSERT_TRUE( std::equal( std::begin( list2 ), std::end( list1 ), std::begin( list2 ), std::end( list2 ) ) );
+		ASSERT_TRUE( std::equal( std::begin( list1 ), std::end( list2 ), std::begin( list1 ), std::end( list1 ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::begin( list2 ), std::end( list1 ), std::begin( list2 ), std::end( list2 ) ) );
-            Assert::IsTrue( std::equal( std::begin( list1 ), std::end( list2 ), std::begin( list1 ), std::end( list1 ) ) );
-        }
+	TEST(equality_push_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(equality_push_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			auto value = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                auto value = generator();
+			list1.push_front( value );
+			list2.push_front( value );
+		}
 
-                list1.push_front( value );
-                list2.push_front( value );
-            }
+		ASSERT_TRUE( list1 == list2 );
 
-            Assert::IsTrue( list1 == list2 );
+		list1.clear();
+		list2.clear();
 
-            list1.clear();
-            list2.clear();
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_front( generator() );
+			list2.push_front( generator() );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_front( generator() );
-                list2.push_front( generator() );
-            }
+		ASSERT_TRUE( list1 != list2 );
+	}
 
-            Assert::IsTrue( list1 != list2 );
-        }
+	TEST(equality_push_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(equality_push_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list1;
+		dsa::doubly_linked_list< unsigned int > list2;
 
-            dsa::doubly_linked_list< unsigned int > list1;
-            dsa::doubly_linked_list< unsigned int > list2;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			auto value = generator();
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                auto value = generator();
+			list1.push_back( value );
+			list2.push_back( value );
+		}
 
-                list1.push_back( value );
-                list2.push_back( value );
-            }
+		ASSERT_TRUE( list1 == list2 );
 
-            Assert::IsTrue( list1 == list2 );
+		list1.clear();
+		list2.clear();
 
-            list1.clear();
-            list2.clear();
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list1.push_back( generator() );
+			list2.push_back( generator() );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list1.push_back( generator() );
-                list2.push_back( generator() );
-            }
+		ASSERT_TRUE( list1 != list2 );
+	}
 
-            Assert::IsTrue( list1 != list2 );
-        }
+	TEST(empty_pop_front_test)
+	{
+		dsa::doubly_linked_list< unsigned int > list;
 
-        TEST_METHOD(empty_pop_front_test)
-        {
-            dsa::doubly_linked_list< unsigned int > list;
+		list.pop_front();
 
-            list.pop_front();
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(empty_pop_back_test)
+	{
+		dsa::doubly_linked_list< unsigned int > list;
 
-        TEST_METHOD(empty_pop_back_test)
-        {
-            dsa::doubly_linked_list< unsigned int > list;
+		list.pop_back();
 
-            list.pop_back();
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(clear_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(clear_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_back( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list.push_back( generator() );
-            }
+		list.clear();
 
-            list.clear();
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(empty_peek_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(empty_peek_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_back( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list.push_back( generator() );
-            }
+		auto size = list.size();
+		auto value = list.peek_front();
 
-            auto size = list.size();
-            auto value = list.peek_front();
+		ASSERT_EQ( size, list.size() );
+		ASSERT_EQ( value, list.pop_front() );
+	}
 
-            Assert::AreEqual( size, list.size() );
-            Assert::AreEqual( value, list.pop_front() );
-        }
+	TEST(empty_peek_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(empty_peek_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_back( generator() );
+		}
 
-            dsa::doubly_linked_list< unsigned int > list;
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                list.push_back( generator() );
-            }
+		auto size = list.size();
+		auto value = list.peek_back();
 
-            auto size = list.size();
-            auto value = list.peek_back();
+		ASSERT_EQ( size, list.size() );
+		ASSERT_EQ( value, list.pop_back() );
+	}
 
-            Assert::AreEqual( size, list.size() );
-            Assert::AreEqual( value, list.pop_back() );
-        }
+	TEST(push_front_pop_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(push_front_pop_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_front( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_front( values[idx] );
-            }
+		ASSERT_EQ( ITERATIONS, list.size() );
 
-            Assert::AreEqual( ITERATIONS, list.size() );
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			std::size_t reverseIdx = ITERATIONS - 1 - idx;
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                std::size_t reverseIdx = ITERATIONS - 1 - idx;
+			ASSERT_EQ( values[reverseIdx], list.pop_front() );
+		}
 
-                Assert::AreEqual( values[reverseIdx], list.pop_front() );
-            }
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(push_front_pop_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(push_front_pop_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_front( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_front( values[idx] );
-            }
+		ASSERT_EQ( ITERATIONS, list.size() );
 
-            Assert::AreEqual( ITERATIONS, list.size() );
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			ASSERT_EQ( values[idx], list.pop_back() );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                Assert::AreEqual( values[idx], list.pop_back() );
-            }
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(push_back_pop_front_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(push_back_pop_front_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_back( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_back( values[idx] );
-            }
+		ASSERT_EQ( ITERATIONS, list.size() );
 
-            Assert::AreEqual( ITERATIONS, list.size() );
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			ASSERT_EQ( values[idx], list.pop_front() );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                Assert::AreEqual( values[idx], list.pop_front() );
-            }
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(push_back_pop_back_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(push_back_pop_back_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_back( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_back( values[idx] );
-            }
+		ASSERT_EQ( ITERATIONS, list.size() );
 
-            Assert::AreEqual( ITERATIONS, list.size() );
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			std::size_t reverseIdx = ITERATIONS - 1 - idx;
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                std::size_t reverseIdx = ITERATIONS - 1 - idx;
+			ASSERT_EQ( values[reverseIdx], list.pop_back() );
+		}
 
-                Assert::AreEqual( values[reverseIdx], list.pop_back() );
-            }
+		ASSERT_TRUE( list.empty() );
+	}
 
-            Assert::IsTrue( list.empty() );
-        }
+	TEST(iterator_push_front_begin_end_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(iterator_push_front_begin_end_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_front( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_front( values[idx] );
-            }
+		ASSERT_TRUE( std::equal( std::begin( values ), std::end( values ), std::begin( list ), std::end( list ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::begin( values ), std::end( values ), std::begin( list ), std::end( list ) ) );
-        }
+	TEST(iterator_push_back_begin_end_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(iterator_push_back_begin_end_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_back( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_back( values[idx] );
-            }
+		ASSERT_TRUE( std::equal( std::rbegin( values ), std::rend( values ), std::begin( list ), std::end( list ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::rbegin( values ), std::rend( values ), std::begin( list ), std::end( list ) ) );
-        }
+	TEST(iterator_push_front_rbegin_rend_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(iterator_push_front_rbegin_rend_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_front( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_front( values[idx] );
-            }
+		ASSERT_TRUE( std::equal( std::rbegin( values ), std::rend( values ), std::rbegin( list ), std::rend( list ) ) );
+	}
 
-            Assert::IsTrue( std::equal( std::rbegin( values ), std::rend( values ), std::rbegin( list ), std::rend( list ) ) );
-        }
+	TEST(iterator_push_back_rbegin_rend_test)
+	{
+		std::default_random_engine generator;
 
-        TEST_METHOD(iterator_push_back_rbegin_rend_test)
-        {
-            std::default_random_engine generator;
+		dsa::doubly_linked_list< unsigned int > list;
+		unsigned int values[ITERATIONS];
 
-            dsa::doubly_linked_list< unsigned int > list;
-            unsigned int values[ITERATIONS];
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			values[idx] = generator();
+			list.push_back( values[idx] );
+		}
 
-            for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-            {
-                values[idx] = generator();
-                list.push_back( values[idx] );
-            }
-
-            Assert::IsTrue( std::equal( std::begin( values ), std::end( values ), std::rbegin( list ), std::rend( list ) ) );
-        }
-    };
+		ASSERT_TRUE( std::equal( std::begin( values ), std::end( values ), std::rbegin( list ), std::rend( list ) ) );
+	}
 }
