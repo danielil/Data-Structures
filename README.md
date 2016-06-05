@@ -12,4 +12,4 @@ author: `Daniel Sebastian Iliescu, http://dansil.net`
 Limitations
 ------------------
 
-Limited testing files exist for Lists and Sorts. The testing files are native Visual Studio C++ tests. More tests will be added soon.
+Limited testing files exist for Lists and Sorts. More tests will be added soon.
