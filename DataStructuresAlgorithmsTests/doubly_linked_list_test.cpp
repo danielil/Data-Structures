@@ -2,18 +2,21 @@
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <random>
 
 namespace
 {
 	const std::size_t ITERATIONS = 10;
+
+    using ListValueType = unsigned int;
 }
 
 namespace dsa
 {
 	TEST(constructor_test)
 	{
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 
 		ASSERT_TRUE( list.empty() );
 	}
@@ -22,7 +25,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
+		doubly_linked_list< ListValueType > list1;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list1.push_front( generator() );
@@ -37,7 +40,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
+		doubly_linked_list< ListValueType > list1;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list1.push_back( generator() );
@@ -52,7 +55,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
+		doubly_linked_list< ListValueType > list1;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list1.push_front( generator() );
@@ -67,7 +70,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
+		doubly_linked_list< ListValueType > list1;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list1.push_back( generator() );
@@ -82,9 +85,9 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -104,9 +107,9 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -126,9 +129,9 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -148,9 +151,9 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -170,8 +173,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -199,8 +202,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list1;
-		dsa::doubly_linked_list< unsigned int > list2;
+		doubly_linked_list< ListValueType > list1;
+		doubly_linked_list< ListValueType > list2;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -226,7 +229,7 @@ namespace dsa
 
 	TEST(empty_pop_front_test)
 	{
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 
 		list.pop_front();
 
@@ -235,7 +238,7 @@ namespace dsa
 
 	TEST(empty_pop_back_test)
 	{
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 
 		list.pop_back();
 
@@ -246,7 +249,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list.push_back( generator() );
@@ -261,7 +264,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list.push_back( generator() );
@@ -278,7 +281,7 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
+		doubly_linked_list< ListValueType > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			list.push_back( generator() );
@@ -295,8 +298,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -320,8 +323,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -343,8 +346,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -366,8 +369,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -391,8 +394,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -407,8 +410,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -423,8 +426,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
@@ -439,8 +442,8 @@ namespace dsa
 	{
 		std::default_random_engine generator;
 
-		dsa::doubly_linked_list< unsigned int > list;
-		unsigned int values[ITERATIONS];
+		doubly_linked_list< ListValueType > list;
+		std::array< ListValueType, ITERATIONS > values;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
