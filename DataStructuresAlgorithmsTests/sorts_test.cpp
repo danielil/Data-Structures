@@ -15,7 +15,7 @@ namespace
 
 namespace dsa
 {
-	TEST(bubble_sort_test)
+	TEST(sort, bubble_sort)
 	{
 		std::default_random_engine generator;
 
@@ -30,7 +30,7 @@ namespace dsa
 		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
 	}
 
-	TEST(insertion_sort_test)
+	TEST(sort, insertion_sort)
 	{
 		std::default_random_engine generator;
 
@@ -45,7 +45,7 @@ namespace dsa
 		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
 	}
 
-	TEST(merge_sort_test)
+	TEST(sort, merge_sort)
 	{
 		std::default_random_engine generator;
 
@@ -60,7 +60,7 @@ namespace dsa
 		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
 	}
 
-	TEST(quick_sort_test)
+	TEST(sort, quick_sort)
 	{
 		std::default_random_engine generator;
 
