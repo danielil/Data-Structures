@@ -6,92 +6,76 @@
 
 #pragma once
 
+#include <iterator>
+#include <vector>
+
 namespace dsa
 {
-    template < typename T >
-    void copy( T* source, T* dest, const std::size_t start, const std::size_t end )
-    {
-        if ( ( dest != nullptr ) &&
-             ( source != nullptr ) &&
-             ( start < end ) )
-        {
-            for ( std::size_t idx = start; idx < end; ++idx )
-            {
-                dest[idx] = source[idx];
-            }
-        }
-    }
+	template<
+		typename input_iterator,
+		typename output_iterator >
+	auto
+	merge(
+		input_iterator inputBegin1,
+		input_iterator inputEnd1,
+		input_iterator inputBegin2,
+		input_iterator inputEnd2,
+		output_iterator output )
+	{
+		while ( ( inputBegin1 != inputEnd1 ) &&
+				( inputBegin2 != inputEnd2 ) )
+		{
+			if ( *inputBegin1 <= *inputBegin2 )
+			{
+				*output = *inputBegin1;
+				++inputBegin1;
+			}
+			else
+			{
+				*output = *inputBegin2;
+				++inputBegin2;
+			}
 
-    template < typename T >
-    void swap( T* data, const std::size_t index1, const std::size_t index2 )
-    {
-        if ( ( data != nullptr ) &&
-             ( index1 != index2 ) )
-        {
-            T temp = data[index1];
-            data[index1] = data[index2];
-            data[index2] = temp;
-        }
-    }
+			++output;
+		}
 
-    template < typename T >
-    void merge( T* source, T* dest, const std::size_t start, const std::size_t middle, const std::size_t end )
-    {
-        if ( ( source != nullptr ) &&
-             ( dest != nullptr ) &&
-             ( start < middle ) &&
-             ( middle < end ) )
-        {
-            std::size_t j1 = start;
-            std::size_t j2 = middle;
+		return ( inputBegin1 == inputEnd1 ) ? 
+			std::copy( inputBegin2, inputEnd2, output ) : 
+			std::copy( inputBegin1, inputEnd1, output );
+	}
 
-            for ( std::size_t idx = start; idx < end; ++idx )
-            {
-                if ( ( j1 < middle ) &&
-                     ( ( j2 >= end ) ||
-                       ( source[j1] <= source[j2] ) ) )
-                {
-                    dest[idx] = source[j1];
-                    ++j1;
-                }
-                else
-                {
-                    dest[idx] = source[j2];
-                    ++j2;
-                }
-            }
-        }
-    }
+	template < typename iterator >
+	auto
+	partition(
+		iterator begin,
+		iterator end,
+		iterator pivot )
+	{
+		auto position = pivot;
 
-    template < typename T >
-    std::size_t partition( T* data, const std::size_t start, const std::size_t end, const std::size_t pivot )
-    {
-        std::size_t position = pivot;
+		while ( ( begin != end ) &&
+				( pivot != end ) )
+		{
+			const auto pivotValue = *pivot;
 
-        if ( ( data != nullptr ) &&
-             ( start < end ) &&
-             ( pivot >= start ) &&
-             ( pivot <= end ) )
-        {
-            const T pivotValue = data[pivot];
+			// Move pivot to the rightmost end
+			std::swap( *pivot, *end );
 
-            // Move pivot to the rightmost end
-            swap( data, pivot, end );
-            position = start;
+			position = end;
 
-            for ( std::size_t idx = start; idx <= ( end - 1 ); idx++ )
-            {
-                if ( data[idx] <= pivotValue )
-                {
-                    swap( data, idx, position );
-                    ++position;
-                }
-            }
+			for ( auto it = begin; it != std::prev( end ); ++it )
+			{
+				if ( *it <= pivotValue )
+				{
+					std::swap( *it, *position );
+					++position;
+				}
+			}
 
-            // Move pivot to its final position
-            swap( data, position, end );
-        }
+			// Move pivot to its final position
+			std::swap( *position, *end );
+		}
 
-        return position;
-    }
+		return position;
+	}
 }

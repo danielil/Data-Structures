@@ -10,26 +10,19 @@
 
 namespace dsa
 {
-    template < typename T >
-    void quicksort( T* data, const std::size_t size )
-    {
-        if ( ( data != nullptr ) &&
-             ( size >= 0 ) )
-        {
-            quicksort( data, 0, size - 1 );
-        }
-    }
+	template < typename iterator >
+	void
+	quick_sort(
+		iterator begin,
+		iterator end )
+	{
+		if ( begin < end )
+		{
+			const auto mid = std::distance( begin, end ) / 2;
+			auto pivot = dsa::partition( begin, end, std::next( begin, mid ) );
 
-    template < typename T >
-    void quicksort( T* data, const std::size_t low, const std::size_t high )
-    {
-        if ( low < high )
-        {
-            const std::size_t mid = ( low + high ) / 2;
-            std::size_t pivot = partition( data, low, high, mid );
-
-            quicksort( data, low, pivot );
-            quicksort( data, pivot + 1, high );
-        }
-    }
+			quick_sort( begin, pivot );
+			quick_sort( std::next( pivot ), end );
+		}
+	}
 }

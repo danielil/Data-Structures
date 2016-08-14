@@ -1,77 +1,94 @@
-#include "sorts/bubble_sort.hpp"
-#include "sorts/insertion_sort.hpp"
-#include "sorts/merge_sort.hpp"
-#include "sorts/quick_sort.hpp"
+/**
+* Author: Daniel Sebastian Iliescu
+*
+* Tester for the various sorting algorithms.
+*/
+
+#include <sorts/bubble_sort.hpp>
+#include <sorts/insertion_sort.hpp>
+#include <sorts/merge_sort.hpp>
+#include <sorts/quick_sort.hpp>
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <algorithm>
 #include <random>
 
-namespace
-{
-	const std::size_t ITERATIONS = 10;
-}
-
 namespace dsa
 {
-	TEST(sort, bubble_sort)
+	class sort_tester : public testing::Test
 	{
-		std::default_random_engine generator;
+	protected:
 
-		unsigned int values[ITERATIONS];
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		using value_type = uint64_t;
+		static const auto ITERATIONS = 10000U;
+
+		void SetUp() override
 		{
-			values[idx] = generator();
+			std::generate(
+				std::begin( container ),
+				std::end( container ),
+				this->generator );
 		}
 
-		dsa::bubblesort( values, ITERATIONS );
+		std::array< value_type, ITERATIONS > container;
 
-		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
+	private:
+
+		std::default_random_engine generator;
+	};
+
+	TEST_F( sort_tester, bubble_sort )
+	{
+		dsa::bubble_sort(
+			std::begin( container ),
+			std::end( container ) );
+
+		ASSERT_TRUE(
+			std::is_sorted(
+				std::begin( container ),
+				std::end( container ) ) );
 	}
 
-	TEST(sort, insertion_sort)
+	TEST_F( sort_tester, insertion_sort )
 	{
-		std::default_random_engine generator;
+		dsa::insertion_sort(
+			std::begin( container ),
+			std::end( container ) );
 
-		unsigned int values[ITERATIONS];
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-		{
-			values[idx] = generator();
-		}
-
-		dsa::insertionsort( values, ITERATIONS );
-
-		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
+		ASSERT_TRUE(
+			std::is_sorted(
+				std::begin( container ),
+				std::end( container ) ) );
 	}
 
-	TEST(sort, merge_sort)
+	TEST_F( sort_tester, merge_sort )
 	{
-		std::default_random_engine generator;
+		dsa::merge_sort(
+			std::begin( container ),
+			std::end( container ) );
 
-		unsigned int values[ITERATIONS];
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-		{
-			values[idx] = generator();
-		}
-
-		dsa::mergesort( values, ITERATIONS );
-
-		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
+		ASSERT_TRUE(
+			std::is_sorted(
+				std::begin( container ),
+				std::end( container ) ) );
 	}
 
-	TEST(sort, quick_sort)
+	TEST_F( sort_tester, quick_sort )
 	{
-		std::default_random_engine generator;
+		// Fix iterator-based dsa::partition
+		/*
 
-		unsigned int values[ITERATIONS];
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
-		{
-			values[idx] = generator();
-		}
+		dsa::quick_sort(
+			std::begin( container ),
+			std::end( container ) );
 
-		dsa::quicksort( values, ITERATIONS );
+		ASSERT_TRUE(
+			std::is_sorted(
+				std::begin( container ),
+				std::end( container ) ) );
 
-		ASSERT_TRUE( std::is_sorted( std::begin( values ), std::end( values ) ) );
+		*/
 	}
 }

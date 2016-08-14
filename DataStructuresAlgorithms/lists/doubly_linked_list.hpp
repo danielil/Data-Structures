@@ -15,870 +15,853 @@
 
 namespace dsa
 {
-    template < typename T >
-    struct doubly_linked_node
-    {
-        doubly_linked_node() :
-            item( T() ),
-            previous( nullptr ),
-            next( nullptr )
-        {
-        }
-
-        doubly_linked_node( T item ) :
-            item( item ),
-            previous( nullptr ),
-            next( nullptr )
-        {
-        }
-
-        ~doubly_linked_node() = default;
-
-        doubly_linked_node( const doubly_linked_node& ) = default;
-        doubly_linked_node( doubly_linked_node&& ) noexcept = default;
-        doubly_linked_node& operator=( const doubly_linked_node& ) = default;
-        doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
-
-        bool operator==( const doubly_linked_node& rhs ) const
-        {
-            return ( this->item == rhs.item );
-        }
-
-        bool operator!=( const doubly_linked_node& rhs ) const
-        {
-            return !( *this == rhs );
-        }
-
-        T item;
-
-        std::shared_ptr< doubly_linked_node< T > > previous;
-        std::shared_ptr< doubly_linked_node< T > > next;
-    };
-
-    template < typename T >
-    class doubly_linked_list
-    {
-    public:
-        class iterator : public std::iterator< std::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T& >
-        {
-        public:
-            friend class doubly_linked_list;
-            friend class const_iterator;
-
-            iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
-                node( node )
-            {
-            }
-
-            iterator( const iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            iterator& operator=( const iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            iterator& operator++()
-            {
-                this->node = this->node.lock()->next;
-
-                return *this;
-            }
-
-            iterator operator++( int )
-            {
-                iterator iterator( *this );
-                ++( *this );
-
-                return iterator;
-            }
-
-            iterator& operator--()
-            {
-                this->node = this->node.lock()->previous;
-
-                return *this;
-            }
-
-            iterator operator--( int )
-            {
-                iterator iterator( *this );
-                --( *this );
-
-                return iterator;
-            }
-
-            T operator*() const
-            {
-                return this->node.lock()->item;
-            }
-
-            doubly_linked_node< T >* operator->() const
-            {
-                return this->node.lock().get();
-            }
-
-            bool operator==( const iterator& it )
-            {
-                if ( this->node.expired() && 
-                     it.node.expired() )
-                {
-                    return true;
-                }
-
-                if ( it.node.expired() )
-                {
-                    return false;
-                }
-
-                return ( *( this->node.lock().get() ) == *( it.node.lock().get() ) );
-            }
-
-            bool operator!=( const iterator& it )
-            {
-                return !( *this == it );
-            }
-
-        private:
-            std::weak_ptr< doubly_linked_node< T > > node;
-        };
-
-        class const_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
-        {
-        public:
-            friend class doubly_linked_list;
-            friend class iterator;
-
-            const_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
-                node( node )
-            {
-            }
-
-            const_iterator( const const_iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            const_iterator( const iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            const_iterator& operator=( const const_iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            const_iterator& operator=( const iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            const_iterator& operator++()
-            {
-                this->node = this->node.lock()->next;
-
-                return *this;
-            }
-
-            const_iterator operator++( int )
-            {
-                const_iterator iterator( *this );
-                ++( *this );
-
-                return iterator;
-            }
-
-            const_iterator& operator--()
-            {
-                this->node = this->node.lock()->previous;
-
-                return *this;
-            }
-
-            const_iterator operator--( int )
-            {
-                const_iterator iterator( *this );
-                --( *this );
-
-                return iterator;
-            }
-
-            const T operator*() const
-            {
-                return this->node.lock()->item;
-            }
-
-            const doubly_linked_node< T >* operator->() const
-            {
-                return this->node.lock().get();
-            }
-
-            bool operator==( const const_iterator& it ) const
-            {
-                if ( this->node.expired() && 
-                     it.node.expired() )
-                {
-                    return true;
-                }
-
-                if ( it.node.expired() )
-                {
-                    return false;
-                }
-
-                return ( *( this->node.lock().get() ) == *( it.node.lock().get() ) );
-            }
-
-            bool operator!=( const const_iterator& it ) const
-            {
-                return !( *this == it );
-            }
-
-        private:
-            std::weak_ptr< doubly_linked_node< T > > node;
-        };
-
-        class reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
-        {
-        public:
-            friend class doubly_linked_list;
-            friend class const_reverse_iterator;
-
-            reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
-                node( node )
-            {
-            }
-
-            reverse_iterator( const reverse_iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            reverse_iterator& operator=( const reverse_iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            reverse_iterator& operator++()
-            {
-                this->node = this->node.lock()->previous;
-
-                return *this;
-            }
-
-            reverse_iterator operator++( int )
-            {
-                reverse_iterator iterator( *this );
-                ++( *this );
-
-                return iterator;
-            }
-
-            reverse_iterator& operator--()
-            {
-                this->node = this->node.lock()->next;
-
-                return *this;
-            }
-
-            reverse_iterator operator--( int )
-            {
-                iterator iterator( *this );
-                --( *this );
-
-                return iterator;
-            }
-
-            T operator*() const
-            {
-                return this->node.lock()->item;
-            }
-
-            doubly_linked_node< T >* operator->() const
-            {
-                return this->node.lock().get();
-            }
-
-            bool operator==( const reverse_iterator& it )
-            {
-                if ( this->node.expired() && 
-                     it.node.expired() )
-                {
-                    return true;
-                }
-
-                if ( it.node.expired() )
-                {
-                    return false;
-                }
-
-                return ( *( this->node.lock().get() ) == *( it.node.lock().get() ) );
-            }
-
-            bool operator!=( const reverse_iterator& it )
-            {
-                return !( *this == it );
-            }
-
-        private:
-            std::weak_ptr< doubly_linked_node< T > > node;
-        };
-
-        class const_reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
-        {
-        public:
-            friend class doubly_linked_list;
-            friend class iterator;
-
-            const_reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
-                node( node )
-            {
-            }
-
-            const_reverse_iterator( const const_reverse_iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            const_reverse_iterator( const reverse_iterator& it ) :
-                node( it.node )
-            {
-            }
-
-            const_reverse_iterator& operator=( const const_reverse_iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            const_reverse_iterator& operator=( const reverse_iterator& it )
-            {
-                this->node = it.node;
-
-                return *this;
-            }
-
-            const_reverse_iterator& operator++()
-            {
-                this->node = this->node.lock()->previous;
-
-                return *this;
-            }
-
-            const_reverse_iterator operator++( int )
-            {
-                const_reverse_iterator iterator( *this );
-                ++( *this );
-
-                return iterator;
-            }
-
-            const_reverse_iterator& operator--()
-            {
-                this->node = this->node.lock()->next;
-
-                return *this;
-            }
-
-            const_reverse_iterator operator--( int )
-            {
-                const_reverse_iterator iterator( *this );
-                --( *this );
-
-                return iterator;
-            }
-
-            const T operator*() const
-            {
-                return this->node.lock()->item;
-            }
-
-            const doubly_linked_node< T >* operator->() const
-            {
-                return this->node.lock().get();
-            }
-
-            bool operator==( const const_reverse_iterator& it ) const
-            {
-                if ( this->node.expired() && 
-                     it.node.expired() )
-                {
-                    return true;
-                }
-
-                if ( it.node.expired() )
-                {
-                    return false;
-                }
-
-                return ( *( this->node.lock().get() ) == *( it.node.lock().get() ) );
-            }
-
-            bool operator!=( const const_reverse_iterator& it ) const
-            {
-                return !( *this == it );
-            }
-
-        private:
-            std::weak_ptr< doubly_linked_node< T > > node;
-        };
-
-        doubly_linked_list() = default;
-        ~doubly_linked_list() noexcept = default;
-
-        doubly_linked_list( const doubly_linked_list& other );
-        doubly_linked_list( doubly_linked_list&& other ) noexcept;
-
-        // Operators
-        doubly_linked_list& operator=( const doubly_linked_list& rhs );
-        doubly_linked_list& operator=( doubly_linked_list&& rhs ) noexcept;
-
-        doubly_linked_list& operator+( const doubly_linked_list& rhs );
-        doubly_linked_list& operator+=( const doubly_linked_list& rhs );
-
-        bool operator==( const doubly_linked_list& rhs ) const noexcept;
-        bool operator!=( const doubly_linked_list& rhs ) const noexcept;
-
-        // Operations
-        void push_front( const T item );
-        void push_back( const T item );
-        T pop_front();
-        T pop_back();
-        void clear() noexcept;
-
-        // Accessors
-        T peek_front() const noexcept;
-        T peek_back() const noexcept ;
-        std::size_t size() const noexcept;
-        bool empty() const noexcept;
-
-        // Iterator operations
-        iterator begin() noexcept;
-        iterator end() noexcept;
-        reverse_iterator rbegin() noexcept;
-        reverse_iterator rend() noexcept;
-
-        const_iterator begin() const noexcept;
-        const_iterator end() const noexcept;
-        const_reverse_iterator rbegin() const noexcept;
-        const_reverse_iterator rend() const noexcept;
-
-        const_iterator cbegin() const noexcept;
-        const_iterator cend() const noexcept;
-        const_reverse_iterator crbegin() const noexcept;
-        const_reverse_iterator crend() const noexcept;
-    private:
-        void blank_pop_front() noexcept;
-
-        bool equals(
-            const std::weak_ptr< doubly_linked_node< T > > node1,
-            const std::weak_ptr< doubly_linked_node< T > > node2 ) const noexcept;
-
-        std::weak_ptr< doubly_linked_node< T > > first() const noexcept;
-        std::weak_ptr< doubly_linked_node< T > > last() const noexcept;
-        std::weak_ptr< doubly_linked_node< T > > next( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept;
-        std::weak_ptr< doubly_linked_node< T > > previous( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept;
-
-        std::shared_ptr< doubly_linked_node< T > > front;
-        std::shared_ptr< doubly_linked_node< T > > back;
-
-        std::size_t nodes = 0;
-    };
-
-    template < typename T >
-    doubly_linked_list< T >::doubly_linked_list( const doubly_linked_list& other )
-    {
-        std::shared_ptr< doubly_linked_node< T > > node = other.back;
-
-        while ( node )
-        {
-            this->push_front( node->item );
-            node = node->next;
-        }
-    }
-
-    template < typename T >
-    doubly_linked_list< T >::doubly_linked_list( doubly_linked_list&& other ) noexcept :
-        front( std::move_if_noexcept( other.front ) ),
-        back( std::move_if_noexcept( other.back ) ),
-        nodes( other.nodes )
-    {
-        other.nodes = 0;
-    }
-
-    template < typename T >
-    doubly_linked_list< T >& doubly_linked_list< T >::operator=( const doubly_linked_list& rhs )
-    {
-        if ( this != &rhs )
-        {
-            this->clear();
-
-            *this = std::move( doubly_linked_list< T >( rhs ) );
-        }
-
-        return *this;
-    }
-
-    template < typename T >
-    doubly_linked_list< T >& doubly_linked_list< T >::operator=( doubly_linked_list&& rhs ) noexcept
-    {
-        if ( this != &rhs )
-        {
-            this->clear();
-
-            this->front = std::move_if_noexcept( rhs.front );
-            this->back = std::move_if_noexcept( rhs.back );
-            this->nodes = rhs.nodes;
-
-            rhs.nodes = 0;
-        }
-
-        return *this;
-    }
-
-    template < typename T >
-    doubly_linked_list< T >& doubly_linked_list< T >::operator+( const doubly_linked_list& rhs )
-    {
-        return *this += rhs;
-    }
-
-    template < typename T >
-    doubly_linked_list< T > operator+( const doubly_linked_list< T >& lhs, const doubly_linked_list< T >& rhs )
-    {
-        doubly_linked_list< T > result( lhs );
-
-        return result += rhs;
-    }
-
-    template < typename T >
-    doubly_linked_list< T >& doubly_linked_list< T >::operator+=( const doubly_linked_list& rhs )
-    {
-        if ( !rhs.empty() )
-        {
-            std::shared_ptr< doubly_linked_node< T > > node = rhs.back;
-
-            while ( node )
-            {
-                this->push_front( node->item );
-
-                node = node->next;
-            }
-        }
-
-        return *this;
-    }
-
-    template < typename T >
-    bool doubly_linked_list< T >::operator==( const doubly_linked_list& rhs ) const noexcept
-    {
-        return this->equals( this->back, rhs.back );
-    }
-
-    template < typename T >
-    bool doubly_linked_list< T >::operator!=( const doubly_linked_list& rhs ) const noexcept
-    {
-        return !( *this == rhs );
-    }
-
-    template < typename T >
-    void doubly_linked_list< T >::push_front( const T item )
-    {
-        auto newNode = std::make_shared< doubly_linked_node< T > >( item );
-
-        if ( this->empty() )
-        {
-            this->front = newNode;
-            this->back = newNode;
-        }
-        else
-        {
-            newNode->previous = this->front;
-
-            this->front->next = newNode;
-            this->front = newNode;
-        }
-
-        ++( this->nodes );
-    }
-
-    template < typename T >
-    void doubly_linked_list< T >::push_back( const T item )
-    {
-        auto newNode = std::make_shared< doubly_linked_node< T > >( item );
-
-        if ( this->empty() )
-        {
-            this->back = newNode;
-            this->front = newNode;
-        }
-        else
-        {
-            newNode->next = this->back;
-
-            this->back->previous = newNode;
-            this->back = newNode;
-        }
-
-        ++( this->nodes );
-    }
-
-    template < typename T >
-    T doubly_linked_list< T >::pop_front()
-    {
-        if ( this->empty() )
-        {
-            return T();
-        }
-
-        T item = this->front->item;
-        auto previousNode = std::move( this->front->previous );
-
-        if ( previousNode )
-        {
-            previousNode->next = nullptr;
-
-            this->front = std::move( previousNode );
-        }
-        else
-        {
-            this->front = nullptr;
-            this->back = nullptr;
-        }
-
-        --( this->nodes );
-
-        return item;
-    }
-
-    template < typename T >
-    T doubly_linked_list< T >::pop_back()
-    {
-        if ( this->empty() )
-        {
-            return T();
-        }
-
-        T item = this->back->item;
-        auto nextNode = std::move( this->back->next );
-
-        if ( nextNode )
-        {
-            nextNode->previous = nullptr;
-
-            this->back = std::move( nextNode );
-        }
-        else
-        {
-            this->front = nullptr;
-            this->back = nullptr;
-        }
-
-        --( this->nodes );
-
-        return item;
-    }
-
-    template < typename T >
-    void doubly_linked_list< T >::clear() noexcept
-    {
-        while ( !this->empty() )
-        {
-            this->blank_pop_front();
-        }
-    }
-
-    template < typename T >
-    T doubly_linked_list< T >::peek_front() const noexcept
-    {
-        if ( this->empty() )
-        {
-            return T();
-        }
-
-        return this->front->item;
-    }
-
-    template < typename T >
-    T doubly_linked_list< T >::peek_back() const noexcept
-    {
-        if ( this->empty() )
-        {
-            return T();
-        }
-
-        return this->back->item;
-    }
-
-    template < typename T >
-    std::size_t doubly_linked_list< T >::size() const noexcept
-    {
-        return this->nodes;
-    }
-
-    template < typename T >
-    bool doubly_linked_list< T >::empty() const noexcept
-    {
-        return ( ( !this->front ) &&
-                 ( !this->back ) &&
-                 ( this->nodes == 0 ) );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::iterator doubly_linked_list< T >::begin() noexcept
-    {
-        return iterator( this->first() );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::iterator doubly_linked_list< T >::end() noexcept
-    {
-        return iterator( this->next( this->last() ) );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::reverse_iterator doubly_linked_list< T >::rbegin() noexcept
-    {
-        return reverse_iterator( this->last() );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::reverse_iterator doubly_linked_list< T >::rend() noexcept
-    {
-        return reverse_iterator( this->previous( this->first() ) );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_iterator doubly_linked_list< T >::begin() const noexcept
-    {
-        return const_iterator( this->first() );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_iterator doubly_linked_list< T >::end() const noexcept
-    {
-        return const_iterator( this->next( this->last() ) );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_reverse_iterator doubly_linked_list< T >::rbegin() const noexcept
-    {
-        return const_reverse_iterator( this->last() );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_reverse_iterator doubly_linked_list< T >::rend() const noexcept
-    {
-        return const_reverse_iterator( this->previous( this->first() ) );
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_iterator doubly_linked_list< T >::cbegin() const noexcept
-    {
-        return this->begin();
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_iterator doubly_linked_list< T >::cend() const noexcept
-    {
-        return this->end();
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_reverse_iterator doubly_linked_list< T >::crbegin() const noexcept
-    {
-        return this->rbegin();
-    }
-
-    template < typename T >
-    typename doubly_linked_list< T >::const_reverse_iterator doubly_linked_list< T >::crend() const noexcept
-    {
-        return this->rend();
-    }
-
-    template < typename T >
-    void doubly_linked_list< T >::blank_pop_front() noexcept
-    {
-        if ( !this->empty() )
-        {
-            auto previousNode = std::move_if_noexcept( this->front->previous );
-
-            if ( previousNode )
-            {
-                previousNode->next = nullptr;
-
-                this->front = std::move_if_noexcept( previousNode );
-            }
-            else
-            {
-                this->front = nullptr;
-                this->back = nullptr;
-            }
-
-            --( this->nodes );
-        }
-    }
-
-    template < typename T >
-    bool doubly_linked_list< T >::equals(
-        const std::weak_ptr< doubly_linked_node< T > > node1,
-        const std::weak_ptr< doubly_linked_node< T > > node2 ) const noexcept
-    {
-        if ( node1.expired() &&
-             node2.expired() )
-        {
-            return true;
-        }
-
-        if ( node1.expired() ||
-             node2.expired() )
-        {
-            return false;
-        }
-
-        const auto lockedNode1 = node1.lock();
-        const auto lockedNode2 = node2.lock();
-
-        if ( lockedNode1->item == lockedNode2->item )
-        {
-            return this->equals( lockedNode1->next, lockedNode2->next );
-        }
-
-        return false;
-    }
-
-    template < typename T >
-    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::first() const noexcept
-    {
-        return this->back;
-    }
-
-    template < typename T >
-    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::last() const noexcept
-    {
-        return this->front;
-    }
-
-    template < typename T >
-    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::next( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept
-    {
-        return current.lock()->next;
-    }
-
-    template < typename T >
-    std::weak_ptr< doubly_linked_node< T > > doubly_linked_list< T >::previous( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept
-    {
-        return current.lock()->previous;
-    }
+	template < typename T >
+	class doubly_linked_list
+	{
+	public:
+
+		using value_type = T;
+
+		template < typename T >
+		struct doubly_linked_node
+		{
+			doubly_linked_node() = default;
+
+			doubly_linked_node( T item ) :
+				item( item )
+			{
+			}
+
+			~doubly_linked_node() = default;
+
+			doubly_linked_node( const doubly_linked_node& ) = default;
+			doubly_linked_node( doubly_linked_node&& ) noexcept = default;
+			doubly_linked_node& operator=( const doubly_linked_node& ) = default;
+			doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
+
+			bool
+				operator==( const doubly_linked_node& rhs ) const
+			{
+				return ( this->item == rhs.item );
+			}
+
+			bool
+				operator!=( const doubly_linked_node& rhs ) const
+			{
+				return !( *this == rhs );
+			}
+
+			T item = T();
+
+			std::shared_ptr< doubly_linked_node< T > > previous = nullptr;
+			std::shared_ptr< doubly_linked_node< T > > next = nullptr;
+		};
+
+		class iterator : public std::iterator< std::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T& >
+		{
+		public:
+			friend class doubly_linked_list;
+			friend class const_iterator;
+
+			iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
+				node( node )
+			{
+			}
+
+			iterator( const iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			iterator&
+			operator=( const iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			iterator&
+			operator++()
+			{
+				this->node = this->node.lock()->next;
+
+				return *this;
+			}
+
+			iterator
+			operator++( int )
+			{
+				iterator iterator( *this );
+				++( *this );
+
+				return iterator;
+			}
+
+			iterator&
+			operator--()
+			{
+				this->node = this->node.lock()->previous;
+
+				return *this;
+			}
+
+			iterator
+			operator--( int )
+			{
+				iterator iterator( *this );
+				--( *this );
+
+				return iterator;
+			}
+
+			T
+			operator*() const
+			{
+				return this->node.lock()->item;
+			}
+
+			doubly_linked_node< T >*
+			operator->() const
+			{
+				return this->node.lock().get();
+			}
+
+			bool
+			operator==( const iterator& it )
+			{
+				if ( this->node.expired() && 
+					 it.node.expired() )
+				{
+					return true;
+				}
+
+				if ( it.node.expired() )
+				{
+					return false;
+				}
+
+				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+			}
+
+			bool
+			operator!=( const iterator& it )
+			{
+				return !( *this == it );
+			}
+
+		private:
+			std::weak_ptr< doubly_linked_node< T > > node;
+		};
+
+		class const_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
+		{
+		public:
+			friend class doubly_linked_list;
+			friend class iterator;
+
+			const_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
+				node( node )
+			{
+			}
+
+			const_iterator( const const_iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			const_iterator( const iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			const_iterator&
+			operator=( const const_iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			const_iterator&
+			operator=( const iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			const_iterator& 
+			operator++()
+			{
+				this->node = this->node.lock()->next;
+
+				return *this;
+			}
+
+			const_iterator
+			operator++( int )
+			{
+				const_iterator iterator( *this );
+				++( *this );
+
+				return iterator;
+			}
+
+			const_iterator&
+			operator--()
+			{
+				this->node = this->node.lock()->previous;
+
+				return *this;
+			}
+
+			const_iterator
+			operator--( int )
+			{
+				const_iterator iterator( *this );
+				--( *this );
+
+				return iterator;
+			}
+
+			const T
+			operator*() const
+			{
+				return this->node.lock()->item;
+			}
+
+			const doubly_linked_node< T >*
+			operator->() const
+			{
+				return this->node.lock().get();
+			}
+
+			bool
+			operator==( const const_iterator& it ) const
+			{
+				if ( this->node.expired() && 
+					 it.node.expired() )
+				{
+					return true;
+				}
+
+				if ( it.node.expired() )
+				{
+					return false;
+				}
+
+				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+			}
+
+			bool
+			operator!=( const const_iterator& it ) const
+			{
+				return !( *this == it );
+			}
+
+		private:
+			std::weak_ptr< doubly_linked_node< T > > node;
+		};
+
+		class reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
+		{
+		public:
+			friend class doubly_linked_list;
+			friend class const_reverse_iterator;
+
+			reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
+				node( node )
+			{
+			}
+
+			reverse_iterator( const reverse_iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			reverse_iterator&
+			operator=( const reverse_iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			reverse_iterator&
+			operator++()
+			{
+				this->node = this->node.lock()->previous;
+
+				return *this;
+			}
+
+			reverse_iterator
+			operator++( int )
+			{
+				reverse_iterator iterator( *this );
+				++( *this );
+
+				return iterator;
+			}
+
+			reverse_iterator&
+			operator--()
+			{
+				this->node = this->node.lock()->next;
+
+				return *this;
+			}
+
+			reverse_iterator
+			operator--( int )
+			{
+				iterator iterator( *this );
+				--( *this );
+
+				return iterator;
+			}
+
+			T
+			operator*() const
+			{
+				return this->node.lock()->item;
+			}
+
+			doubly_linked_node< T >*
+			operator->() const
+			{
+				return this->node.lock().get();
+			}
+
+			bool
+			operator==( const reverse_iterator& it )
+			{
+				if ( this->node.expired() && 
+					 it.node.expired() )
+				{
+					return true;
+				}
+
+				if ( it.node.expired() )
+				{
+					return false;
+				}
+
+				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+			}
+
+			bool
+			operator!=( const reverse_iterator& it )
+			{
+				return !( *this == it );
+			}
+
+		private:
+			std::weak_ptr< doubly_linked_node< T > > node;
+		};
+
+		class const_reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
+		{
+		public:
+			friend class doubly_linked_list;
+			friend class iterator;
+
+			const_reverse_iterator( std::weak_ptr< doubly_linked_node< T > > node ) :
+				node( node )
+			{
+			}
+
+			const_reverse_iterator( const const_reverse_iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			const_reverse_iterator( const reverse_iterator& it ) :
+				node( it.node )
+			{
+			}
+
+			const_reverse_iterator&
+			operator=( const const_reverse_iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			const_reverse_iterator&
+			operator=( const reverse_iterator& it )
+			{
+				this->node = it.node;
+
+				return *this;
+			}
+
+			const_reverse_iterator&
+			operator++()
+			{
+				this->node = this->node.lock()->previous;
+
+				return *this;
+			}
+
+			const_reverse_iterator
+			operator++( int )
+			{
+				const_reverse_iterator iterator( *this );
+				++( *this );
+
+				return iterator;
+			}
+
+			const_reverse_iterator&
+			operator--()
+			{
+				this->node = this->node.lock()->next;
+
+				return *this;
+			}
+
+			const_reverse_iterator
+			operator--( int )
+			{
+				const_reverse_iterator iterator( *this );
+				--( *this );
+
+				return iterator;
+			}
+
+			const T
+			operator*() const
+			{
+				return this->node.lock()->item;
+			}
+
+			const doubly_linked_node< T >*
+			operator->() const
+			{
+				return this->node.lock().get();
+			}
+
+			bool
+			operator==( const const_reverse_iterator& it ) const
+			{
+				if ( this->node.expired() && 
+					 it.node.expired() )
+				{
+					return true;
+				}
+
+				if ( it.node.expired() )
+				{
+					return false;
+				}
+
+				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+			}
+
+			bool
+			operator!=( const const_reverse_iterator& it ) const
+			{
+				return !( *this == it );
+			}
+
+		private:
+			std::weak_ptr< doubly_linked_node< T > > node;
+		};
+
+		doubly_linked_list() = default;
+		~doubly_linked_list() noexcept = default;
+
+		doubly_linked_list( const doubly_linked_list& other )
+		{
+			std::shared_ptr< doubly_linked_node< T > > node = other.back;
+
+			while ( node )
+			{
+				this->push_front( node->item );
+				node = node->next;
+			}
+		}
+
+		doubly_linked_list( doubly_linked_list&& other ) noexcept :
+			front( std::move_if_noexcept( other.front ) ),
+			back( std::move_if_noexcept( other.back ) ),
+			nodes( other.nodes )
+		{
+			other.nodes = 0;
+		}
+
+		doubly_linked_list&
+		operator=( const doubly_linked_list& rhs )
+		{
+			if ( this != &rhs )
+			{
+				this->clear();
+
+				*this = std::move( doubly_linked_list< T >( rhs ) );
+			}
+
+			return *this;
+		}
+
+		doubly_linked_list&
+		operator=( doubly_linked_list&& rhs ) noexcept
+		{
+			if ( this != &rhs )
+			{
+				this->clear();
+
+				this->front = std::move_if_noexcept( rhs.front );
+				this->back = std::move_if_noexcept( rhs.back );
+				this->nodes = rhs.nodes;
+
+				rhs.nodes = 0;
+			}
+
+			return *this;
+		}
+
+		doubly_linked_list&
+		operator+( const doubly_linked_list& rhs )
+		{
+			return *this += rhs;
+		}
+
+		doubly_linked_list&
+		operator+=( const doubly_linked_list& rhs )
+		{
+			if ( !rhs.empty() )
+			{
+				std::shared_ptr< doubly_linked_node< T > > node = rhs.back;
+
+				while ( node )
+				{
+					this->push_front( node->item );
+
+					node = node->next;
+				}
+			}
+
+			return *this;
+		}
+
+		bool
+		operator==( const doubly_linked_list& rhs ) const noexcept
+		{
+			return this->equals( this->back, rhs.back );
+		}
+
+		bool
+		operator!=( const doubly_linked_list& rhs ) const noexcept
+		{
+			return !( *this == rhs );
+		}
+
+		void
+		push_front( const T item )
+		{
+			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
+
+			if ( this->empty() )
+			{
+				this->front = newNode;
+				this->back = newNode;
+			}
+			else
+			{
+				newNode->previous = this->front;
+
+				this->front->next = newNode;
+				this->front = newNode;
+			}
+
+			++( this->nodes );
+		}
+
+		void
+		push_back( const T item )
+		{
+			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
+
+			if ( this->empty() )
+			{
+				this->back = newNode;
+				this->front = newNode;
+			}
+			else
+			{
+				newNode->next = this->back;
+
+				this->back->previous = newNode;
+				this->back = newNode;
+			}
+
+			++( this->nodes );
+		}
+
+		T
+		pop_front()
+		{
+			if ( this->empty() )
+			{
+				return T();
+			}
+
+			T item = this->front->item;
+			auto previousNode = std::move( this->front->previous );
+
+			if ( previousNode )
+			{
+				previousNode->next = nullptr;
+
+				this->front = std::move( previousNode );
+			}
+			else
+			{
+				this->front = nullptr;
+				this->back = nullptr;
+			}
+
+			--( this->nodes );
+
+			return item;
+		}
+
+		T
+		pop_back()
+		{
+			if ( this->empty() )
+			{
+				return T();
+			}
+
+			T item = this->back->item;
+			auto nextNode = std::move( this->back->next );
+
+			if ( nextNode )
+			{
+				nextNode->previous = nullptr;
+
+				this->back = std::move( nextNode );
+			}
+			else
+			{
+				this->front = nullptr;
+				this->back = nullptr;
+			}
+
+			--( this->nodes );
+
+			return item;
+		}
+
+		void
+		clear() noexcept
+		{
+			while ( !this->empty() )
+			{
+				this->blank_pop_front();
+			}
+		}
+
+		T
+		peek_front() const noexcept
+		{
+			if ( this->empty() )
+			{
+				return T();
+			}
+
+			return this->front->item;
+		}
+
+		T
+		peek_back() const noexcept
+		{
+			if ( this->empty() )
+			{
+				return T();
+			}
+
+			return this->back->item;
+		}
+
+		auto
+		size() const noexcept
+		{
+			return this->nodes;
+		}
+
+		bool
+		empty() const noexcept
+		{
+			return ( ( !this->front ) &&
+					 ( !this->back ) &&
+					 ( this->nodes == 0 ) );
+		}
+
+		iterator
+		begin() noexcept
+		{
+			return iterator( this->first() );
+		}
+
+		iterator
+		end() noexcept
+		{
+			return iterator( this->next( this->last() ) );
+		}
+
+		reverse_iterator
+		rbegin() noexcept
+		{
+			return reverse_iterator( this->last() );
+		}
+
+		reverse_iterator
+		rend() noexcept
+		{
+			return reverse_iterator( this->previous( this->first() ) );
+		}
+
+		const_iterator
+		begin() const noexcept
+		{
+			return const_iterator( this->first() );
+		}
+
+		const_iterator
+		end() const noexcept
+		{
+			return const_iterator( this->next( this->last() ) );
+		}
+
+		const_reverse_iterator
+		rbegin() const noexcept
+		{
+			return const_reverse_iterator( this->last() );
+		}
+
+		const_reverse_iterator
+		rend() const noexcept
+		{
+			return const_reverse_iterator( this->previous( this->first() ) );
+		}
+
+		const_iterator
+		cbegin() const noexcept
+		{
+			return this->begin();
+		}
+
+		const_iterator
+		cend() const noexcept
+		{
+			return this->end();
+		}
+
+		const_reverse_iterator
+		crbegin() const noexcept
+		{
+			return this->rbegin();
+		}
+
+		const_reverse_iterator
+		crend() const noexcept
+		{
+			return this->rend();
+		}
+
+	private:
+		void
+		blank_pop_front() noexcept
+		{
+			if ( !this->empty() )
+			{
+				auto previousNode = std::move_if_noexcept( this->front->previous );
+
+				if ( previousNode )
+				{
+					previousNode->next = nullptr;
+
+					this->front = std::move_if_noexcept( previousNode );
+				}
+				else
+				{
+					this->front = nullptr;
+					this->back = nullptr;
+				}
+
+				--( this->nodes );
+			}
+		}
+
+		bool
+		equals(
+			const std::weak_ptr< doubly_linked_node< T > > node1,
+			const std::weak_ptr< doubly_linked_node< T > > node2 ) const noexcept
+		{
+			if ( node1.expired() &&
+				 node2.expired() )
+			{
+				return true;
+			}
+
+			if ( node1.expired() ||
+				 node2.expired() )
+			{
+				return false;
+			}
+
+			const auto lockedNode1 = node1.lock();
+			const auto lockedNode2 = node2.lock();
+
+			if ( lockedNode1->item == lockedNode2->item )
+			{
+				return this->equals( lockedNode1->next, lockedNode2->next );
+			}
+
+			return false;
+		}
+
+		std::weak_ptr< doubly_linked_node< T > >
+		first() const noexcept
+		{
+			return this->back;
+		}
+
+		std::weak_ptr< doubly_linked_node< T > >
+		last() const noexcept
+		{
+			return this->front;
+		}
+
+		std::weak_ptr< doubly_linked_node< T > >
+		next( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept
+		{
+			return current.lock()->next;
+		}
+
+		std::weak_ptr< doubly_linked_node< T > >
+		previous( const std::weak_ptr< doubly_linked_node< T > > current ) const noexcept
+		{
+			return current.lock()->previous;
+		}
+
+		std::shared_ptr< doubly_linked_node< T > > front = nullptr;
+		std::shared_ptr< doubly_linked_node< T > > back = nullptr;
+
+		std::size_t nodes = 0;
+	};
+
+	template < typename T >
+	auto
+	operator+( const doubly_linked_list< T >& lhs, const doubly_linked_list< T >& rhs )
+	{
+		doubly_linked_list< T > result( lhs );
+
+		return result += rhs;
+	}
 }

@@ -8,27 +8,26 @@
 
 namespace dsa
 {
-    template < typename T >
-    void insertionsort( T* data, const std::size_t size )
-    {
-        if ( ( data != nullptr ) &&
-             ( size >= 0 ) )
-        {
-            for ( std::size_t idx = 1; idx < size; ++idx )
-            {
-                T current = data[idx];
+	template < typename iterator >
+	void insertion_sort(
+		iterator begin,
+		iterator end )
+	{
+		for ( auto it = ( begin + 1 ); it != end; ++it )
+		{
+			const auto currentItem = *it;
+			const auto previousItem = *( it - 1 );
 
-                std::size_t insertPos = idx;
+			auto insertPosition = it;
 
-                while ( ( insertPos != 0 ) &&
-                        ( current < data[insertPos - 1] ) )
-                {
-                    data[insertPos] = data[insertPos - 1];
-                    --insertPos;
-                }
+			while ( ( insertPosition != begin ) &&
+					( currentItem < previousItem ) )
+			{
+				*insertPosition = previousItem;
+				--insertPosition;
+			}
 
-                data[insertPos] = current;
-            }
-        }
-    }
+			*insertPosition = currentItem;
+		}
+	}
 }

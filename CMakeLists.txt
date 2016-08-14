@@ -20,7 +20,7 @@ enable_testing()
 
 include_directories( ${gtest_SOURCE_DIR}/include )
 
-file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp)
+file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp DataStructuresAlgorithmsTests/*.hpp)
 add_executable(DataStructuresAlgorithmsTests ${TEST_SOURCES})
 
 target_link_libraries(DataStructuresAlgorithmsTests gtest gtest_main)
