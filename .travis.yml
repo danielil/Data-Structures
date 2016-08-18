@@ -17,11 +17,8 @@ addons:
       - clang-3.6
       - cmake
       - cmake-data
-before_script:
+script:
   - mkdir build
   - cd build
   - cmake ..
-script:
-  - make
-  - cd ../bin
-  - ./Tests
+  - ./DataStructuresAlgorithmsTests
