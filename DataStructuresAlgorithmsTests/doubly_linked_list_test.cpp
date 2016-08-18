@@ -6,27 +6,27 @@
 
 #include <lists/doubly_linked_list.hpp>
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <array>
 #include <random>
 
 namespace
 {
-	const auto ITERATIONS = 10000U;
+	const auto ITERATIONS = 1000U;
 	using value_type = std::uint64_t;
 }
 
 namespace dsa
 {
-	TEST( doubly_linked_list, default_constructor )
+	TEST_CASE( "default_constructor", "doubly_linked_list" )
 	{
 		doubly_linked_list< value_type > list;
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, copy_constructor_push_front )
+	TEST_CASE( "copy_constructor_push_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -38,10 +38,10 @@ namespace dsa
 
 		auto list2( list1 );
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 	}
 
-	TEST( doubly_linked_list, copy_constructor_push_back )
+	TEST_CASE( "copy_constructor_push_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -53,10 +53,10 @@ namespace dsa
 
 		auto list2( list1 );
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 	}
 
-	TEST( doubly_linked_list, copy_assignment_push_front )
+	TEST_CASE( "copy_assignment_push_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -68,10 +68,10 @@ namespace dsa
 
 		auto list2 = list1;
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 	}
 
-	TEST( doubly_linked_list, copy_assignment_push_back )
+	TEST_CASE( "copy_assignment_push_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -83,10 +83,10 @@ namespace dsa
 
 		auto list2 = list1;
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 	}
 
-	TEST( doubly_linked_list, addition_operator_push_front )
+	TEST_CASE( "addition_operator_push_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -107,13 +107,13 @@ namespace dsa
 
 		auto wholeList = firstHalf + secondHalf;
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( wholeList ),
 				std::end( firstHalf ),
 				std::begin( firstHalf ),
 				std::end( firstHalf ) ) );
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( secondHalf ),
 				std::end( wholeList ),
@@ -121,7 +121,7 @@ namespace dsa
 				std::end( secondHalf ) ) );
 	}
 
-	TEST( doubly_linked_list, addition_operator_push_back )
+	TEST_CASE( "addition_operator_push_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -142,13 +142,13 @@ namespace dsa
 
 		auto wholeList = firstHalf + secondHalf;
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( wholeList ),
 				std::end( firstHalf ),
 				std::begin( firstHalf ),
 				std::end( firstHalf ) ) );
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( secondHalf ),
 				std::end( wholeList ),
@@ -156,7 +156,7 @@ namespace dsa
 				std::end( secondHalf ) ) );
 	}
 
-	TEST( doubly_linked_list, addition_equal_operator_push_front )
+	TEST_CASE( "addition_equal_operator_push_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -177,13 +177,13 @@ namespace dsa
 
 		list2 += list1;
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( list2 ),
 				std::end( list1 ),
 				std::begin( list2 ),
 				std::end( list2 ) ) );
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( list1 ),
 				std::end( list2 ),
@@ -191,7 +191,7 @@ namespace dsa
 				std::end( list1 ) ) );
 	}
 
-	TEST( doubly_linked_list, addition_equal_operator_push_back )
+	TEST_CASE( "addition_equal_operator_push_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -212,13 +212,13 @@ namespace dsa
 
 		list2 += list1;
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( list2 ),
 				std::end( list1 ),
 				std::begin( list2 ),
 				std::end( list2 ) ) );
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( list1 ),
 				std::end( list2 ),
@@ -226,7 +226,7 @@ namespace dsa
 				std::end( list1 ) ) );
 	}
 
-	TEST( doubly_linked_list, equality_operator_push_front )
+	TEST_CASE( "equality_operator_push_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -241,7 +241,7 @@ namespace dsa
 			list2.push_front( value );
 		}
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 
 		list1.clear();
 		list2.clear();
@@ -252,10 +252,10 @@ namespace dsa
 			list2.push_front( generator() );
 		}
 
-		ASSERT_TRUE( list1 != list2 );
+		REQUIRE( list1 != list2 );
 	}
 
-	TEST( doubly_linked_list, equality_operator_push_back )
+	TEST_CASE( "equality_operator_push_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -270,7 +270,7 @@ namespace dsa
 			list2.push_back( value );
 		}
 
-		ASSERT_TRUE( list1 == list2 );
+		REQUIRE( list1 == list2 );
 
 		list1.clear();
 		list2.clear();
@@ -281,28 +281,28 @@ namespace dsa
 			list2.push_back( generator() );
 		}
 
-		ASSERT_TRUE( list1 != list2 );
+		REQUIRE( list1 != list2 );
 	}
 
-	TEST( doubly_linked_list, empty_pop_front )
+	TEST_CASE( "empty_pop_front", "doubly_linked_list" )
 	{
 		doubly_linked_list< value_type > list;
 
 		list.pop_front();
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, empty_pop_back )
+	TEST_CASE( "empty_pop_back", "doubly_linked_list" )
 	{
 		doubly_linked_list< value_type > list;
 
 		list.pop_back();
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, clear )
+	TEST_CASE( "clear", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -314,10 +314,10 @@ namespace dsa
 
 		list.clear();
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, empty_peek_front )
+	TEST_CASE( "empty_peek_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -330,11 +330,11 @@ namespace dsa
 		auto size = list.size();
 		auto value = list.peek_front();
 
-		ASSERT_EQ( size, list.size() );
-		ASSERT_EQ( value, list.pop_front() );
+		REQUIRE( size == list.size() );
+		REQUIRE( value == list.pop_front() );
 	}
 
-	TEST( doubly_linked_list, empty_peek_back )
+	TEST_CASE( "empty_peek_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -347,11 +347,11 @@ namespace dsa
 		auto size = list.size();
 		auto value = list.peek_back();
 
-		ASSERT_EQ( size, list.size() );
-		ASSERT_EQ( value, list.pop_back() );
+		REQUIRE( size == list.size() );
+		REQUIRE( value == list.pop_back() );
 	}
 
-	TEST( doubly_linked_list, push_front_pop_front )
+	TEST_CASE( "push_front_pop_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -367,19 +367,19 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_EQ( ITERATIONS, list.size() );
+		REQUIRE( ITERATIONS == list.size() );
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			std::size_t reverseIdx = ITERATIONS - 1 - idx;
 
-			ASSERT_EQ( values[reverseIdx], list.pop_front() );
+			REQUIRE( values[reverseIdx] == list.pop_front() );
 		}
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, push_front_pop_back )
+	TEST_CASE( "push_front_pop_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -395,17 +395,17 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_EQ( ITERATIONS, list.size() );
+		REQUIRE( ITERATIONS == list.size() );
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			ASSERT_EQ( values[idx], list.pop_back() );
+			REQUIRE( values[idx] == list.pop_back() );
 		}
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, push_back_pop_front )
+	TEST_CASE( "push_back_pop_front", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -421,17 +421,17 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_EQ( ITERATIONS, list.size() );
+		REQUIRE( ITERATIONS == list.size() );
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			ASSERT_EQ( values[idx], list.pop_front() );
+			REQUIRE( values[idx] == list.pop_front() );
 		}
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, push_back_pop_back )
+	TEST_CASE( "push_back_pop_back", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -447,19 +447,19 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_EQ( ITERATIONS, list.size() );
+		REQUIRE( ITERATIONS == list.size() );
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			std::size_t reverseIdx = ITERATIONS - 1 - idx;
 
-			ASSERT_EQ( values[reverseIdx], list.pop_back() );
+			REQUIRE( values[reverseIdx] == list.pop_back() );
 		}
 
-		ASSERT_TRUE( list.empty() );
+		REQUIRE( list.empty() );
 	}
 
-	TEST( doubly_linked_list, iterator_push_front_begin_end )
+	TEST_CASE( "iterator_push_front_begin_end", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -475,7 +475,7 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( values ),
 				std::end( values ),
@@ -483,7 +483,7 @@ namespace dsa
 				std::end( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_back_begin_end )
+	TEST_CASE( "iterator_push_back_begin_end", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -499,7 +499,7 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::rbegin( values ),
 				std::rend( values ),
@@ -507,7 +507,7 @@ namespace dsa
 				std::end( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_front_rbegin_rend )
+	TEST_CASE( "iterator_push_front_rbegin_rend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -523,7 +523,7 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::rbegin( values ),
 				std::rend( values ),
@@ -531,7 +531,7 @@ namespace dsa
 				std::rend( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_back_rbegin_rend )
+	TEST_CASE( "iterator_push_back_rbegin_rend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -547,7 +547,7 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::begin( values ),
 				std::end( values ),
@@ -555,7 +555,7 @@ namespace dsa
 				std::rend( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_front_cbegin_cend )
+	TEST_CASE( "iterator_push_front_cbegin_cend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -571,7 +571,7 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::cbegin( values ),
 				std::cend( values ),
@@ -579,7 +579,7 @@ namespace dsa
 				std::cend( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_back_cbegin_cend )
+	TEST_CASE( "iterator_push_back_cbegin_cend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -595,7 +595,7 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::crbegin( values ),
 				std::crend( values ),
@@ -603,7 +603,7 @@ namespace dsa
 				std::cend( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_front_crbegin_crend )
+	TEST_CASE( "iterator_push_front_crbegin_crend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -619,7 +619,7 @@ namespace dsa
 			list.push_front( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::crbegin( values ),
 				std::crend( values ),
@@ -627,7 +627,7 @@ namespace dsa
 				std::crend( list ) ) );
 	}
 
-	TEST( doubly_linked_list, iterator_push_back_crbegin_crend )
+	TEST_CASE( "iterator_push_back_crbegin_crend", "doubly_linked_list" )
 	{
 		std::default_random_engine generator;
 
@@ -643,7 +643,7 @@ namespace dsa
 			list.push_back( values[idx] );
 		}
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::equal(
 				std::cbegin( values ),
 				std::cend( values ),

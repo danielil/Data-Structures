@@ -9,73 +9,78 @@
 #include <sorts/merge_sort.hpp>
 #include <sorts/quick_sort.hpp>
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <array>
 #include <algorithm>
 #include <random>
 
+namespace
+{
+	using value_type = std::uint64_t;
+	const auto ITERATIONS = 1000U;
+}
+
 namespace dsa
 {
-	class sort_tester : public testing::Test
+	TEST_CASE( "bubble sort", "sort" )
 	{
-	protected:
-
-		using value_type = uint64_t;
-		static const auto ITERATIONS = 10000U;
-
-		void SetUp() override
-		{
-			std::generate(
-				std::begin( container ),
-				std::end( container ),
-				this->generator );
-		}
-
-		std::array< value_type, ITERATIONS > container;
-
-	private:
-
 		std::default_random_engine generator;
-	};
+		std::array< value_type, ITERATIONS > container;
+		std::generate(
+			std::begin( container ),
+			std::end( container ),
+			generator );
 
-	TEST_F( sort_tester, bubble_sort )
-	{
 		dsa::bubble_sort(
 			std::begin( container ),
 			std::end( container ) );
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::is_sorted(
 				std::begin( container ),
 				std::end( container ) ) );
 	}
 
-	TEST_F( sort_tester, insertion_sort )
+	TEST_CASE( "insertion sort", "sort" )
 	{
+		std::default_random_engine generator;
+		std::array< value_type, ITERATIONS > container;
+		std::generate(
+			std::begin( container ),
+			std::end( container ),
+			generator );
+
 		dsa::insertion_sort(
 			std::begin( container ),
 			std::end( container ) );
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::is_sorted(
 				std::begin( container ),
 				std::end( container ) ) );
 	}
 
-	TEST_F( sort_tester, merge_sort )
+	TEST_CASE( "merge sort", "sort" )
 	{
+		std::default_random_engine generator;
+		std::array< value_type, ITERATIONS > container;
+		std::generate(
+			std::begin( container ),
+			std::end( container ),
+			generator );
+
 		dsa::merge_sort(
 			std::begin( container ),
 			std::end( container ) );
 
-		ASSERT_TRUE(
+		REQUIRE(
 			std::is_sorted(
 				std::begin( container ),
 				std::end( container ) ) );
 	}
 
-	TEST_F( sort_tester, quick_sort )
+	TEST_CASE( "quick sort", "sort" )
 	{
 		// Fix iterator-based dsa::partition
 		/*
