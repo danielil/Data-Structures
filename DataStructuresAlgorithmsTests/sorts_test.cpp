@@ -13,26 +13,34 @@
 
 #include <array>
 #include <algorithm>
+#include <functional>
 #include <random>
 
 namespace
 {
 	using value_type = std::uint64_t;
 	const auto ITERATIONS = 1000U;
+
+	using container_type = std::array< value_type, ITERATIONS >;
 }
 
 namespace dsa
 {
-	TEST_CASE( "bubble sort", "sort" )
+	void sort_tester(
+		std::function<
+			void(
+				container_type::iterator,
+				container_type::iterator ) >&& sort )
 	{
 		std::default_random_engine generator;
-		std::array< value_type, ITERATIONS > container;
+		container_type container;
+
 		std::generate(
 			std::begin( container ),
 			std::end( container ),
 			generator );
 
-		dsa::bubble_sort(
+		sort(
 			std::begin( container ),
 			std::end( container ) );
 
@@ -40,44 +48,39 @@ namespace dsa
 			std::is_sorted(
 				std::begin( container ),
 				std::end( container ) ) );
+	}
+
+	TEST_CASE( "bubble sort", "sort" )
+	{
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					dsa::bubble_sort( begin, end );
+				} );
 	}
 
 	TEST_CASE( "insertion sort", "sort" )
 	{
-		std::default_random_engine generator;
-		std::array< value_type, ITERATIONS > container;
-		std::generate(
-			std::begin( container ),
-			std::end( container ),
-			generator );
-
-		dsa::insertion_sort(
-			std::begin( container ),
-			std::end( container ) );
-
-		REQUIRE(
-			std::is_sorted(
-				std::begin( container ),
-				std::end( container ) ) );
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					dsa::insertion_sort( begin, end );
+				} );
 	}
 
 	TEST_CASE( "merge sort", "sort" )
 	{
-		std::default_random_engine generator;
-		std::array< value_type, ITERATIONS > container;
-		std::generate(
-			std::begin( container ),
-			std::end( container ),
-			generator );
-
-		dsa::merge_sort(
-			std::begin( container ),
-			std::end( container ) );
-
-		REQUIRE(
-			std::is_sorted(
-				std::begin( container ),
-				std::end( container ) ) );
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					dsa::merge_sort( begin, end );
+				} );
 	}
 
 	TEST_CASE( "quick sort", "sort" )
@@ -85,14 +88,13 @@ namespace dsa
 		// Fix iterator-based dsa::partition
 		/*
 
-		dsa::quick_sort(
-			std::begin( container ),
-			std::end( container ) );
-
-		ASSERT_TRUE(
-			std::is_sorted(
-				std::begin( container ),
-				std::end( container ) ) );
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					dsa::quick_sort( begin, end );
+				} );
 
 		*/
 	}
