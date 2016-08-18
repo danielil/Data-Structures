@@ -11,12 +11,7 @@ ADD_DEFINITIONS(-DUNICODE)
 ADD_DEFINITIONS(-D_UNICODE)
 
 include_directories( DataStructuresAlgorithms )
-
-# Includes Catch in the project:
-set(EXT_PROJECTS_DIR ext)
-add_subdirectory(${EXT_PROJECTS_DIR}/catch)
-include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
-enable_testing(true)  # Enables unit-testing.
+include_directories( includes )
 
 file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp DataStructuresAlgorithmsTests/*.hpp)
 add_executable(DataStructuresAlgorithmsTests ${TEST_SOURCES})
