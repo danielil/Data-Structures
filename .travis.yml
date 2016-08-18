@@ -1,13 +1,21 @@
 language: cpp
+sudo: required
+dist: trusty
 compiler:
-  - gcc
-  - clang
-sudo: false
+- clang
+os:
+- linux
+- osx
 addons:
   apt:
     sources:
-      - george-edison55-precise-backports
+      # add PPAs with more up-to-date toolchains
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.6
     packages:
+      - gcc-5
+      - g++-5
+      - clang-3.6
       - cmake
       - cmake-data
 before_script:
