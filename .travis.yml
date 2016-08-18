@@ -1,6 +1,15 @@
 language: cpp
 compiler:
   - gcc
+  - clang
+sudo: false
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake
+      - cmake-data
 before_script:
   - mkdir build
   - cd build
