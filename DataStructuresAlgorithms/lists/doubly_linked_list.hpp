@@ -62,7 +62,7 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class const_iterator;
 
-			iterator( std::weak_ptr< doubly_linked_node > node ) :
+			iterator( std::shared_ptr< doubly_linked_node > node ) :
 				node( node )
 			{
 			}
@@ -83,7 +83,7 @@ namespace dsa
 			iterator&
 			operator++()
 			{
-				this->node = this->node.lock()->next;
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -100,7 +100,7 @@ namespace dsa
 			iterator&
 			operator--()
 			{
-				this->node = this->node.lock()->previous;
+				this->node = this->node->previous;
 
 				return *this;
 			}
@@ -117,30 +117,30 @@ namespace dsa
 			T
 			operator*() const
 			{
-				return this->node.lock()->item;
+				return this->node->item;
 			}
 
 			doubly_linked_node*
 			operator->() const
 			{
-				return this->node.lock().get();
+				return this->node.get();
 			}
 
 			bool
 			operator==( const iterator& it )
 			{
-				if ( this->node.expired() && 
-					 it.node.expired() )
+				if ( nullptr == this->node && 
+					 nullptr == it.node )
 				{
 					return true;
 				}
 
-				if ( it.node.expired() )
+				if ( nullptr == it.node )
 				{
 					return false;
 				}
 
-				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+				return ( *( this->node ) == *( it.node ) );
 			}
 
 			bool
@@ -150,7 +150,7 @@ namespace dsa
 			}
 
 		private:
-			std::weak_ptr< doubly_linked_node > node;
+			std::shared_ptr< doubly_linked_node > node;
 		};
 
 		class const_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -159,7 +159,7 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class iterator;
 
-			const_iterator( std::weak_ptr< doubly_linked_node > node ) :
+			const_iterator( std::shared_ptr< doubly_linked_node > node ) :
 				node( node )
 			{
 			}
@@ -193,7 +193,7 @@ namespace dsa
 			const_iterator& 
 			operator++()
 			{
-				this->node = this->node.lock()->next;
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -210,7 +210,7 @@ namespace dsa
 			const_iterator&
 			operator--()
 			{
-				this->node = this->node.lock()->previous;
+				this->node = this->node->previous;
 
 				return *this;
 			}
@@ -227,30 +227,30 @@ namespace dsa
 			const T
 			operator*() const
 			{
-				return this->node.lock()->item;
+				return this->node->item;
 			}
 
 			const doubly_linked_node*
 			operator->() const
 			{
-				return this->node.lock().get();
+				return this->node.get();
 			}
 
 			bool
 			operator==( const const_iterator& it ) const
 			{
-				if ( this->node.expired() && 
-					 it.node.expired() )
+				if ( nullptr == this->node && 
+					 nullptr == it.node )
 				{
 					return true;
 				}
 
-				if ( it.node.expired() )
+				if ( nullptr == it.node )
 				{
 					return false;
 				}
 
-				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+				return ( *( this->node ) == *( it.node ) );
 			}
 
 			bool
@@ -260,7 +260,7 @@ namespace dsa
 			}
 
 		private:
-			std::weak_ptr< doubly_linked_node > node;
+			std::shared_ptr< doubly_linked_node > node;
 		};
 
 		class reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -269,7 +269,7 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class const_reverse_iterator;
 
-			reverse_iterator( std::weak_ptr< doubly_linked_node > node ) :
+			reverse_iterator( std::shared_ptr< doubly_linked_node > node ) :
 				node( node )
 			{
 			}
@@ -290,7 +290,7 @@ namespace dsa
 			reverse_iterator&
 			operator++()
 			{
-				this->node = this->node.lock()->previous;
+				this->node = this->node->previous;
 
 				return *this;
 			}
@@ -307,7 +307,7 @@ namespace dsa
 			reverse_iterator&
 			operator--()
 			{
-				this->node = this->node.lock()->next;
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -324,30 +324,30 @@ namespace dsa
 			T
 			operator*() const
 			{
-				return this->node.lock()->item;
+				return this->node->item;
 			}
 
 			doubly_linked_node*
 			operator->() const
 			{
-				return this->node.lock().get();
+				return this->node.get();
 			}
 
 			bool
 			operator==( const reverse_iterator& it )
 			{
-				if ( this->node.expired() && 
-					 it.node.expired() )
+				if ( nullptr == this->node && 
+					 nullptr == it.node )
 				{
 					return true;
 				}
 
-				if ( it.node.expired() )
+				if ( nullptr == it.node )
 				{
 					return false;
 				}
 
-				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+				return ( *( this->node ) == *( it.node ) );
 			}
 
 			bool
@@ -357,7 +357,7 @@ namespace dsa
 			}
 
 		private:
-			std::weak_ptr< doubly_linked_node > node;
+			std::shared_ptr< doubly_linked_node > node;
 		};
 
 		class const_reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
@@ -366,7 +366,7 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class iterator;
 
-			const_reverse_iterator( std::weak_ptr< doubly_linked_node > node ) :
+			const_reverse_iterator( std::shared_ptr< doubly_linked_node > node ) :
 				node( node )
 			{
 			}
@@ -400,7 +400,7 @@ namespace dsa
 			const_reverse_iterator&
 			operator++()
 			{
-				this->node = this->node.lock()->previous;
+				this->node = this->node->previous;
 
 				return *this;
 			}
@@ -417,7 +417,7 @@ namespace dsa
 			const_reverse_iterator&
 			operator--()
 			{
-				this->node = this->node.lock()->next;
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -434,30 +434,30 @@ namespace dsa
 			const T
 			operator*() const
 			{
-				return this->node.lock()->item;
+				return this->node->item;
 			}
 
 			const doubly_linked_node*
 			operator->() const
 			{
-				return this->node.lock().get();
+				return this->node.get();
 			}
 
 			bool
 			operator==( const const_reverse_iterator& it ) const
 			{
-				if ( this->node.expired() && 
-					 it.node.expired() )
+				if ( nullptr == this->node && 
+					 nullptr == it.node )
 				{
 					return true;
 				}
 
-				if ( it.node.expired() )
+				if ( nullptr == it.node )
 				{
 					return false;
 				}
 
-				return ( *( this->node.lock() ) == *( it.node.lock() ) );
+				return ( *( this->node ) == *( it.node ) );
 			}
 
 			bool
@@ -467,7 +467,7 @@ namespace dsa
 			}
 
 		private:
-			std::weak_ptr< doubly_linked_node > node;
+			std::shared_ptr< doubly_linked_node > node;
 		};
 
 		doubly_linked_list() = default;
@@ -799,54 +799,51 @@ namespace dsa
 
 		bool
 		equals(
-			const std::weak_ptr< doubly_linked_node > node1,
-			const std::weak_ptr< doubly_linked_node > node2 ) const noexcept
+			const std::shared_ptr< doubly_linked_node > node1,
+			const std::shared_ptr< doubly_linked_node > node2 ) const noexcept
 		{
-			if ( node1.expired() &&
-				 node2.expired() )
+			if ( nullptr == node1 &&
+				 nullptr == node2 )
 			{
 				return true;
 			}
 
-			if ( node1.expired() ||
-				 node2.expired() )
+			if ( nullptr == node1 ||
+				 nullptr == node2 )
 			{
 				return false;
 			}
 
-			const auto lockedNode1 = node1.lock();
-			const auto lockedNode2 = node2.lock();
-
-			if ( lockedNode1->item == lockedNode2->item )
+			if ( node1->item == node2->item )
 			{
-				return this->equals( lockedNode1->next, lockedNode2->next );
+				return this->equals( node1->next, node2->next );
 			}
 
 			return false;
 		}
 
-		std::weak_ptr< doubly_linked_node >
+		auto
 		first() const noexcept
 		{
 			return this->back;
 		}
 
-		std::weak_ptr< doubly_linked_node >
+		auto
 		last() const noexcept
 		{
 			return this->front;
 		}
 
-		std::weak_ptr< doubly_linked_node >
-		next( const std::weak_ptr< doubly_linked_node > current ) const noexcept
+		auto
+		next( const std::shared_ptr< doubly_linked_node > current ) const noexcept
 		{
-			return current.lock()->next;
+			return current->next;
 		}
 
-		std::weak_ptr< doubly_linked_node >
-		previous( const std::weak_ptr< doubly_linked_node > current ) const noexcept
+		auto
+		previous( const std::shared_ptr< doubly_linked_node > current ) const noexcept
 		{
-			return current.lock()->previous;
+			return current->previous;
 		}
 
 		std::shared_ptr< doubly_linked_node > front = nullptr;
