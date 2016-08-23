@@ -62,8 +62,8 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class const_iterator;
 
-			iterator( std::shared_ptr< doubly_linked_node > node ) :
-				node( node )
+			iterator( std::shared_ptr< doubly_linked_node >&& node ) :
+				node( std::forward< decltype( this->node ) >( node ) )
 			{
 			}
 
@@ -159,8 +159,8 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class iterator;
 
-			const_iterator( std::shared_ptr< doubly_linked_node > node ) :
-				node( node )
+			const_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
+				node( std::forward< decltype( this->node ) >( node ) )
 			{
 			}
 
@@ -269,8 +269,8 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class const_reverse_iterator;
 
-			reverse_iterator( std::shared_ptr< doubly_linked_node > node ) :
-				node( node )
+			reverse_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
+				node( std::forward< decltype( this->node ) >( node ) )
 			{
 			}
 
@@ -366,8 +366,8 @@ namespace dsa
 			friend class doubly_linked_list;
 			friend class iterator;
 
-			const_reverse_iterator( std::shared_ptr< doubly_linked_node > node ) :
-				node( node )
+			const_reverse_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
+				node( std::forward< decltype( this->node ) >( node ) )
 			{
 			}
 
@@ -835,13 +835,13 @@ namespace dsa
 		}
 
 		auto
-		next( const std::shared_ptr< doubly_linked_node > current ) const noexcept
+		next( std::shared_ptr< doubly_linked_node >&& current ) const noexcept
 		{
 			return current->next;
 		}
 
 		auto
-		previous( const std::shared_ptr< doubly_linked_node > current ) const noexcept
+		previous( std::shared_ptr< doubly_linked_node >&& current ) const noexcept
 		{
 			return current->previous;
 		}
