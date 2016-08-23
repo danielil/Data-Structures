@@ -46,8 +46,8 @@ namespace dsa
 
 		REQUIRE(
 			std::is_sorted(
-				std::begin( container ),
-				std::end( container ) ) );
+				std::cbegin( container ),
+				std::cend( container ) ) );
 	}
 
 	TEST_CASE( "bubble sort", "sort" )
