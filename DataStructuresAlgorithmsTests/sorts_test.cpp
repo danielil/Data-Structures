@@ -37,12 +37,6 @@ namespace sorts {
 		std::default_random_engine generator;
 		container_type container;
 
-		std::iota(
-			std::rbegin( container ),
-			std::rend( container ),
-			0 );
-
-		if ( false )
 		std::generate(
 			std::begin( container ),
 			std::end( container ),
