@@ -14,6 +14,7 @@
 #include <array>
 #include <algorithm>
 #include <functional>
+#include <numeric>
 #include <random>
 
 namespace
@@ -24,8 +25,9 @@ namespace
 	using container_type = std::array< value_type, ITERATIONS >;
 }
 
-namespace dsa
-{
+namespace dsa {
+namespace sorts {
+
 	void sort_tester(
 		std::function<
 			void(
@@ -35,6 +37,12 @@ namespace dsa
 		std::default_random_engine generator;
 		container_type container;
 
+		std::iota(
+			std::rbegin( container ),
+			std::rend( container ),
+			0 );
+
+		if ( false )
 		std::generate(
 			std::begin( container ),
 			std::end( container ),
@@ -57,45 +65,63 @@ namespace dsa
 				auto begin,
 				auto end )
 				{
-					dsa::bubble_sort( begin, end );
+					bubble::sort( begin, end );
 				} );
 	}
 
-	TEST_CASE( "insertion sort", "sort" )
+	TEST_CASE( "insertion sort (std implementation)", "sort" )
 	{
 		sort_tester(
 			[](
 				auto begin,
 				auto end )
 				{
-					dsa::insertion_sort( begin, end );
+					insertion::sort( begin, end );
 				} );
 	}
 
-	TEST_CASE( "merge sort", "sort" )
+	TEST_CASE( "insertion sort (custom implementation)", "sort" )
 	{
 		sort_tester(
 			[](
 				auto begin,
 				auto end )
 				{
-					dsa::merge_sort( begin, end );
+					insertion::sort< insertion::custom_implementation >( begin, end );
+				} );
+	}
+
+	TEST_CASE( "merge sort (std implementation)", "sort" )
+	{
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					merge::sort( begin, end );
+				} );
+	}
+
+	TEST_CASE( "merge sort (custom implementation)", "sort" )
+	{
+		sort_tester(
+			[](
+				auto begin,
+				auto end )
+				{
+					merge::sort< merge::custom_implementation >( begin, end );
 				} );
 	}
 
 	TEST_CASE( "quick sort", "sort" )
 	{
-		// Fix iterator-based dsa::partition
-		/*
-
 		sort_tester(
 			[](
 				auto begin,
 				auto end )
 				{
-					dsa::quick_sort( begin, end );
+					quick::sort( begin, end );
 				} );
-
-		*/
 	}
-}
+
+}}

@@ -12,15 +12,16 @@
 namespace dsa
 {
 	template<
-		typename input_iterator,
-		typename output_iterator >
+		typename InputIterator1,
+		typename InputIterator2,
+		typename OutputIterator >
 	auto
 	merge(
-		input_iterator inputBegin1,
-		input_iterator inputEnd1,
-		input_iterator inputBegin2,
-		input_iterator inputEnd2,
-		output_iterator output )
+		InputIterator1 inputBegin1,
+		InputIterator1 inputEnd1,
+		InputIterator2 inputBegin2,
+		InputIterator2 inputEnd2,
+		OutputIterator output )
 	{
 		while ( ( inputBegin1 != inputEnd1 ) &&
 				( inputBegin2 != inputEnd2 ) )
@@ -44,38 +45,29 @@ namespace dsa
 			std::copy( inputBegin1, inputEnd1, output );
 	}
 
-	template < typename iterator >
+	template <
+		typename ForwardIt,
+		typename UnaryPredicate >
 	auto
 	partition(
-		iterator begin,
-		iterator end,
-		iterator pivot )
+		ForwardIt begin,
+		ForwardIt end,
+		UnaryPredicate predicate )
 	{
-		auto position = pivot;
+		begin = std::find_if_not( begin, end, predicate );
 
-		while ( ( begin != end ) &&
-				( pivot != end ) )
+		if ( begin != end )
 		{
-			const auto pivotValue = *pivot;
-
-			// Move pivot to the rightmost end
-			std::swap( *pivot, *end );
-
-			position = end;
-
-			for ( auto it = begin; it != std::prev( end ); ++it )
+			for ( auto&& it = std::next( begin ); it != end; ++it )
 			{
-				if ( *it <= pivotValue )
+				if ( predicate( *it ) )
 				{
-					std::swap( *it, *position );
-					++position;
+					std::swap( *it, *begin );
+					++begin;
 				}
 			}
-
-			// Move pivot to its final position
-			std::swap( *position, *end );
 		}
 
-		return position;
+		return begin;
 	}
 }

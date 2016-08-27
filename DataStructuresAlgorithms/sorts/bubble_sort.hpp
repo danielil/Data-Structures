@@ -1,32 +1,36 @@
 /**
  * Daniel Sebastian Iliescu
  *
- * An implementation of bubble sort.
+ * Implementation of bubble sort.
  */
 
 #pragma once
 
-#include "sort.hpp"
+namespace dsa {
+namespace sorts {
 
-namespace dsa
+struct bubble
 {
-	template < typename iterator >
-	void bubble_sort(
-		iterator begin,
-		iterator end )
+	template < typename ForwardIterator >
+	static void
+	sort(
+		ForwardIterator begin,
+		ForwardIterator end )
 	{
 		for ( auto it = begin; it != end; ++it )
 		{
-			for ( auto shiftIt = begin; shiftIt != ( end - 1 ); ++shiftIt )
+			for ( auto shift_it = begin; shift_it != std::prev( end ); ++shift_it )
 			{
-				auto& currentItem = *shiftIt;
-				auto& nextItem = *( shiftIt + 1 );
+				auto& current_item = *shift_it;
+				auto& next_item = *std::next( shift_it );
 
-				if ( currentItem > nextItem )
+				if ( current_item > next_item )
 				{
-					std::swap( currentItem, nextItem );
+					std::swap( current_item, next_item );
 				}
 			}
 		}
 	}
-}
+};
+
+}}

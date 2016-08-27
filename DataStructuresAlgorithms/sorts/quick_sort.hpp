@@ -8,21 +8,68 @@
 
 #include "sort.hpp"
 
-namespace dsa
+namespace
 {
-	template < typename iterator >
-	void
-	quick_sort(
-		iterator begin,
-		iterator end )
-	{
-		if ( begin < end )
-		{
-			const auto mid = std::distance( begin, end ) / 2;
-			auto pivot = dsa::partition( begin, end, std::next( begin, mid ) );
-
-			quick_sort( begin, pivot );
-			quick_sort( std::next( pivot ), end );
-		}
-	}
+	static const std::size_t PARTITION_THRESHOLD = 1;
 }
+
+namespace dsa {
+namespace sorts {
+
+struct quick
+{
+	template <
+		typename Implementation = std_implementation,
+		typename ForwardIt >
+	static void
+	sort(
+		ForwardIt begin,
+		ForwardIt end )
+	{
+		Implementation::sort( begin, end );
+	}
+
+	struct std_implementation
+	{
+		template < typename ForwardIt >
+		static void
+		sort(
+			ForwardIt begin,
+			ForwardIt end )
+		{
+			if ( begin != end )
+			{
+				const auto size = std::distance( begin, end );
+
+				if ( size > PARTITION_THRESHOLD )
+				{
+					const auto mid = size / 2;
+					const auto pivot = *std::next( begin, mid );
+
+					const std::pair< ForwardIt, ForwardIt > partitions =
+					{
+						std::partition(
+							begin,
+							end,
+							[pivot]( const auto& element )
+							{
+								return ( element < pivot );
+							} ),
+						std::partition(
+							begin,
+							end,
+							[pivot]( const auto& element )
+							{
+								return !( pivot < element );
+							} )
+					};
+
+					sort( begin, partitions.first );
+					sort( partitions.second, end );
+				}
+			}
+		}
+	};
+};
+
+}}
