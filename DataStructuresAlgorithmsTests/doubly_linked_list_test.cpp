@@ -109,16 +109,16 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( wholeList ),
-				std::end( firstHalf ),
-				std::begin( firstHalf ),
-				std::end( firstHalf ) ) );
+				std::cbegin( wholeList ),
+				std::cend( firstHalf ),
+				std::cbegin( firstHalf ),
+				std::cend( firstHalf ) ) );
 		REQUIRE(
 			std::equal(
-				std::begin( secondHalf ),
-				std::end( wholeList ),
-				std::begin( secondHalf ),
-				std::end( secondHalf ) ) );
+				std::cbegin( secondHalf ),
+				std::cend( wholeList ),
+				std::cbegin( secondHalf ),
+				std::cend( secondHalf ) ) );
 	}
 
 	TEST_CASE( "addition_operator_push_back", "doubly_linked_list" )
@@ -144,16 +144,16 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( wholeList ),
-				std::end( firstHalf ),
-				std::begin( firstHalf ),
-				std::end( firstHalf ) ) );
+				std::cbegin( wholeList ),
+				std::cend( firstHalf ),
+				std::cbegin( firstHalf ),
+				std::cend( firstHalf ) ) );
 		REQUIRE(
 			std::equal(
-				std::begin( secondHalf ),
-				std::end( wholeList ),
-				std::begin( secondHalf ),
-				std::end( secondHalf ) ) );
+				std::cbegin( secondHalf ),
+				std::cend( wholeList ),
+				std::cbegin( secondHalf ),
+				std::cend( secondHalf ) ) );
 	}
 
 	TEST_CASE( "addition_equal_operator_push_front", "doubly_linked_list" )
@@ -179,16 +179,16 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( list2 ),
-				std::end( list1 ),
-				std::begin( list2 ),
-				std::end( list2 ) ) );
+				std::cbegin( list2 ),
+				std::cend( list1 ),
+				std::cbegin( list2 ),
+				std::cend( list2 ) ) );
 		REQUIRE(
 			std::equal(
-				std::begin( list1 ),
-				std::end( list2 ),
-				std::begin( list1 ),
-				std::end( list1 ) ) );
+				std::cbegin( list1 ),
+				std::cend( list2 ),
+				std::cbegin( list1 ),
+				std::cend( list1 ) ) );
 	}
 
 	TEST_CASE( "addition_equal_operator_push_back", "doubly_linked_list" )
@@ -214,16 +214,16 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( list2 ),
-				std::end( list1 ),
-				std::begin( list2 ),
-				std::end( list2 ) ) );
+				std::cbegin( list2 ),
+				std::cend( list1 ),
+				std::cbegin( list2 ),
+				std::cend( list2 ) ) );
 		REQUIRE(
 			std::equal(
-				std::begin( list1 ),
-				std::end( list2 ),
-				std::begin( list1 ),
-				std::end( list1 ) ) );
+				std::cbegin( list1 ),
+				std::cend( list2 ),
+				std::cbegin( list1 ),
+				std::cend( list1 ) ) );
 	}
 
 	TEST_CASE( "equality_operator_push_front", "doubly_linked_list" )
@@ -477,10 +477,10 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( values ),
-				std::end( values ),
-				std::begin( list ),
-				std::end( list ) ) );
+				std::cbegin( values ),
+				std::cend( values ),
+				std::cbegin( list ),
+				std::cend( list ) ) );
 	}
 
 	TEST_CASE( "iterator_push_back_begin_end", "doubly_linked_list" )
@@ -501,10 +501,10 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::rbegin( values ),
-				std::rend( values ),
-				std::begin( list ),
-				std::end( list ) ) );
+				std::crbegin( values ),
+				std::crend( values ),
+				std::cbegin( list ),
+				std::cend( list ) ) );
 	}
 
 	TEST_CASE( "iterator_push_front_rbegin_rend", "doubly_linked_list" )
@@ -525,10 +525,10 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::rbegin( values ),
-				std::rend( values ),
-				std::rbegin( list ),
-				std::rend( list ) ) );
+				std::crbegin( values ),
+				std::crend( values ),
+				std::crbegin( list ),
+				std::crend( list ) ) );
 	}
 
 	TEST_CASE( "iterator_push_back_rbegin_rend", "doubly_linked_list" )
@@ -549,10 +549,10 @@ namespace dsa
 
 		REQUIRE(
 			std::equal(
-				std::begin( values ),
-				std::end( values ),
-				std::rbegin( list ),
-				std::rend( list ) ) );
+				std::cbegin( values ),
+				std::cend( values ),
+				std::crbegin( list ),
+				std::crend( list ) ) );
 	}
 
 	TEST_CASE( "iterator_push_front_cbegin_cend", "doubly_linked_list" )

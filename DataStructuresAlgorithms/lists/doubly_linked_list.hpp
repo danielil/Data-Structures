@@ -6,7 +6,8 @@
  * All insertions (push_front, push_back) and removal (pop_front, pop_back) are done in O(1) complexity
  * since no traversal is done for these operations.
  *
- * Custom STL-style iterators for the list are also implemented.
+ * Custom STL-style iterators for the list are also implemented. Mutable and const iterators share 
+ * the same implementation through compile-time logic.
  */
 
 #pragma once
@@ -39,13 +40,13 @@ namespace dsa
 			doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
 
 			bool
-				operator==( const doubly_linked_node& rhs ) const
+			operator==( const doubly_linked_node& rhs ) const
 			{
 				return ( this->item == rhs.item );
 			}
 
 			bool
-				operator!=( const doubly_linked_node& rhs ) const
+			operator!=( const doubly_linked_node& rhs ) const
 			{
 				return !( *this == rhs );
 			}
@@ -56,78 +57,96 @@ namespace dsa
 			std::shared_ptr< doubly_linked_node > next = nullptr;
 		};
 
-		class iterator : public std::iterator< std::bidirectional_iterator_tag, T, std::ptrdiff_t, T*, T& >
+		// Iterator class for both mutable and const iterators.
+		template< bool is_const_iterator >
+		class iterator_impl :
+			public std::iterator<
+				std::bidirectional_iterator_tag,
+				typename std::conditional< is_const_iterator, const T, T >::type >
 		{
-		public:
-			friend class doubly_linked_list;
-			friend class const_iterator;
 
-			iterator( std::shared_ptr< doubly_linked_node >&& node ) :
-				node( std::forward< decltype( this->node ) >( node ) )
+		public:
+
+			friend class doubly_linked_list;
+			friend class iterator_impl< true >;
+
+			iterator_impl( doubly_linked_node* const node ) :
+				node( node )
 			{
 			}
 
-			iterator( const iterator& it ) :
+			iterator_impl( const iterator_impl< false >& it ) :
 				node( it.node )
 			{
 			}
 
-			iterator&
-			operator=( const iterator& it )
+			/**
+			 * Copy construction for const iterators is handled by the default
+			 * generated implementation. The copy constructor specialization for
+			 * mutable iterators allows for the conversion from mutable to const.
+			 */
+
+			iterator_impl& operator=( const iterator_impl< false >& it )
 			{
 				this->node = it.node;
 
 				return *this;
 			}
 
-			iterator&
+			void
+			swap( iterator_impl& it )
+			{
+				std::swap( this->node, it.node );
+			}
+
+			iterator_impl&
 			operator++()
 			{
-				this->node = this->node->next;
+				this->node = this->node->next.get();
 
 				return *this;
 			}
 
-			iterator
+			iterator_impl
 			operator++( int )
 			{
-				iterator iterator( *this );
+				const iterator_impl iterator( *this );
 				++( *this );
 
 				return iterator;
 			}
 
-			iterator&
+			iterator_impl&
 			operator--()
 			{
-				this->node = this->node->previous;
+				this->node = this->node->previous.get();
 
 				return *this;
 			}
 
-			iterator
+			iterator_impl
 			operator--( int )
 			{
-				iterator iterator( *this );
+				const iterator_impl iterator( *this );
 				--( *this );
 
 				return iterator;
 			}
 
-			T
+			reference
 			operator*() const
 			{
 				return this->node->item;
 			}
 
-			doubly_linked_node*
+			pointer
 			operator->() const
 			{
-				return this->node.get();
+				return this->node;
 			}
 
 			bool
-			operator==( const iterator& it )
+			operator==( const iterator_impl& it ) const
 			{
 				if ( nullptr == this->node && 
 					 nullptr == it.node )
@@ -144,100 +163,97 @@ namespace dsa
 			}
 
 			bool
-			operator!=( const iterator& it )
+			operator!=( const iterator_impl& it ) const
 			{
 				return !( *this == it );
 			}
 
 		private:
-			std::shared_ptr< doubly_linked_node > node;
+			doubly_linked_node* node;
 		};
 
-		class const_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
+		// Iterator class for both mutable and const reverse iterators.
+		template< bool is_const_iterator >
+		class reverse_iterator_impl :
+			public std::iterator<
+				std::bidirectional_iterator_tag,
+				typename std::conditional< is_const_iterator, const T, T >::type >
 		{
 		public:
 			friend class doubly_linked_list;
-			friend class iterator;
+			friend class reverse_iterator_impl< true >;
 
-			const_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
-				node( std::forward< decltype( this->node ) >( node ) )
+			reverse_iterator_impl( doubly_linked_node* const node ) :
+				node( node )
 			{
 			}
 
-			const_iterator( const const_iterator& it ) :
+			reverse_iterator_impl( const reverse_iterator_impl< false >& it ) :
 				node( it.node )
 			{
 			}
 
-			const_iterator( const iterator& it ) :
-				node( it.node )
-			{
-			}
-
-			const_iterator&
-			operator=( const const_iterator& it )
+			reverse_iterator_impl& operator=( const reverse_iterator_impl< false >& it )
 			{
 				this->node = it.node;
 
 				return *this;
 			}
 
-			const_iterator&
-			operator=( const iterator& it )
+			void
+			swap( reverse_iterator_impl& it )
 			{
-				this->node = it.node;
-
-				return *this;
+				std::swap( this->node, it.node );
 			}
 
-			const_iterator& 
+			reverse_iterator_impl&
 			operator++()
 			{
-				this->node = this->node->next;
+				this->node = this->node->previous.get();
 
 				return *this;
 			}
 
-			const_iterator
+			reverse_iterator_impl
 			operator++( int )
 			{
-				const_iterator iterator( *this );
+				const reverse_iterator_impl iterator( *this );
 				++( *this );
 
 				return iterator;
 			}
 
-			const_iterator&
+			reverse_iterator_impl&
 			operator--()
 			{
-				this->node = this->node->previous;
+				this->node = this->node->next.get();
 
 				return *this;
 			}
 
-			const_iterator
+			reverse_iterator_impl
 			operator--( int )
 			{
-				const_iterator iterator( *this );
+				const reverse_iterator_impl iterator( *this );
 				--( *this );
 
 				return iterator;
 			}
 
-			const T
+			reference
 			operator*() const
 			{
 				return this->node->item;
 			}
 
-			const doubly_linked_node*
+			pointer
 			operator->() const
 			{
-				return this->node.get();
+				return this->node;
 			}
 
 			bool
-			operator==( const const_iterator& it ) const
+			operator==( const reverse_iterator_impl& it )
 			{
 				if ( nullptr == this->node && 
 					 nullptr == it.node )
@@ -254,221 +270,19 @@ namespace dsa
 			}
 
 			bool
-			operator!=( const const_iterator& it ) const
+			operator!=( const reverse_iterator_impl& it )
 			{
 				return !( *this == it );
 			}
 
 		private:
-			std::shared_ptr< doubly_linked_node > node;
+			doubly_linked_node* node;
 		};
 
-		class reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
-		{
-		public:
-			friend class doubly_linked_list;
-			friend class const_reverse_iterator;
-
-			reverse_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
-				node( std::forward< decltype( this->node ) >( node ) )
-			{
-			}
-
-			reverse_iterator( const reverse_iterator& it ) :
-				node( it.node )
-			{
-			}
-
-			reverse_iterator&
-			operator=( const reverse_iterator& it )
-			{
-				this->node = it.node;
-
-				return *this;
-			}
-
-			reverse_iterator&
-			operator++()
-			{
-				this->node = this->node->previous;
-
-				return *this;
-			}
-
-			reverse_iterator
-			operator++( int )
-			{
-				reverse_iterator iterator( *this );
-				++( *this );
-
-				return iterator;
-			}
-
-			reverse_iterator&
-			operator--()
-			{
-				this->node = this->node->next;
-
-				return *this;
-			}
-
-			reverse_iterator
-			operator--( int )
-			{
-				iterator iterator( *this );
-				--( *this );
-
-				return iterator;
-			}
-
-			T
-			operator*() const
-			{
-				return this->node->item;
-			}
-
-			doubly_linked_node*
-			operator->() const
-			{
-				return this->node.get();
-			}
-
-			bool
-			operator==( const reverse_iterator& it )
-			{
-				if ( nullptr == this->node && 
-					 nullptr == it.node )
-				{
-					return true;
-				}
-
-				if ( nullptr == it.node )
-				{
-					return false;
-				}
-
-				return ( *( this->node ) == *( it.node ) );
-			}
-
-			bool
-			operator!=( const reverse_iterator& it )
-			{
-				return !( *this == it );
-			}
-
-		private:
-			std::shared_ptr< doubly_linked_node > node;
-		};
-
-		class const_reverse_iterator : public std::iterator< std::bidirectional_iterator_tag, T, T*, T& >
-		{
-		public:
-			friend class doubly_linked_list;
-			friend class iterator;
-
-			const_reverse_iterator( std::shared_ptr< doubly_linked_node >&& node ) :
-				node( std::forward< decltype( this->node ) >( node ) )
-			{
-			}
-
-			const_reverse_iterator( const const_reverse_iterator& it ) :
-				node( it.node )
-			{
-			}
-
-			const_reverse_iterator( const reverse_iterator& it ) :
-				node( it.node )
-			{
-			}
-
-			const_reverse_iterator&
-			operator=( const const_reverse_iterator& it )
-			{
-				this->node = it.node;
-
-				return *this;
-			}
-
-			const_reverse_iterator&
-			operator=( const reverse_iterator& it )
-			{
-				this->node = it.node;
-
-				return *this;
-			}
-
-			const_reverse_iterator&
-			operator++()
-			{
-				this->node = this->node->previous;
-
-				return *this;
-			}
-
-			const_reverse_iterator
-			operator++( int )
-			{
-				const_reverse_iterator iterator( *this );
-				++( *this );
-
-				return iterator;
-			}
-
-			const_reverse_iterator&
-			operator--()
-			{
-				this->node = this->node->next;
-
-				return *this;
-			}
-
-			const_reverse_iterator
-			operator--( int )
-			{
-				const_reverse_iterator iterator( *this );
-				--( *this );
-
-				return iterator;
-			}
-
-			const T
-			operator*() const
-			{
-				return this->node->item;
-			}
-
-			const doubly_linked_node*
-			operator->() const
-			{
-				return this->node.get();
-			}
-
-			bool
-			operator==( const const_reverse_iterator& it ) const
-			{
-				if ( nullptr == this->node && 
-					 nullptr == it.node )
-				{
-					return true;
-				}
-
-				if ( nullptr == it.node )
-				{
-					return false;
-				}
-
-				return ( *( this->node ) == *( it.node ) );
-			}
-
-			bool
-			operator!=( const const_reverse_iterator& it ) const
-			{
-				return !( *this == it );
-			}
-
-		private:
-			std::shared_ptr< doubly_linked_node > node;
-		};
+		using iterator = iterator_impl< false >;
+		using const_iterator = iterator_impl< true >;
+		using reverse_iterator = reverse_iterator_impl< false >;
+		using const_reverse_iterator = reverse_iterator_impl< true >;
 
 		doubly_linked_list() = default;
 		~doubly_linked_list() noexcept = default;
@@ -549,7 +363,7 @@ namespace dsa
 		bool
 		operator==( const doubly_linked_list& rhs ) const noexcept
 		{
-			return this->equals( this->back, rhs.back );
+			return this->equals( this->back.get(), rhs.back.get() );
 		}
 
 		bool
@@ -799,8 +613,8 @@ namespace dsa
 
 		bool
 		equals(
-			const std::shared_ptr< doubly_linked_node > node1,
-			const std::shared_ptr< doubly_linked_node > node2 ) const noexcept
+			doubly_linked_node const* const node1,
+			doubly_linked_node const* const node2 ) const noexcept
 		{
 			if ( nullptr == node1 &&
 				 nullptr == node2 )
@@ -816,7 +630,7 @@ namespace dsa
 
 			if ( node1->item == node2->item )
 			{
-				return this->equals( node1->next, node2->next );
+				return this->equals( node1->next.get(), node2->next.get() );
 			}
 
 			return false;
@@ -825,25 +639,25 @@ namespace dsa
 		auto
 		first() const noexcept
 		{
-			return this->back;
+			return this->back.get();
 		}
 
 		auto
 		last() const noexcept
 		{
-			return this->front;
+			return this->front.get();
 		}
 
 		auto
-		next( std::shared_ptr< doubly_linked_node >&& current ) const noexcept
+		next( doubly_linked_node const* const current ) const noexcept
 		{
-			return current->next;
+			return current->next.get();
 		}
 
 		auto
-		previous( std::shared_ptr< doubly_linked_node >&& current ) const noexcept
+		previous( doubly_linked_node const* const current ) const noexcept
 		{
-			return current->previous;
+			return current->previous.get();
 		}
 
 		std::shared_ptr< doubly_linked_node > front = nullptr;
