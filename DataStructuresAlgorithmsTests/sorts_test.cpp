@@ -54,68 +54,58 @@ namespace sorts {
 
 	TEST_CASE( "bubble sort", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					bubble::sort( begin, end );
-				} );
+		sort_tester( [](auto begin, auto end )
+		{
+			bubble::sort( begin, end );
+		} );
 	}
 
 	TEST_CASE( "insertion sort (std implementation)", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					insertion::sort( begin, end );
-				} );
+		sort_tester( []( auto begin, auto end )
+		{
+			insertion::sort( begin, end );
+		} );
 	}
 
 	TEST_CASE( "insertion sort (custom implementation)", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					insertion::sort< insertion::custom_implementation >( begin, end );
-				} );
+		sort_tester( []( auto begin, auto end )
+		{
+			insertion::sort< insertion::custom_implementation >( begin, end );
+		} );
 	}
 
 	TEST_CASE( "merge sort (std implementation)", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					merge::sort( begin, end );
-				} );
+		sort_tester( []( auto begin, auto end )
+		{
+			merge::sort( begin, end );
+		} );
 	}
 
 	TEST_CASE( "merge sort (custom implementation)", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					merge::sort< merge::custom_implementation >( begin, end );
-				} );
+		sort_tester( []( auto begin, auto end )
+		{
+			merge::sort< merge::custom_implementation >( begin, end );
+		} );
 	}
 
 	TEST_CASE( "quick sort", "sort" )
 	{
-		sort_tester(
-			[](
-				auto begin,
-				auto end )
-				{
-					quick::sort( begin, end );
-				} );
+		sort_tester( []( auto begin, auto end )
+		{
+			quick::sort( begin, end );
+		} );
+	}
+
+	TEST_CASE( "quick sort (custom implementation)", "sort" )
+	{
+		sort_tester( []( auto begin, auto end )
+		{
+			quick::sort< quick::custom_implementation >( begin, end );
+		} );
 	}
 
 }}

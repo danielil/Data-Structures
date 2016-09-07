@@ -45,27 +45,38 @@ namespace dsa
 			std::copy( inputBegin1, inputEnd1, output );
 	}
 
-	template <
-		typename ForwardIt,
-		typename UnaryPredicate >
+	/**
+	 * This partition algorithm attempts to preserve 
+	 * the condition that the elements less than the
+	 * predicate (pivot) come exactly before it. This
+	 * is different than a partition algorithm which 
+	 * groups values less than the pivot but forgoes
+	 * any guarantees about the relative pivot position.
+	 */
+	template < typename BidirectionalIterator >
 	auto
 	partition(
-		ForwardIt begin,
-		ForwardIt end,
-		UnaryPredicate predicate )
+		BidirectionalIterator begin,
+		BidirectionalIterator pivot,
+		BidirectionalIterator end )
 	{
-		begin = std::find_if_not( begin, end, predicate );
-
 		if ( begin != end )
 		{
+			// Move pivot to the far most right.
+			std::swap( *pivot, *std::prev( end ) );
+
 			for ( auto&& it = std::next( begin ); it != end; ++it )
 			{
-				if ( predicate( *it ) )
+				if ( *it <= *pivot )
 				{
 					std::swap( *it, *begin );
 					++begin;
 				}
 			}
+
+			// Move back pivot to the index where the predicate
+			// has failed to enforce proximity.
+			std::swap( *begin, *std::prev( end ) );
 		}
 
 		return begin;
