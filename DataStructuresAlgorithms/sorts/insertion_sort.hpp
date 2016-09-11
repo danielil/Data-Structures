@@ -11,29 +11,24 @@ namespace sorts {
 
 struct insertion
 {
-	/**
-	 * The std_implementation can work using only a forward iterator
-	 * but because the custom_implementation requires a bidirectional
-	 * iterator, the wrapper function also requires it.
-	 */
 	template <
 		typename Implementation = std_implementation,
-		typename BidirectionalIterator >
+		typename Iterator >
 	static void
 	sort(
-		BidirectionalIterator begin,
-		BidirectionalIterator end )
+		Iterator begin,
+		Iterator end )
 	{
 		Implementation::sort( begin, end );
 	}
 
 	struct std_implementation
 	{
-		template < typename ForwardIterator >
+		template < typename Iterator >
 		static void
 		sort(
-			ForwardIterator begin,
-			ForwardIterator end )
+			Iterator begin,
+			Iterator end )
 		{
 			for ( auto it = begin; it != end; ++it )
 			{
@@ -50,27 +45,25 @@ struct insertion
 
 	struct custom_implementation
 	{
-		template < typename BidirectionalIterator >
+		template < typename Iterator >
 		static void
 		sort(
-			BidirectionalIterator begin,
-			BidirectionalIterator end )
+			Iterator begin,
+			Iterator end )
 		{
 			for ( auto it = std::next( begin ); it != end; ++it )
 			{
-				const auto currentItem = *it;
-				const auto previousItem = *std::prev( it );
-
+				const auto previousItem = std::prev( it );
 				auto insertPosition = it;
 
 				while ( ( insertPosition != begin ) &&
-						( currentItem < previousItem ) )
+						( *it < *previousItem ) )
 				{
-					*insertPosition = previousItem;
+					*insertPosition = *previousItem;
 					--insertPosition;
 				}
 
-				*insertPosition = currentItem;
+				*insertPosition = *it;
 			}
 		}
 	};
