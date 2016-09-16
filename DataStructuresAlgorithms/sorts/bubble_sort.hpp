@@ -2,6 +2,11 @@
  * Daniel Sebastian Iliescu
  *
  * Implementation of bubble sort.
+ * 
+ * Worst case performance: O(n^2)
+ * Best case performance: O(n)
+ * Average case performance: O(n^2)
+ * Worst case space complexity: O(1)
  */
 
 #pragma once
@@ -17,7 +22,9 @@ struct bubble
 		Iterator begin,
 		Iterator end )
 	{
-		for ( auto it = begin; ( it != end ); ++it )
+		using std::swap;
+
+		for ( auto it = begin; it != end; ++it )
 		{
 			bool swapped = false;
 
@@ -28,7 +35,7 @@ struct bubble
 
 				if ( *current_item > *next_item )
 				{
-					std::swap( *current_item, *next_item );
+					swap( *current_item, *next_item );
 
 					swapped = true;
 				}
