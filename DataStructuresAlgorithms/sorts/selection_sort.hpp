@@ -2,11 +2,6 @@
  * Daniel Sebastian Iliescu
  *
  * Implementation of selection sort.
- * 
- * Worst case performance: O(n^2)
- * Best case performance: O(n^2)
- * Average case performance: O(n^2)
- * Worst case space complexity: O(1)
  */
 
 #pragma once
