@@ -57,18 +57,12 @@ namespace sorts {
 
 	TEST_CASE( "selection sort (std implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			selection::sort( begin, end );
-		} );
+		sort_tester< selection >();
 	}
 
 	TEST_CASE( "selection sort (custom implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			selection::sort< selection::custom_implementation >( begin, end );
-		} );
+		sort_tester< selection::custom_implementation >();
 	}
 
 	TEST_CASE( "insertion sort (std implementation)", "sort" )
