@@ -3,11 +3,18 @@
  *
  * A doubly-linked implementation of a list combining both stack (LIFO) and queue (FIFO) operations.
  *
- * All insertions (push_front, push_back) and removal (pop_front, pop_back) are done in O(1) complexity
+ * All insertions (push_front, push_back) and removals (pop_front, pop_back) are done in O(1) complexity
  * since no traversal is done for these operations.
  *
  * Custom STL-style iterators for the list are also implemented. Mutable and const iterators share 
  * the same implementation through compile-time logic.
+ *
+ * Two std::shared_ptr are used to keep track of the previous and next nodes. A better candidate for
+ * one of these nodes might have been an std::weak_ptr since we don't actually need to keep track of 
+ * two strong references to the same node (one strong and one weak reference would work). However,
+ * trivial tasks such as forwards or backwards (depending on which node is the weak reference) 
+ * iterations would be slowed down due to the construction of an std::shared_ptr for every iterated
+ * nodes.
  */
 
 #pragma once
@@ -20,8 +27,6 @@ namespace dsa
 	class doubly_linked_list
 	{
 	public:
-
-		using value_type = T;
 
 		struct doubly_linked_node
 		{
@@ -59,13 +64,15 @@ namespace dsa
 
 		// Iterator class for both mutable and const iterators.
 		template< bool is_const_iterator >
-		class iterator_impl :
-			public std::iterator<
-				std::bidirectional_iterator_tag,
-				typename std::conditional< is_const_iterator, const T, T >::type >
+		class iterator_impl
 		{
-
 		public:
+
+			using iterator_category = std::bidirectional_iterator_tag;
+			using value_type = typename std::conditional< is_const_iterator, const T, T >::type;
+			using difference_type = std::ptrdiff_t;
+			using pointer = T*;
+			using reference = T&;
 
 			friend class doubly_linked_list;
 			friend class iterator_impl< true >;
@@ -85,7 +92,6 @@ namespace dsa
 			 * generated implementation. The copy constructor specialization for
 			 * mutable iterators allows for the conversion from mutable to const.
 			 */
-
 			iterator_impl& operator=( const iterator_impl< false >& it )
 			{
 				this->node = it.node;
@@ -174,12 +180,16 @@ namespace dsa
 
 		// Iterator class for both mutable and const reverse iterators.
 		template< bool is_const_iterator >
-		class reverse_iterator_impl :
-			public std::iterator<
-				std::bidirectional_iterator_tag,
-				typename std::conditional< is_const_iterator, const T, T >::type >
+		class reverse_iterator_impl
 		{
 		public:
+
+			using iterator_category = std::bidirectional_iterator_tag;
+			using value_type = typename std::conditional< is_const_iterator, const T, T >::type;
+			using difference_type = std::ptrdiff_t;
+			using pointer = T*;
+			using reference = T&;
+
 			friend class doubly_linked_list;
 			friend class reverse_iterator_impl< true >;
 

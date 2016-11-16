@@ -28,11 +28,8 @@ namespace
 namespace dsa {
 namespace sorts {
 
-	void sort_tester(
-		std::function<
-			void(
-				container_type::iterator,
-				container_type::iterator ) >&& sort )
+	template< typename sort_implementation >
+	void sort_tester()
 	{
 		std::default_random_engine generator;
 		container_type container;
@@ -42,7 +39,7 @@ namespace sorts {
 			std::end( container ),
 			generator );
 
-		sort(
+		sort_implementation::sort(
 			std::begin( container ),
 			std::end( container ) );
 
@@ -54,58 +51,37 @@ namespace sorts {
 
 	TEST_CASE( "bubble sort", "sort" )
 	{
-		sort_tester( [](auto begin, auto end )
-		{
-			bubble::sort( begin, end );
-		} );
+		sort_tester< bubble >();
 	}
 
 	TEST_CASE( "insertion sort (std implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			insertion::sort( begin, end );
-		} );
+		sort_tester< insertion >();
 	}
 
 	TEST_CASE( "insertion sort (custom implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			insertion::sort< insertion::custom_implementation >( begin, end );
-		} );
+		sort_tester< insertion::custom_implementation >();
 	}
 
 	TEST_CASE( "merge sort (std implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			merge::sort( begin, end );
-		} );
+		sort_tester< merge >();
 	}
 
 	TEST_CASE( "merge sort (custom implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			merge::sort< merge::custom_implementation >( begin, end );
-		} );
+		sort_tester< merge::custom_implementation >();
 	}
 
 	TEST_CASE( "quick sort", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			quick::sort( begin, end );
-		} );
+		sort_tester< quick >();
 	}
 
 	TEST_CASE( "quick sort (custom implementation)", "sort" )
 	{
-		sort_tester( []( auto begin, auto end )
-		{
-			quick::sort< quick::custom_implementation >( begin, end );
-		} );
+		sort_tester< quick::custom_implementation >();
 	}
 
 }}
