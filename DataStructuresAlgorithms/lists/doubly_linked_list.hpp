@@ -12,8 +12,8 @@
  * Two std::shared_ptr are used to keep track of the previous and next nodes. A better candidate for
  * one of these nodes might have been an std::weak_ptr since we don't actually need to keep track of 
  * two strong references to the same node (one strong and one weak reference would work). However,
- * trivial tasks such as forwards or backwards (depending on which node is the weak reference) 
- * iterations would be slowed down due to the construction of an std::shared_ptr for every iterated
+ * trivial tasks such as forward or backward (depending on which node is the weak reference) 
+ * iterations would be slowed down due to the construction of a new std::shared_ptr for every iterated
  * nodes.
  */
 
