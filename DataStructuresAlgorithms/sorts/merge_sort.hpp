@@ -10,7 +10,7 @@
 
 namespace
 {
-	static const std::size_t MERGE_THRESHOLD = 1;
+	static const std::size_t MERGE_THRESHOLD = 16;
 }
 
 namespace dsa {
@@ -27,43 +27,48 @@ struct merge
 	 */
 	template <
 		typename Implementation = std_implementation,
-		typename ForwardIterator >
+		typename Iterator >
 	static void
 	sort(
-		ForwardIterator begin,
-		ForwardIterator end )
+		Iterator begin,
+		Iterator end )
 	{
 		Implementation::sort( begin, end );
 	}
 
 	struct std_implementation
 	{
-		template < typename BidirectionalIterator >
+		template < typename Iterator >
 		static void sort(
-			BidirectionalIterator begin,
-			BidirectionalIterator end )
+			Iterator begin,
+			Iterator end )
 		{
-			const auto length = std::distance( begin, end );
+			const auto size = std::distance( begin, end );
 
-			if ( length > MERGE_THRESHOLD )
+			if ( size > MERGE_THRESHOLD )
 			{
-				const auto mid = length / 2;
-				const auto mid_it = std::next( begin, mid );
+				const auto center = size / 2;
+				const auto mid = std::next( begin, center );
 
-				sort( begin, mid_it );
-				sort( mid_it, end );
+				sort( begin, mid );
+				sort( mid, end );
 
-				std::inplace_merge( begin, mid_it, end );
+				std::inplace_merge( begin, mid, end );
+			}
+			else
+			{
+				// Switch to insertion sort if the container size is small enough.
+				insertion::sort( begin, end );
 			}
 		}
 	};
 
 	struct custom_implementation
 	{
-		template < typename ForwardIterator >
+		template < typename Iterator >
 		static void sort(
-			ForwardIterator begin,
-			ForwardIterator end )
+			Iterator begin,
+			Iterator end )
 		{
 			std::vector< 
 				std::iterator_traits< decltype( begin ) >::value_type > merged_items(
@@ -81,43 +86,48 @@ struct merge
 		}
 
 		template <
-			typename ForwardIterator,
+			typename Iterator,
 			typename OutputIterator >
 		static void
 		sort(
-			ForwardIterator input_begin,
-			ForwardIterator input_end,
+			Iterator input_begin,
+			Iterator input_end,
 			OutputIterator output )
 		{
-			const auto length = std::distance( input_begin, input_end );
+			const auto size = std::distance( input_begin, input_end );
 
-			if ( length > MERGE_THRESHOLD )
+			if ( size > MERGE_THRESHOLD )
 			{
-				const auto mid = length / 2;
-				const auto mid_it = std::next( input_begin, mid );
+				const auto center = size / 2;
+				const auto mid = std::next( input_begin, center );
 
-				sort( input_begin, mid_it, output );
-				sort( mid_it, input_end, output );
+				sort( input_begin, mid, output );
+				sort( mid, input_end, output );
 
 				// Merge both sorted regions into sorted output
 				dsa::merge(
 					input_begin,
-					mid_it,
-					mid_it,
+					mid,
+					mid,
 					input_end,
 					output );
 
 				// Replace first unsorted region with first sorted region
 				std::copy(
 					output,
-					std::next( output, mid ),
+					std::next( output, center ),
 					input_begin );
 
 				// Replace second unsorted region with second sorted region
 				std::copy(
-					std::next( output, mid ),
-					std::next( output, length ),
-					mid_it );
+					std::next( output, center ),
+					std::next( output, size ),
+					mid );
+			}
+			else
+			{
+				// Switch to insertion sort if the container size is small enough.
+				insertion::sort( input_begin, input_end );
 			}
 		}
 	};

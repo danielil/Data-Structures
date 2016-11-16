@@ -10,7 +10,7 @@
 
 namespace
 {
-	static const std::size_t PARTITION_THRESHOLD = 1;
+	static const std::size_t PARTITION_THRESHOLD = 16;
 }
 
 namespace dsa {
@@ -20,22 +20,22 @@ struct quick
 {
 	template <
 		typename Implementation = std_implementation,
-		typename BidirectionalIterator >
+		typename Iterator >
 	static void
 	sort(
-		BidirectionalIterator begin,
-		BidirectionalIterator end )
+		Iterator begin,
+		Iterator end )
 	{
 		Implementation::sort( begin, end );
 	}
 
 	struct std_implementation
 	{
-		template < typename ForwardIterator >
+		template < typename Iterator >
 		static void
 		sort(
-			ForwardIterator begin,
-			ForwardIterator end )
+			Iterator begin,
+			Iterator end )
 		{
 			if ( begin != end )
 			{
@@ -43,8 +43,14 @@ struct quick
 
 				if ( size > PARTITION_THRESHOLD )
 				{
-					const auto mid = size / 2;
-					const auto pivot = *std::next( begin, mid );
+					const auto center = std::next( begin, size / 2 );
+					const auto container_end = std::prev( end );
+
+					// Median-of-three pivot calculation
+					auto pivot =
+						std::max(
+							std::min( *begin, *container_end ),
+							std::min( std::max( *begin, *container_end ), *center ) );
 
 					/**
 					 * Two partitions are required if using the standard
@@ -73,31 +79,38 @@ struct quick
 					sort( begin, partitions.first );
 					sort( partitions.second, end );
 				}
+				else
+				{
+					// Switch to insertion sort if the container size is small enough.
+					insertion::sort( begin, end );
+				}
 			}
 		}
 	};
 
 	struct custom_implementation
 	{
-		template < typename BidirectionalIterator >
+		template < typename RandomAccessIterator >
 		static void
 		sort(
-			BidirectionalIterator begin,
-			BidirectionalIterator end )
+			RandomAccessIterator begin,
+			RandomAccessIterator end )
 		{
 			if ( begin != end )
 			{
-				const auto size = std::distance( begin, end );
+				const auto size = begin - end;
 
 				if ( size > PARTITION_THRESHOLD )
 				{
-					const auto mid = size / 2;
-					const auto pivot = std::next( begin, mid );
-
-					const auto partition = dsa::partition( begin, pivot, end );
+					const auto partition = dsa::partition( begin, end );
 
 					sort( begin, partition );
-					sort( std::next( partition ), end );
+					sort( partition + 1, end );
+				}
+				else
+				{
+					// Switch to insertion sort if the container size is small enough.
+					insertion::sort( begin, end );
 				}
 			}
 		}

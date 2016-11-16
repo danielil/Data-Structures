@@ -13,6 +13,5 @@ ADD_DEFINITIONS(-D_UNICODE)
 include_directories( DataStructuresAlgorithms )
 include_directories( includes )
 
-file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp DataStructuresAlgorithmsTests/*.hpp)
+file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp)
 add_executable(DataStructuresAlgorithmsTests ${TEST_SOURCES})
-

@@ -17,32 +17,32 @@ namespace dsa
 		typename OutputIterator >
 	auto
 	merge(
-		InputIterator1 inputBegin1,
-		InputIterator1 inputEnd1,
-		InputIterator2 inputBegin2,
-		InputIterator2 inputEnd2,
+		InputIterator1 input_begin1,
+		InputIterator1 input_end1,
+		InputIterator2 input_begin2,
+		InputIterator2 input_end2,
 		OutputIterator output )
 	{
-		while ( ( inputBegin1 != inputEnd1 ) &&
-				( inputBegin2 != inputEnd2 ) )
+		while ( ( input_begin1 != input_end1 ) &&
+				( input_begin2 != input_end2 ) )
 		{
-			if ( *inputBegin1 <= *inputBegin2 )
+			if ( *input_begin1 <= *input_begin2 )
 			{
-				*output = *inputBegin1;
-				++inputBegin1;
+				*output = *input_begin1;
+				++input_begin1;
 			}
 			else
 			{
-				*output = *inputBegin2;
-				++inputBegin2;
+				*output = *input_begin2;
+				++input_begin2;
 			}
 
 			++output;
 		}
 
-		return ( inputBegin1 == inputEnd1 ) ? 
-			std::copy( inputBegin2, inputEnd2, output ) : 
-			std::copy( inputBegin1, inputEnd1, output );
+		return ( input_begin1 == input_end1 ) ?
+			std::copy( input_begin2, input_end2, output ) :
+			std::copy( input_begin1, input_end1, output );
 	}
 
 	/**
@@ -53,30 +53,42 @@ namespace dsa
 	 * groups values less than the pivot but forgoes
 	 * any guarantees about the relative pivot position.
 	 */
-	template < typename BidirectionalIterator >
+	template < typename RandomAccessIterator >
 	auto
 	partition(
-		BidirectionalIterator begin,
-		BidirectionalIterator pivot,
-		BidirectionalIterator end )
+		RandomAccessIterator begin,
+		RandomAccessIterator end )
 	{
-		if ( begin != end )
+		const auto center = begin + ( end - begin ) / 2;
+		const auto container_end = end - 1;
+
+		// Median-of-three pivot calculation
+		auto pivot =
+			std::max(
+				std::min( *begin, *container_end ),
+				std::min( std::max( *begin, *container_end ), *center ) );
+
+		auto mid = begin;
+
+		while ( mid != end )
 		{
-			// Move pivot to the far most right.
-			std::swap( *pivot, *std::prev( end ) );
-
-			for ( auto&& it = std::next( begin ); it != end; ++it )
+			if ( *mid < pivot )
 			{
-				if ( *it <= *pivot )
-				{
-					std::swap( *it, *begin );
-					++begin;
-				}
-			}
+				std::swap( *begin, *mid );
 
-			// Move back pivot to the index where the predicate
-			// has failed to enforce proximity.
-			std::swap( *begin, *std::prev( end ) );
+				++begin;
+				++mid;
+			}
+			else if ( *mid == pivot )
+			{
+				++mid;
+			}
+			else
+			{
+				--end;
+
+				std::swap( *end, *mid );
+			}
 		}
 
 		return begin;

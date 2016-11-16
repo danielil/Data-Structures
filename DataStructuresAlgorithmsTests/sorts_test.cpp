@@ -5,6 +5,7 @@
 */
 
 #include <sorts/bubble_sort.hpp>
+#include <sorts/selection_sort.hpp>
 #include <sorts/insertion_sort.hpp>
 #include <sorts/merge_sort.hpp>
 #include <sorts/quick_sort.hpp>
@@ -52,6 +53,22 @@ namespace sorts {
 	TEST_CASE( "bubble sort", "sort" )
 	{
 		sort_tester< bubble >();
+	}
+
+	TEST_CASE( "selection sort (std implementation)", "sort" )
+	{
+		sort_tester( []( auto begin, auto end )
+		{
+			selection::sort( begin, end );
+		} );
+	}
+
+	TEST_CASE( "selection sort (custom implementation)", "sort" )
+	{
+		sort_tester( []( auto begin, auto end )
+		{
+			selection::sort< selection::custom_implementation >( begin, end );
+		} );
 	}
 
 	TEST_CASE( "insertion sort (std implementation)", "sort" )
