@@ -1,98 +1,138 @@
 /**
- * @author Daniel Sebastian Iliescu
- *
- * This file contains the methods for BinTree class that implements a
- * Search Binary Tree.
+ * Daniel Sebastian Iliescu
  */
 
 #pragma once
 
-#include "../graphs/node_data.hpp"
+#include <memory>
 
 namespace dsa
 {
-    //---------------------------------------------------------------------------
-    // BinTree class: implementation of a Binary Search Tree (BST) holding data
-    // packaged as NodeData objects.
-    // Features:
-    //  --  allows insertion of retrieval of data
-    //  --  exposes properties such as tree size, tree height and depth
-    //  --  allows for assignment/copy of other trees
-    //  --  allows pre-order, in-order and post-order traversal
-    //---------------------------------------------------------------------------
-    class BinTree
-    {
-    public:
-        BinTree();                      // constructor 
-        BinTree(const BinTree &source); // copy constructor 
-        ~BinTree();                     // destructor 
+	class node;
 
-        // Accessors
-        bool isEmpty() const;
-        int getTreeSize() const;
-        int getTreeHeight() const;
-        int getDepth(const NodeData &targetData) const;
-        void makeEmpty();
+	template < typename T >
+	class binary_search_tree
+	{
 
-        // Operators
-        BinTree& operator=(const BinTree &source);
-        bool operator==(const BinTree &other) const;
-        bool operator!=(const BinTree &other) const;
+	public:
+		binary_search_tree() = default;
+		~binary_search_tree() noexcept = default;
 
-        // Oputput operator
-        friend std::ostream& operator<<(std::ostream& os, const BinTree& obj);
+		binary_search_tree( const binary_search_tree& other ) = default;
+		binary_search_tree( binary_search_tree&& other ) noexcept = default;
 
-        // Tree operations
-        bool insert(NodeData* data);
-        bool retrieve(const NodeData &refData, NodeData* &data) const;
+		binary_search_tree& operator=( const binary_search_tree& rhs ) = default;
+		binary_search_tree& operator=( binary_search_tree&& rhs ) noexcept = default;
 
-        // Recursive tree traversal
-        NodeData** preorderTraverse() const;
-        NodeData** inorderTraverse() const;
-        NodeData** postorderTraverse() const;
+		bool empty() const
+		{
+			return this->root;
+		}
 
-        // Tree-Array conversions
-        void bstreeToArray(NodeData* nodesData[]);
-        void arrayToBSTree(NodeData* nodesData[]);
+		std::size_t get_tree_size() const
+		{
+			return this->get_branch_size( this->root );
+		}
 
-        // Display operations
-        void displaySideways() const;
-        void displayTree() const;
+		std::size_t get_tree_height() const
+		{
+			return this->get_branch_height( this->root );
+		}
 
-    private:
-        struct Node
-        {
-            NodeData* data;             // pointer to data object 
-            Node* left;                 // left subtree pointer 
-            Node* right;                // right subtree pointer 
-        };
+		std::size_t get_depth( const node& data ) const
+		{
+			return this->find_node( this->root, data, nullptr );
+		}
 
-        // Helper methods 
-        NodeData** createDataArray() const;
-        Node* createNode(NodeData* data) const;
-        void destroyNode(Node* node);
-        int getBranchSize(Node* node) const;
-        int getBranchHeight(Node* node) const;
-        void copyNode(Node** dst, const Node* source);
-        bool areEqual(Node* node1, Node* node2) const;
-        int findNode(Node* rootNode, const NodeData &targetData, Node**) const;
-        bool insertHelper(Node* current, NodeData* data);
-        void insertBalanced(NodeData** data, int low, int high);
-        void preorderHelper(
-            Node* node, NodeData** nodesData, int &index, bool removeData) const;
-        void inorderHelper(
-            Node* node, NodeData** nodesData, int &index, bool removeData) const;
-        void postorderHelper(
-            Node* node, NodeData** nodesData, int &index, bool removeData) const;
-        void traverseHelper(
-            int traverseType,
-            Node* node,
-            NodeData** nodesData,
-            int &index,
-            bool removeData) const;
-        void sideways(Node* current, int level) const;
+		void clear()
+		{
+			// Might be defaulted
+		}
 
-        // Data members
-        Node* root;                     // root of the tree 
-    };
+		bool operator==( const binary_search_tree& other ) const;
+		bool operator!=( const binary_search_tree& other ) const;
+
+		// Oputput operator
+		friend std::ostream& operator<<(std::ostream& os, const BinTree& obj);
+
+		// Tree operations
+		bool insert(NodeData* data);
+		bool retrieve(const NodeData &refData, NodeData* &data) const;
+
+		// Recursive tree traversal
+		NodeData** preorderTraverse() const;
+		NodeData** inorderTraverse() const;
+		NodeData** postorderTraverse() const;
+
+		// Tree-Array conversions
+		void bstreeToArray(NodeData* nodesData[]);
+		void arrayToBSTree(NodeData* nodesData[]);
+
+		// Display operations
+		void displaySideways() const;
+		void displayTree() const;
+
+	private:
+
+		// Helper methods 
+		NodeData** createDataArray() const;
+		Node* createNode(NodeData* data) const;
+		void destroyNode(Node* node);
+		int getBranchSize(Node* node) const;
+		int getBranchHeight(Node* node) const;
+		void copyNode(Node** dst, const Node* source);
+		bool areEqual(Node* node1, Node* node2) const;
+		int findNode(Node* rootNode, const NodeData &targetData, Node**) const;
+		bool insertHelper(Node* current, NodeData* data);
+		void insertBalanced(NodeData** data, int low, int high);
+		void preorderHelper(
+			Node* node, NodeData** nodesData, int &index, bool removeData) const;
+		void inorderHelper(
+			Node* node, NodeData** nodesData, int &index, bool removeData) const;
+		void postorderHelper(
+			Node* node, NodeData** nodesData, int &index, bool removeData) const;
+		void traverseHelper(
+			int traverseType,
+			Node* node,
+			NodeData** nodesData,
+			int &index,
+			bool removeData) const;
+		void sideways(Node* current, int level) const;
+
+		struct node
+		{
+			node() = default;
+
+			node( T item ) :
+				item( item )
+			{
+			}
+
+			~node() = default;
+
+			node( const doubly_linked_node& ) = default;
+			node( node&& ) noexcept = default;
+			node& operator=( const node& ) = default;
+			node& operator=( node&& ) noexcept = default;
+
+			bool
+			operator==( const node& rhs ) const
+			{
+				return ( this->item == rhs.item );
+			}
+
+			bool
+			operator!=( const node& rhs ) const
+			{
+				return !( *this == rhs );
+			}
+
+			T item = T();
+
+			std::shared_ptr< node > left = nullptr;
+			std::shared_ptr< node > right = nullptr;
+		};
+
+		std::shared_ptr< node > root;
+	};
 }
