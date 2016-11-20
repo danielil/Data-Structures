@@ -4,17 +4,19 @@
  * Tester for the Doubly Linked List.
  */
 
-#include <lists/doubly_linked_list.hpp>
+#include "lists/doubly_linked_list.hpp"
+
+#include "utilities/generator.hpp"
 
 #include <catch.hpp>
 
 #include <array>
-#include <random>
 
 namespace
 {
-	const auto ITERATIONS = 1000U;
 	using value_type = std::uint64_t;
+
+	const auto ITERATIONS = 1000U;
 }
 
 namespace dsa
@@ -28,260 +30,324 @@ namespace dsa
 
 	TEST_CASE( "copy_constructor_push_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
+		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_front( generator() );
+			list.push_front( generator() );
 		}
 
-		auto list2( list1 );
+		auto list_copy( list );
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list_copy );
 	}
 
 	TEST_CASE( "copy_constructor_push_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
+		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_back( generator() );
+			list.push_back( generator() );
 		}
 
-		auto list2( list1 );
+		auto list_copy( list );
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list_copy );
+	}
+
+	TEST_CASE( "move_constructor_push_front", "doubly_linked_list" )
+	{
+		generator< value_type > generator;
+
+		doubly_linked_list< value_type > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_front( generator() );
+		}
+
+		auto list_copy( list );
+		auto list_move( std::move( list ) );
+
+		REQUIRE( list.empty() );
+		REQUIRE( list_move == list_copy );
+	}
+
+	TEST_CASE( "move_constructor_push_back", "doubly_linked_list" )
+	{
+		generator< value_type > generator;
+
+		doubly_linked_list< value_type > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_back( generator() );
+		}
+
+		auto list_copy( list );
+		auto list_move( std::move( list ) );
+
+		REQUIRE( list.empty() );
+		REQUIRE( list_move == list_copy );
 	}
 
 	TEST_CASE( "copy_assignment_push_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
+		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_front( generator() );
+			list.push_front( generator() );
 		}
 
-		auto list2 = list1;
+		auto list_copy = list;
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list );
 	}
 
 	TEST_CASE( "copy_assignment_push_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
+		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_back( generator() );
+			list.push_back( generator() );
 		}
 
-		auto list2 = list1;
+		auto list_copy = list;
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list_copy );
+	}
+
+	TEST_CASE( "move_assignment_push_front", "doubly_linked_list" )
+	{
+		generator< value_type > generator;
+
+		doubly_linked_list< value_type > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_front( generator() );
+		}
+
+		auto list_copy = list;
+		auto list_move = std::move( list );
+
+		REQUIRE( list.empty() );
+		REQUIRE( list_move == list_copy );
+	}
+
+	TEST_CASE( "move_assignment_push_back", "doubly_linked_list" )
+	{
+		generator< value_type > generator;
+
+		doubly_linked_list< value_type > list;
+		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		{
+			list.push_back( generator() );
+		}
+
+		auto list_copy = list;
+		auto list_move = std::move( list );
+
+		REQUIRE( list.empty() );
+		REQUIRE( list_move == list_copy );
 	}
 
 	TEST_CASE( "addition_operator_push_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
-		doubly_linked_list< value_type > firstHalf;
-		doubly_linked_list< value_type > secondHalf;
+		doubly_linked_list< value_type > first_half;
+		doubly_linked_list< value_type > second_half;
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			firstHalf.push_front( values[idx] );
-			secondHalf.push_front( values[idx] );
+			first_half.push_front( value );
+			second_half.push_front( value );
 		}
 
-		auto wholeList = firstHalf + secondHalf;
+		auto whole_list = first_half + second_half;
 
 		REQUIRE(
 			std::equal(
-				std::cbegin( wholeList ),
-				std::cend( firstHalf ),
-				std::cbegin( firstHalf ),
-				std::cend( firstHalf ) ) );
+				std::cbegin( whole_list ),
+				std::cend( first_half ),
+				std::cbegin( first_half ),
+				std::cend( first_half ) ) );
 		REQUIRE(
 			std::equal(
-				std::cbegin( secondHalf ),
-				std::cend( wholeList ),
-				std::cbegin( secondHalf ),
-				std::cend( secondHalf ) ) );
+				std::cbegin( second_half ),
+				std::cend( whole_list ),
+				std::cbegin( second_half ),
+				std::cend( second_half ) ) );
 	}
 
 	TEST_CASE( "addition_operator_push_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
-		doubly_linked_list< value_type > firstHalf;
-		doubly_linked_list< value_type > secondHalf;
+		doubly_linked_list< value_type > first_half;
+		doubly_linked_list< value_type > second_half;
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			firstHalf.push_back( values[idx] );
-			secondHalf.push_back( values[idx] );
+			first_half.push_back( value );
+			second_half.push_back( value );
 		}
 
-		auto wholeList = firstHalf + secondHalf;
+		auto whole_list = first_half + second_half;
 
 		REQUIRE(
 			std::equal(
-				std::cbegin( wholeList ),
-				std::cend( firstHalf ),
-				std::cbegin( firstHalf ),
-				std::cend( firstHalf ) ) );
+				std::cbegin( whole_list ),
+				std::cend( first_half ),
+				std::cbegin( first_half ),
+				std::cend( first_half ) ) );
 		REQUIRE(
 			std::equal(
-				std::cbegin( secondHalf ),
-				std::cend( wholeList ),
-				std::cbegin( secondHalf ),
-				std::cend( secondHalf ) ) );
+				std::cbegin( second_half ),
+				std::cend( whole_list ),
+				std::cbegin( second_half ),
+				std::cend( second_half ) ) );
 	}
 
 	TEST_CASE( "addition_equal_operator_push_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
-		doubly_linked_list< value_type > list1;
-		doubly_linked_list< value_type > list2;
+		doubly_linked_list< value_type > list;
+		doubly_linked_list< value_type > list_appended;
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list1.push_front( values[idx] );
-			list2.push_front( values[idx] );
+			list.push_front( value );
+			list_appended.push_front( value );
 		}
 
-		list2 += list1;
+		list_appended += list;
 
 		REQUIRE(
 			std::equal(
-				std::cbegin( list2 ),
-				std::cend( list1 ),
-				std::cbegin( list2 ),
-				std::cend( list2 ) ) );
+				std::cbegin( list_appended ),
+				std::cend( list ),
+				std::cbegin( list_appended ),
+				std::cend( list_appended ) ) );
 		REQUIRE(
 			std::equal(
-				std::cbegin( list1 ),
-				std::cend( list2 ),
-				std::cbegin( list1 ),
-				std::cend( list1 ) ) );
+				std::cbegin( list ),
+				std::cend( list_appended ),
+				std::cbegin( list ),
+				std::cend( list ) ) );
 	}
 
 	TEST_CASE( "addition_equal_operator_push_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
-		doubly_linked_list< value_type > list1;
-		doubly_linked_list< value_type > list2;
+		doubly_linked_list< value_type > list;
+		doubly_linked_list< value_type > list_appended;
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list1.push_back( values[idx] );
-			list2.push_back( values[idx] );
+			list.push_back( value );
+			list_appended.push_back( value );
 		}
 
-		list2 += list1;
+		list_appended += list;
 
 		REQUIRE(
 			std::equal(
-				std::cbegin( list2 ),
-				std::cend( list1 ),
-				std::cbegin( list2 ),
-				std::cend( list2 ) ) );
+				std::cbegin( list_appended ),
+				std::cend( list ),
+				std::cbegin( list_appended ),
+				std::cend( list_appended ) ) );
 		REQUIRE(
 			std::equal(
-				std::cbegin( list1 ),
-				std::cend( list2 ),
-				std::cbegin( list1 ),
-				std::cend( list1 ) ) );
+				std::cbegin( list ),
+				std::cend( list_appended ),
+				std::cbegin( list ),
+				std::cend( list ) ) );
 	}
 
 	TEST_CASE( "equality_operator_push_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
-		doubly_linked_list< value_type > list2;
+		doubly_linked_list< value_type > list;
+		doubly_linked_list< value_type > list_copy;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			auto value = generator();
 
-			list1.push_front( value );
-			list2.push_front( value );
+			list.push_front( value );
+			list_copy.push_front( value );
 		}
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list_copy );
 
-		list1.clear();
-		list2.clear();
+		list.clear();
+		list_copy.clear();
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_front( generator() );
-			list2.push_front( generator() );
+			list.push_front( generator() );
+			list_copy.push_front( generator() );
 		}
 
-		REQUIRE( list1 != list2 );
+		REQUIRE( list != list_copy );
 	}
 
 	TEST_CASE( "equality_operator_push_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
-		doubly_linked_list< value_type > list1;
-		doubly_linked_list< value_type > list2;
+		doubly_linked_list< value_type > list;
+		doubly_linked_list< value_type > list_copy;
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
 			auto value = generator();
 
-			list1.push_back( value );
-			list2.push_back( value );
+			list.push_back( value );
+			list_copy.push_back( value );
 		}
 
-		REQUIRE( list1 == list2 );
+		REQUIRE( list == list_copy );
 
-		list1.clear();
-		list2.clear();
+		list.clear();
+		list_copy.clear();
 
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
 		{
-			list1.push_back( generator() );
-			list2.push_back( generator() );
+			list.push_back( generator() );
+			list_copy.push_back( generator() );
 		}
 
-		REQUIRE( list1 != list2 );
+		REQUIRE( list != list_copy );
 	}
 
 	TEST_CASE( "empty_pop_front", "doubly_linked_list" )
@@ -304,7 +370,7 @@ namespace dsa
 
 	TEST_CASE( "clear", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
 		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
@@ -319,7 +385,7 @@ namespace dsa
 
 	TEST_CASE( "empty_peek_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
 		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
@@ -336,7 +402,7 @@ namespace dsa
 
 	TEST_CASE( "empty_peek_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
+		generator< value_type > generator;
 
 		doubly_linked_list< value_type > list;
 		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
@@ -353,27 +419,24 @@ namespace dsa
 
 	TEST_CASE( "push_front_pop_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE( ITERATIONS == list.size() );
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto it = std::rbegin( values ); it != std::rend( values ); ++it )
 		{
-			std::size_t reverseIdx = ITERATIONS - 1 - idx;
-
-			REQUIRE( values[reverseIdx] == list.pop_front() );
+			REQUIRE( *it == list.pop_front() );
 		}
 
 		REQUIRE( list.empty() );
@@ -381,25 +444,24 @@ namespace dsa
 
 	TEST_CASE( "push_front_pop_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE( ITERATIONS == list.size() );
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			REQUIRE( values[idx] == list.pop_back() );
+			REQUIRE( value == list.pop_back() );
 		}
 
 		REQUIRE( list.empty() );
@@ -407,25 +469,24 @@ namespace dsa
 
 	TEST_CASE( "push_back_pop_front", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE( ITERATIONS == list.size() );
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			REQUIRE( values[idx] == list.pop_front() );
+			REQUIRE( value == list.pop_front() );
 		}
 
 		REQUIRE( list.empty() );
@@ -433,27 +494,24 @@ namespace dsa
 
 	TEST_CASE( "push_back_pop_back", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE( ITERATIONS == list.size() );
 
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto it = std::rbegin( values ); it != std::rend( values ); ++it )
 		{
-			std::size_t reverseIdx = ITERATIONS - 1 - idx;
-
-			REQUIRE( values[reverseIdx] == list.pop_back() );
+			REQUIRE( *it == list.pop_back() );
 		}
 
 		REQUIRE( list.empty() );
@@ -461,18 +519,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_front_begin_end", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE(
@@ -485,18 +542,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_back_begin_end", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE(
@@ -509,18 +565,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_front_rbegin_rend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE(
@@ -533,18 +588,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_back_rbegin_rend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE(
@@ -557,18 +611,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_front_cbegin_cend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE(
@@ -581,18 +634,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_back_cbegin_cend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE(
@@ -605,18 +657,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_front_crbegin_crend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_front( values[idx] );
+			list.push_front( value );
 		}
 
 		REQUIRE(
@@ -629,18 +680,17 @@ namespace dsa
 
 	TEST_CASE( "iterator_push_back_crbegin_crend", "doubly_linked_list" )
 	{
-		std::default_random_engine generator;
-
+		generator< value_type > generator;
 		std::array< value_type, ITERATIONS > values;
-		std::generate(
+
+		generator.fill_buffer(
 			std::begin( values ),
-			std::end( values ),
-			generator );
+			std::end( values ) );
 
 		doubly_linked_list< value_type > list;
-		for ( std::size_t idx = 0; idx < ITERATIONS; ++idx )
+		for ( auto&& value : values )
 		{
-			list.push_back( values[idx] );
+			list.push_back( value );
 		}
 
 		REQUIRE(

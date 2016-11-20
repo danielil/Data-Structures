@@ -1,14 +1,16 @@
 /**
-* Author: Daniel Sebastian Iliescu
-*
-* Tester for the various sorting algorithms.
-*/
+ * Author: Daniel Sebastian Iliescu
+ *
+ * Tester for the various sorting algorithms.
+ */
 
-#include <sorts/bubble_sort.hpp>
-#include <sorts/selection_sort.hpp>
-#include <sorts/insertion_sort.hpp>
-#include <sorts/merge_sort.hpp>
-#include <sorts/quick_sort.hpp>
+#include "sorts/bubble_sort.hpp"
+#include "sorts/selection_sort.hpp"
+#include "sorts/insertion_sort.hpp"
+#include "sorts/merge_sort.hpp"
+#include "sorts/quick_sort.hpp"
+
+#include "utilities/generator.hpp"
 
 #include <catch.hpp>
 
@@ -16,31 +18,25 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
-#include <random>
 
-namespace
+namespace dsa::sorts
 {
-	using value_type = std::uint64_t;
-	const auto ITERATIONS = 1000U;
-
-	using container_type = std::array< value_type, ITERATIONS >;
-}
-
-namespace dsa {
-namespace sorts {
-
-	template< typename sort_implementation >
+	template< typename SortImplementation >
 	void sort_tester()
 	{
-		std::default_random_engine generator;
+		using value_type = std::uint64_t;
+		const auto ITERATIONS = 1000U;
+
+		using container_type = std::array< value_type, ITERATIONS >;
+
+		generator< value_type > generator;
 		container_type container;
 
-		std::generate(
+		generator.fill_buffer(
 			std::begin( container ),
-			std::end( container ),
-			generator );
+			std::end( container ) );
 
-		sort_implementation::sort(
+		SortImplementation::sort(
 			std::begin( container ),
 			std::end( container ) );
 
@@ -95,4 +91,4 @@ namespace sorts {
 		sort_tester< quick::custom_implementation >();
 	}
 
-}}
+}
