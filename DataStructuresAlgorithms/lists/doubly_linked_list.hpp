@@ -268,7 +268,7 @@ namespace dsa
 
 		doubly_linked_list( const doubly_linked_list& other )
 		{
-			std::shared_ptr< doubly_linked_node > node = other.back;
+			auto node = other.back;
 
 			while ( node )
 			{
@@ -278,39 +278,17 @@ namespace dsa
 		}
 
 		doubly_linked_list( doubly_linked_list&& other ) noexcept :
-			front( std::move_if_noexcept( other.front ) ),
-			back( std::move_if_noexcept( other.back ) ),
+			front( std::move( other.front ) ),
+			back( std::move( other.back ) ),
 			nodes( other.nodes )
 		{
 			other.nodes = 0;
 		}
 
 		doubly_linked_list&
-		operator=( const doubly_linked_list& rhs )
+		operator=( doubly_linked_list rhs )
 		{
-			if ( this != &rhs )
-			{
-				this->clear();
-
-				*this = std::move( doubly_linked_list< T >( rhs ) );
-			}
-
-			return *this;
-		}
-
-		doubly_linked_list&
-		operator=( doubly_linked_list&& rhs ) noexcept
-		{
-			if ( this != &rhs )
-			{
-				this->clear();
-
-				this->front = std::move_if_noexcept( rhs.front );
-				this->back = std::move_if_noexcept( rhs.back );
-				this->nodes = rhs.nodes;
-
-				rhs.nodes = 0;
-			}
+			this->swap( *this, rhs );
 
 			return *this;
 		}
@@ -349,6 +327,16 @@ namespace dsa
 		operator!=( const doubly_linked_list& rhs ) const noexcept
 		{
 			return !( *this == rhs );
+		}
+
+		friend void
+		swap( doubly_linked_list& first, doubly_linked_list& second ) noexcept
+		{
+			using std::swap;
+
+			swap( first.front, second.front );
+			swap( first.back, second.back );
+			swap( first.nodes, second.nodes );
 		}
 
 		void
@@ -585,13 +573,13 @@ namespace dsa
 			doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
 
 			bool
-				operator==( const doubly_linked_node& rhs ) const
+			operator==( const doubly_linked_node& rhs ) const
 			{
 				return ( this->item == rhs.item );
 			}
 
 			bool
-				operator!=( const doubly_linked_node& rhs ) const
+			operator!=( const doubly_linked_node& rhs ) const
 			{
 				return !( *this == rhs );
 			}
@@ -607,13 +595,13 @@ namespace dsa
 		{
 			if ( !this->empty() )
 			{
-				auto previousNode = std::move_if_noexcept( this->front->previous );
+				auto previousNode = std::move( this->front->previous );
 
 				if ( previousNode )
 				{
 					previousNode->next = nullptr;
 
-					this->front = std::move_if_noexcept( previousNode );
+					this->front = std::move( previousNode );
 				}
 				else
 				{
