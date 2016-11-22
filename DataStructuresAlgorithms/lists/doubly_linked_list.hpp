@@ -258,6 +258,12 @@ namespace dsa
 			doubly_linked_node* node;
 		};
 
+		using value_type = T;
+		using pointer = T*;
+		using const_pointer = const T*;
+		using reference = T&;
+		using const_reference = const T&;
+
 		using iterator = iterator_impl< false >;
 		using const_iterator = iterator_impl< true >;
 		using reverse_iterator = reverse_iterator_impl< false >;
@@ -272,7 +278,7 @@ namespace dsa
 
 			while ( node )
 			{
-				this->push_front( node->item );
+				this->push_back( node->item );
 				node = node->next;
 			}
 		}
@@ -308,7 +314,7 @@ namespace dsa
 
 				while ( node )
 				{
-					this->push_front( node->item );
+					this->push_back( node->item );
 
 					node = node->next;
 				}
@@ -346,15 +352,15 @@ namespace dsa
 
 			if ( this->empty() )
 			{
-				this->front = newNode;
 				this->back = newNode;
+				this->front = newNode;
 			}
 			else
 			{
-				newNode->previous = this->front;
+				newNode->next = this->back;
 
-				this->front->next = newNode;
-				this->front = newNode;
+				this->back->previous = newNode;
+				this->back = newNode;
 			}
 
 			++( this->nodes );
@@ -367,15 +373,15 @@ namespace dsa
 
 			if ( this->empty() )
 			{
-				this->back = newNode;
 				this->front = newNode;
+				this->back = newNode;
 			}
 			else
 			{
-				newNode->next = this->back;
+				newNode->previous = this->front;
 
-				this->back->previous = newNode;
-				this->back = newNode;
+				this->front->next = newNode;
+				this->front = newNode;
 			}
 
 			++( this->nodes );

@@ -19,19 +19,22 @@
 #include <functional>
 #include <numeric>
 
+namespace
+{
+	const std::string UNIT_NAME = "sort";
+}
+
 namespace dsa::sorts
 {
 	template< typename SortImplementation >
 	void sort_tester()
 	{
-		using value_type = std::uint64_t;
+		using value_type = std::int32_t;
 		const auto ITERATIONS = 1000U;
 
-		using container_type = std::array< value_type, ITERATIONS >;
+		std::array< value_type, ITERATIONS > container;
 
 		generator< value_type > generator;
-		container_type container;
-
 		generator.fill_buffer(
 			std::begin( container ),
 			std::end( container ) );
@@ -46,47 +49,47 @@ namespace dsa::sorts
 				std::cend( container ) ) );
 	}
 
-	TEST_CASE( "bubble sort", "sort" )
+	TEST_CASE( ( UNIT_NAME + "bubble sort" ).c_str() )
 	{
 		sort_tester< bubble >();
 	}
 
-	TEST_CASE( "selection sort (std implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "selection sort (std implementation)" ).c_str() )
 	{
 		sort_tester< selection >();
 	}
 
-	TEST_CASE( "selection sort (custom implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "selection sort (custom implementation)" ).c_str() )
 	{
 		sort_tester< selection::custom_implementation >();
 	}
 
-	TEST_CASE( "insertion sort (std implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "insertion sort (std implementation)" ).c_str() )
 	{
 		sort_tester< insertion >();
 	}
 
-	TEST_CASE( "insertion sort (custom implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "insertion sort (custom implementation)" ).c_str() )
 	{
 		sort_tester< insertion::custom_implementation >();
 	}
 
-	TEST_CASE( "merge sort (std implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "merge sort (std implementation)" ).c_str() )
 	{
 		sort_tester< merge >();
 	}
 
-	TEST_CASE( "merge sort (custom implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "merge sort (custom implementation)" ).c_str() )
 	{
 		sort_tester< merge::custom_implementation >();
 	}
 
-	TEST_CASE( "quick sort", "sort" )
+	TEST_CASE( ( UNIT_NAME + "quick sort" ).c_str() )
 	{
 		sort_tester< quick >();
 	}
 
-	TEST_CASE( "quick sort (custom implementation)", "sort" )
+	TEST_CASE( ( UNIT_NAME + "quick sort (custom implementation)" ).c_str() )
 	{
 		sort_tester< quick::custom_implementation >();
 	}

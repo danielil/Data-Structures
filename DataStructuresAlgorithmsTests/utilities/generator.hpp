@@ -14,16 +14,16 @@ public:
 	generator() = default;
 	~generator() noexcept = default;
 
-	generator( const generator& ) = default;
-	generator( generator&& ) noexcept = default;
+	generator( const generator& ) = delete;
+	generator( generator&& ) noexcept = delete;
 
-	generator& operator=( const generator& ) = default;
-	generator& operator=( generator&& ) noexcept = default;
+	generator& operator=( const generator& ) = delete;
+	generator& operator=( generator&& ) noexcept = delete;
 
 	T
 	operator()()
 	{
-		return distribution( engine );
+		return this->distribution( this->engine );
 	}
 
 	template < typename Iterator >
@@ -35,6 +35,21 @@ public:
 		std::generate(
 			begin,
 			end,
+			[=]()
+			{
+				return this->operator()();
+			} );
+	}
+
+	template < typename Iterator >
+	void
+	fill_buffer_n(
+		Iterator begin,
+		const std::size_t iterations )
+	{
+		std::generate_n(
+			begin,
+			iterations,
 			[=]()
 			{
 				return this->operator()();

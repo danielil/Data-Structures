@@ -24,22 +24,26 @@ namespace dsa
 		binary_search_tree& operator=( const binary_search_tree& rhs ) = default;
 		binary_search_tree& operator=( binary_search_tree&& rhs ) noexcept = default;
 
-		bool empty() const
+		bool
+		empty() const
 		{
 			return this->root;
 		}
 
-		std::size_t get_tree_size() const
+		std::size_t
+		get_tree_size() const
 		{
 			return this->get_branch_size( this->root );
 		}
 
-		std::size_t get_tree_height() const
+		std::size_t
+		get_tree_height() const
 		{
 			return this->get_branch_height( this->root );
 		}
 
-		std::size_t get_depth( const node& data ) const
+		std::size_t
+		get_depth( const node& data ) const
 		{
 			return this->find_node( this->root, data, nullptr );
 		}
