@@ -8,6 +8,8 @@
 
 #include "utilities/generator.hpp"
 
+//#include "trees/binary_search_tree.hpp"
+
 #include <catch.hpp>
 
 namespace
