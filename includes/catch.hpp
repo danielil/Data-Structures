@@ -118,6 +118,9 @@
 
 #endif
 
+// Remove when MSVC fully supports C++ 11/14
+#define CATCH_CPP14_OR_GREATER
+
 #ifdef __clang__
 
 #  if __has_feature(cxx_nullptr)
