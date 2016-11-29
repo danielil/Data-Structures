@@ -1,0 +1,44 @@
+language cpp
+sudo required
+dist trusty
+	
+compiler
+	- gcc
+	- clang
+
+matrix
+	allow_failures
+	- compiler clang
+
+addons
+	apt
+		packages
+			- software-properties-common
+			- python-software-properties
+			- cmake
+
+before_install
+	# gcc
+	- if [ $CXX == g++ ]; then sudo add-apt-repository -y ppaubuntu-toolchain-rtest; fi
+
+	# clang
+	- if [ $CXX == clang++ ]; then sudo apt-get install -y wget; fi
+	- if [ $CXX == clang++ ]; then wget -O - httpapt.llvm.orgllvm-snapshot.gpg.keysudo apt-key add -; fi
+	- if [ $CXX == clang++ ]; then sudo bash -c 'echo deb httpapt.llvm.orgtrusty llvm-toolchain-trusty-3.9 main  etcaptsources.list'; fi
+	- if [ $CXX == clang++ ]; then sudo bash -c 'echo deb-src httpapt.llvm.orgtrusty llvm-toolchain-trusty-3.9 main  etcaptsources.list'; fi
+
+	- sudo apt-get update
+
+install
+	# gcc
+	- if [ $CXX == g++ ]; then sudo apt-get install -y g++-6; fi
+	- if [ $CXX == g++ ]; then export CXX=g++-6; fi
+
+	# clang
+	- if [ $CXX == clang++ ]; then sudo apt-get install -y clang++-3.9 libc++-dev; fi
+	- if [ $CXX == clang++ ]; then export CXX=clang++-3.9; fi
+
+script
+	- cmake .
+	- make
+	- ctest --verbose
