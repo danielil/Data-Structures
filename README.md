@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/danielil/Data-Structures-Algorithms.svg?branch=master)](https://travis-ci.org/danielil/Data-Structures-Algorithms)
+
 Data Structures and Algorithms
 ================
 
