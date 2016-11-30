@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <utility>
+#include <iterator>
+
 namespace dsa {
 namespace sorts {
 

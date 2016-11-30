@@ -6,36 +6,28 @@
 
 #pragma once
 
+#include <algorithm>
+#include <utility>
+
 namespace dsa {
 namespace sorts {
 
 struct selection
 {
-	template <
-		typename Implementation = std_implementation,
-		typename Iterator >
-	static void
-	sort(
-		Iterator begin,
-		Iterator end )
-	{
-		Implementation::sort( begin, end );
-	}
-
 	struct std_implementation
 	{
 		template < typename Iterator >
 		static void
 		sort(
-			Iterator begin,
-			Iterator end )
+				Iterator begin,
+				Iterator end )
 		{
 			using std::swap;
 
 			for ( auto current_it = begin; current_it != end; ++current_it )
 			{
 				auto current_minimum = std::min_element( current_it, end );
-				
+
 				swap( *current_minimum, *current_it );
 			}
 		}
@@ -46,8 +38,8 @@ struct selection
 		template < typename Iterator >
 		static void
 		sort(
-			Iterator begin,
-			Iterator end )
+				Iterator begin,
+				Iterator end )
 		{
 			using std::swap;
 
@@ -70,6 +62,17 @@ struct selection
 			}
 		}
 	};
+
+	template <
+		typename Implementation = std_implementation,
+		typename Iterator >
+	static void
+	sort(
+		Iterator begin,
+		Iterator end )
+	{
+		Implementation::sort( begin, end );
+	}
 };
 
 }}

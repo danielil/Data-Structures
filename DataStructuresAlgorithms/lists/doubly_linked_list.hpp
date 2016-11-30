@@ -23,12 +23,44 @@
 
 namespace dsa
 {
-	class doubly_linked_node;
-
 	template < typename T >
 	class doubly_linked_list
 	{
 	public:
+
+        struct doubly_linked_node
+        {
+            doubly_linked_node() = default;
+
+            doubly_linked_node( T item ) :
+                    item( item )
+            {
+            }
+
+            ~doubly_linked_node() = default;
+
+            doubly_linked_node( const doubly_linked_node& ) = default;
+            doubly_linked_node( doubly_linked_node&& ) noexcept = default;
+            doubly_linked_node& operator=( const doubly_linked_node& ) = default;
+            doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
+
+            bool
+            operator==( const doubly_linked_node& rhs ) const
+            {
+                return ( this->item == rhs.item );
+            }
+
+            bool
+            operator!=( const doubly_linked_node& rhs ) const
+            {
+                return !( *this == rhs );
+            }
+
+            T item = T();
+
+            std::shared_ptr< doubly_linked_node > previous = nullptr;
+            std::shared_ptr< doubly_linked_node > next = nullptr;
+        };
 
 		// Iterator class for both mutable and const iterators.
 		template< bool is_const_iterator >
@@ -561,40 +593,6 @@ namespace dsa
 		}
 
 	private:
-
-		struct doubly_linked_node
-		{
-			doubly_linked_node() = default;
-
-			doubly_linked_node( T item ) :
-				item( item )
-			{
-			}
-
-			~doubly_linked_node() = default;
-
-			doubly_linked_node( const doubly_linked_node& ) = default;
-			doubly_linked_node( doubly_linked_node&& ) noexcept = default;
-			doubly_linked_node& operator=( const doubly_linked_node& ) = default;
-			doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
-
-			bool
-			operator==( const doubly_linked_node& rhs ) const
-			{
-				return ( this->item == rhs.item );
-			}
-
-			bool
-			operator!=( const doubly_linked_node& rhs ) const
-			{
-				return !( *this == rhs );
-			}
-
-			T item = T();
-
-			std::shared_ptr< doubly_linked_node > previous = nullptr;
-			std::shared_ptr< doubly_linked_node > next = nullptr;
-		};
 
 		void
 		blank_pop_front() noexcept

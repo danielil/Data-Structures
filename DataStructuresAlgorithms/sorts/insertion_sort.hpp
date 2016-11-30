@@ -11,34 +11,23 @@ namespace sorts {
 
 struct insertion
 {
-	template <
-		typename Implementation = std_implementation,
-		typename Iterator >
-	static void
-	sort(
-		Iterator begin,
-		Iterator end )
-	{
-		Implementation::sort( begin, end );
-	}
-
 	struct std_implementation
 	{
 		template < typename Iterator >
 		static void
 		sort(
-			Iterator begin,
-			Iterator end )
+				Iterator begin,
+				Iterator end )
 		{
 			for ( auto it = begin; it != end; ++it )
 			{
 				std::rotate(
-					std::upper_bound(
-						begin,
+						std::upper_bound(
+								begin,
+								it,
+								*it ),
 						it,
-						*it ),
-					it,
-					std::next( it ) );
+						std::next( it ) );
 			}
 		}
 	};
@@ -48,8 +37,8 @@ struct insertion
 		template < typename Iterator >
 		static void
 		sort(
-			Iterator begin,
-			Iterator end )
+				Iterator begin,
+				Iterator end )
 		{
 			for ( auto it = std::next( begin ); it != end; ++it )
 			{
@@ -67,6 +56,17 @@ struct insertion
 			}
 		}
 	};
+
+	template <
+		typename Implementation = std_implementation,
+		typename Iterator >
+	static void
+	sort(
+		Iterator begin,
+		Iterator end )
+	{
+		Implementation::sort( begin, end );
+	}
 };
 
 }}

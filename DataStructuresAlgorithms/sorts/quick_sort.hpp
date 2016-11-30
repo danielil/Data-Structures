@@ -18,24 +18,13 @@ namespace sorts {
 
 struct quick
 {
-	template <
-		typename Implementation = std_implementation,
-		typename Iterator >
-	static void
-	sort(
-		Iterator begin,
-		Iterator end )
-	{
-		Implementation::sort( begin, end );
-	}
-
 	struct std_implementation
 	{
 		template < typename Iterator >
 		static void
 		sort(
-			Iterator begin,
-			Iterator end )
+				Iterator begin,
+				Iterator end )
 		{
 			if ( begin != end )
 			{
@@ -48,33 +37,33 @@ struct quick
 
 					// Median-of-three pivot calculation
 					auto pivot =
-						std::max(
-							std::min( *begin, *container_end ),
-							std::min( std::max( *begin, *container_end ), *center ) );
+							std::max(
+									std::min( *begin, *container_end ),
+									std::min( std::max( *begin, *container_end ), *center ) );
 
 					/**
 					 * Two partitions are required if using the standard
-					 * partion implementation since the returned 
+					 * partion implementation since the returned
 					 * iterator doesn't guarantee that the pivot itself
 					 * will be in the neighbouring area where the predicate
 					 * has failed.
 					 */
 					const auto partitions =
-						std::make_pair(
-							std::partition(
-								begin,
-								end,
-								[pivot]( const auto& element )
-								{
-									return ( element < pivot );
-								} ),
-							std::partition(
-								begin,
-								end,
-								[pivot]( const auto& element )
-								{
-									return ( element <= pivot );
-								} ) );
+							std::make_pair(
+									std::partition(
+											begin,
+											end,
+											[pivot]( const auto& element )
+											{
+												return ( element < pivot );
+											} ),
+									std::partition(
+											begin,
+											end,
+											[pivot]( const auto& element )
+											{
+												return ( element <= pivot );
+											} ) );
 
 					sort( begin, partitions.first );
 					sort( partitions.second, end );
@@ -93,8 +82,8 @@ struct quick
 		template < typename RandomAccessIterator >
 		static void
 		sort(
-			RandomAccessIterator begin,
-			RandomAccessIterator end )
+				RandomAccessIterator begin,
+				RandomAccessIterator end )
 		{
 			if ( begin != end )
 			{
@@ -115,6 +104,17 @@ struct quick
 			}
 		}
 	};
+
+	template <
+		typename Implementation = std_implementation,
+		typename Iterator >
+	static void
+	sort(
+		Iterator begin,
+		Iterator end )
+	{
+		Implementation::sort( begin, end );
+	}
 };
 
 }}
