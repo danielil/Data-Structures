@@ -1,5 +1,6 @@
 ﻿/**
- * Author: Daniel Sebastian Iliescu
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
  *
  * A doubly-linked implementation of a list combining both stack (LIFO) and queue (FIFO) operations.
  *
@@ -19,7 +20,7 @@
 
 #pragma once
 
-#include <memory>
+#include "doubly_linked_node.hpp"
 
 namespace dsa
 {
@@ -28,40 +29,6 @@ namespace dsa
 	{
 	public:
 
-        struct doubly_linked_node
-        {
-            doubly_linked_node() = default;
-
-            doubly_linked_node( T item ) :
-                    item( item )
-            {
-            }
-
-            ~doubly_linked_node() = default;
-
-            doubly_linked_node( const doubly_linked_node& ) = default;
-            doubly_linked_node( doubly_linked_node&& ) noexcept = default;
-            doubly_linked_node& operator=( const doubly_linked_node& ) = default;
-            doubly_linked_node& operator=( doubly_linked_node&& ) noexcept = default;
-
-            bool
-            operator==( const doubly_linked_node& rhs ) const
-            {
-                return ( this->item == rhs.item );
-            }
-
-            bool
-            operator!=( const doubly_linked_node& rhs ) const
-            {
-                return !( *this == rhs );
-            }
-
-            T item = T();
-
-            std::shared_ptr< doubly_linked_node > previous = nullptr;
-            std::shared_ptr< doubly_linked_node > next = nullptr;
-        };
-
 		// Iterator class for both mutable and const iterators.
 		template< bool is_const_iterator >
 		class iterator_impl
@@ -69,20 +36,17 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = typename std::conditional< is_const_iterator, const T, T >::type;
+			using value_type = T;
 			using difference_type = std::ptrdiff_t;
-			using pointer = T*;
-			using reference = T&;
+			using pointer = typename std::conditional< is_const_iterator, T const * const, T >::type;
+			using reference = typename std::conditional< is_const_iterator, T const &, T >::type;
 
-			friend class doubly_linked_list;
-			friend class iterator_impl< true >;
-
-			iterator_impl( doubly_linked_node* const node ) :
+			iterator_impl( doubly_linked_node< T >* const node ) :
 				node( node )
 			{
 			}
 
-			iterator_impl( const iterator_impl< false >& it ) :
+			iterator_impl( iterator_impl< false > const & it ) :
 				node( it.node )
 			{
 			}
@@ -92,7 +56,7 @@ namespace dsa
 			 * generated implementation. The copy constructor specialization for
 			 * mutable iterators allows for the conversion from mutable to const.
 			 */
-			iterator_impl& operator=( const iterator_impl< false >& it )
+			iterator_impl& operator=( iterator_impl< false > const & it )
 			{
 				this->node = it.node;
 
@@ -116,7 +80,7 @@ namespace dsa
 			iterator_impl
 			operator++( int )
 			{
-				const iterator_impl iterator( *this );
+				iterator_impl const iterator( *this );
 				++( *this );
 
 				return iterator;
@@ -133,7 +97,7 @@ namespace dsa
 			iterator_impl
 			operator--( int )
 			{
-				const iterator_impl iterator( *this );
+				iterator_impl const iterator ( *this );
 				--( *this );
 
 				return iterator;
@@ -152,9 +116,9 @@ namespace dsa
 			}
 
 			bool
-			operator==( const iterator_impl& it ) const
+			operator==( iterator_impl const & it ) const
 			{
-				if ( nullptr == this->node && 
+				if ( nullptr == this->node &&
 					 nullptr == it.node )
 				{
 					return true;
@@ -169,13 +133,13 @@ namespace dsa
 			}
 
 			bool
-			operator!=( const iterator_impl& it ) const
+			operator!=( iterator_impl const & it ) const
 			{
 				return !( *this == it );
 			}
 
 		private:
-			doubly_linked_node* node;
+			doubly_linked_node< T >* node;
 		};
 
 		// Iterator class for both mutable and const reverse iterators.
@@ -185,25 +149,22 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = typename std::conditional< is_const_iterator, const T, T >::type;
+			using value_type = T;
 			using difference_type = std::ptrdiff_t;
-			using pointer = T*;
-			using reference = T&;
+			using pointer = typename std::conditional< is_const_iterator, T const * const, T >::type;
+			using reference = typename std::conditional< is_const_iterator, T const &, T >::type;
 
-			friend class doubly_linked_list;
-			friend class reverse_iterator_impl< true >;
-
-			reverse_iterator_impl( doubly_linked_node* const node ) :
+			reverse_iterator_impl( doubly_linked_node< T >* const node ) :
 				node( node )
 			{
 			}
 
-			reverse_iterator_impl( const reverse_iterator_impl< false >& it ) :
+			reverse_iterator_impl( reverse_iterator_impl< false > const & it ) :
 				node( it.node )
 			{
 			}
 
-			reverse_iterator_impl& operator=( const reverse_iterator_impl< false >& it )
+			reverse_iterator_impl& operator=( reverse_iterator_impl< false > const & it )
 			{
 				this->node = it.node;
 
@@ -227,7 +188,7 @@ namespace dsa
 			reverse_iterator_impl
 			operator++( int )
 			{
-				const reverse_iterator_impl iterator( *this );
+				reverse_iterator_impl const iterator( *this );
 				++( *this );
 
 				return iterator;
@@ -244,7 +205,7 @@ namespace dsa
 			reverse_iterator_impl
 			operator--( int )
 			{
-				const reverse_iterator_impl iterator( *this );
+				reverse_iterator_impl const iterator( *this );
 				--( *this );
 
 				return iterator;
@@ -263,9 +224,9 @@ namespace dsa
 			}
 
 			bool
-			operator==( const reverse_iterator_impl& it )
+			operator==( reverse_iterator_impl const & it )
 			{
-				if ( nullptr == this->node && 
+				if ( nullptr == this->node &&
 					 nullptr == it.node )
 				{
 					return true;
@@ -280,21 +241,21 @@ namespace dsa
 			}
 
 			bool
-			operator!=( const reverse_iterator_impl& it )
+			operator!=( reverse_iterator_impl const & it )
 			{
 				return !( *this == it );
 			}
 
 		private:
 
-			doubly_linked_node* node;
+			doubly_linked_node< T > * node;
 		};
 
 		using value_type = T;
 		using pointer = T*;
-		using const_pointer = const T*;
+		using const_pointer = T const * const;
 		using reference = T&;
-		using const_reference = const T&;
+		using const_reference = T const &;
 
 		using iterator = iterator_impl< false >;
 		using const_iterator = iterator_impl< true >;
@@ -304,7 +265,7 @@ namespace dsa
 		doubly_linked_list() = default;
 		~doubly_linked_list() noexcept = default;
 
-		doubly_linked_list( const doubly_linked_list& other )
+		doubly_linked_list( doubly_linked_list const & other )
 		{
 			auto node = other.back;
 
@@ -332,17 +293,17 @@ namespace dsa
 		}
 
 		doubly_linked_list&
-		operator+( const doubly_linked_list& rhs )
+		operator+( doubly_linked_list const & rhs )
 		{
 			return *this += rhs;
 		}
 
 		doubly_linked_list&
-		operator+=( const doubly_linked_list& rhs )
+		operator+=( doubly_linked_list const & rhs )
 		{
 			if ( !rhs.empty() )
 			{
-				std::shared_ptr< doubly_linked_node > node = rhs.back;
+				std::shared_ptr< doubly_linked_node< T > > node = rhs.back;
 
 				while ( node )
 				{
@@ -356,13 +317,13 @@ namespace dsa
 		}
 
 		bool
-		operator==( const doubly_linked_list& rhs ) const noexcept
+		operator==( doubly_linked_list const & rhs ) const noexcept
 		{
 			return this->equals( this->back.get(), rhs.back.get() );
 		}
 
 		bool
-		operator!=( const doubly_linked_list& rhs ) const noexcept
+		operator!=( doubly_linked_list const & rhs ) const noexcept
 		{
 			return !( *this == rhs );
 		}
@@ -378,9 +339,9 @@ namespace dsa
 		}
 
 		void
-		push_front( const T item )
+		push_front( T const item )
 		{
-			auto newNode = std::make_shared< doubly_linked_node >( item );
+			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
@@ -399,9 +360,9 @@ namespace dsa
 		}
 
 		void
-		push_back( const T item )
+		push_back( T const item )
 		{
-			auto newNode = std::make_shared< doubly_linked_node >( item );
+			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
@@ -619,8 +580,8 @@ namespace dsa
 
 		bool
 		equals(
-			doubly_linked_node const* const node1,
-			doubly_linked_node const* const node2 ) const noexcept
+			doubly_linked_node< T > const * const node1,
+			doubly_linked_node< T > const * const node2 ) const noexcept
 		{
 			if ( nullptr == node1 &&
 				 nullptr == node2 )
@@ -655,26 +616,26 @@ namespace dsa
 		}
 
 		auto
-		next( doubly_linked_node const* const current ) const noexcept
+		next( doubly_linked_node< T > const * const current ) const noexcept
 		{
 			return current->next.get();
 		}
 
 		auto
-		previous( doubly_linked_node const* const current ) const noexcept
+		previous( doubly_linked_node< T > const * const current ) const noexcept
 		{
 			return current->previous.get();
 		}
 
-		std::shared_ptr< doubly_linked_node > front = nullptr;
-		std::shared_ptr< doubly_linked_node > back = nullptr;
+		std::shared_ptr< doubly_linked_node< T > > front = nullptr;
+		std::shared_ptr< doubly_linked_node< T > > back = nullptr;
 
 		std::size_t nodes = 0;
 	};
 
 	template < typename T >
 	auto
-	operator+( const doubly_linked_list< T >& lhs, const doubly_linked_list< T >& rhs )
+	operator+( doubly_linked_list< T > const & lhs, doubly_linked_list< T > const & rhs )
 	{
 		doubly_linked_list< T > result( lhs );
 
