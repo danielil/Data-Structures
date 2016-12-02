@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 project(DataStructureAlgorithms)
 
-set(CMAKE_CXX_FLAGS "-std=c++1z -Wall")
+set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-    set(CMAKE_SHARED_LINKER_FLAGS -lc++experimental)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+	set(CMAKE_SHARED_LINKER_FLAGS -lc++experimental)
 endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -19,4 +19,4 @@ include_directories( DataStructuresAlgorithms )
 include_directories( includes )
 
 file(GLOB_RECURSE TEST_SOURCES DataStructuresAlgorithmsTests/*.cpp)
-add_executable(DataStructuresAlgorithmsTests ${TEST_SOURCES})
+add_executable(DataStructuresAlgorithmsTests ${TEST_SOURCES} )

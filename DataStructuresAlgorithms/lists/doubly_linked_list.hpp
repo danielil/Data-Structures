@@ -341,7 +341,7 @@ namespace dsa
 		void
 		push_front( const T item )
 		{
-			auto new_node = std::make_shared< doubly_linked_node< T > >( item );
+			const auto new_node = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
@@ -362,7 +362,7 @@ namespace dsa
 		void
 		push_back( const T item )
 		{
-			auto new_node = std::make_shared< doubly_linked_node< T > >( item );
+			const auto new_node = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
