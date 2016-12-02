@@ -36,7 +36,7 @@ namespace dsa
 		generator< value_type > generator;
 		generator.fill_buffer_n( std::front_inserter( list ), ITERATIONS );
 
-		const auto list_copy( list );
+		auto list_copy( list );
 
 		REQUIRE( list == list_copy );
 	}
@@ -369,7 +369,7 @@ namespace dsa
 		REQUIRE( value_type() == list.peek_back() );
 	}
 
-	TEST_CASE( ( UNIT_NAME + "push_front_pop_front" ).c_str() )
+	TEST_CASE( ( UNIT_NAME + "push_front_pop_back" ).c_str() )
 	{
 		std::array< value_type, ITERATIONS > values;
 
@@ -388,13 +388,13 @@ namespace dsa
 
 		for ( auto&& value : values )
 		{
-			REQUIRE( value == list.pop_front() );
+			REQUIRE( value == list.pop_back() );
 		}
 
 		REQUIRE( list.empty() );
 	}
 
-	TEST_CASE( ( UNIT_NAME + "push_front_pop_back" ).c_str() )
+	TEST_CASE( ( UNIT_NAME + "push_front_pop_front" ).c_str() )
 	{
 		std::array< value_type, ITERATIONS > values;
 
@@ -408,31 +408,6 @@ namespace dsa
 			std::cbegin( values ),
 			std::cend( values ),
 			std::front_inserter( list ) );
-
-		REQUIRE( ITERATIONS == list.size() );
-
-		for ( auto it = std::rbegin( values ); it != std::rend( values ); ++it )
-		{
-			REQUIRE( *it == list.pop_back() );
-		}
-
-		REQUIRE( list.empty() );
-	}
-
-	TEST_CASE( ( UNIT_NAME + "push_back_pop_front" ).c_str() )
-	{
-		std::array< value_type, ITERATIONS > values;
-
-		generator< value_type > generator;
-		generator.fill_buffer(
-			std::begin( values ),
-			std::end( values ) );
-
-		doubly_linked_list< value_type > list;
-		std::copy(
-			std::cbegin( values ),
-			std::cend( values ),
-			std::back_inserter( list ) );
 
 		REQUIRE( ITERATIONS == list.size() );
 
@@ -461,9 +436,34 @@ namespace dsa
 
 		REQUIRE( ITERATIONS == list.size() );
 
+		for ( auto it = std::rbegin( values ); it != std::rend( values ); ++it )
+		{
+			REQUIRE( *it == list.pop_back() );
+		}
+
+		REQUIRE( list.empty() );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "push_back_pop_front" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		REQUIRE( ITERATIONS == list.size() );
+
 		for ( auto&& value : values )
 		{
-			REQUIRE( value == list.pop_back() );
+			REQUIRE( value == list.pop_front() );
 		}
 
 		REQUIRE( list.empty() );

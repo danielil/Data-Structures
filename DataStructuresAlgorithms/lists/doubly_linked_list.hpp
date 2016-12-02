@@ -80,7 +80,7 @@ namespace dsa
 			iterator_impl
 			operator++( int )
 			{
-				iterator_impl const iterator( *this );
+				const iterator_impl iterator( *this );
 				++( *this );
 
 				return iterator;
@@ -97,7 +97,7 @@ namespace dsa
 			iterator_impl
 			operator--( int )
 			{
-				iterator_impl const iterator ( *this );
+				const iterator_impl iterator ( *this );
 				--( *this );
 
 				return iterator;
@@ -188,7 +188,7 @@ namespace dsa
 			reverse_iterator_impl
 			operator++( int )
 			{
-				reverse_iterator_impl const iterator( *this );
+				const reverse_iterator_impl iterator( *this );
 				++( *this );
 
 				return iterator;
@@ -205,7 +205,7 @@ namespace dsa
 			reverse_iterator_impl
 			operator--( int )
 			{
-				reverse_iterator_impl const iterator( *this );
+				const reverse_iterator_impl iterator( *this );
 				--( *this );
 
 				return iterator;
@@ -267,7 +267,7 @@ namespace dsa
 
 		doubly_linked_list( doubly_linked_list const & other )
 		{
-			auto node = other.back;
+			auto node = other.front;
 
 			while ( node )
 			{
@@ -303,7 +303,7 @@ namespace dsa
 		{
 			if ( !rhs.empty() )
 			{
-				std::shared_ptr< doubly_linked_node< T > > node = rhs.back;
+				auto node = rhs.front;
 
 				while ( node )
 				{
@@ -319,7 +319,7 @@ namespace dsa
 		bool
 		operator==( doubly_linked_list const & rhs ) const noexcept
 		{
-			return this->equals( this->back.get(), rhs.back.get() );
+			return this->equals( this->front.get(), rhs.front.get() );
 		}
 
 		bool
@@ -339,42 +339,42 @@ namespace dsa
 		}
 
 		void
-		push_front( T const item )
+		push_front( const T item )
 		{
-			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
+			auto new_node = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
-				this->back = newNode;
-				this->front = newNode;
+				this->front = new_node;
+				this->back = new_node;
 			}
 			else
 			{
-				newNode->next = this->back;
+				new_node->next = this->front;
 
-				this->back->previous = newNode;
-				this->back = newNode;
+				this->front->previous = new_node;
+				this->front = new_node;
 			}
 
 			++( this->nodes );
 		}
 
 		void
-		push_back( T const item )
+		push_back( const T item )
 		{
-			auto newNode = std::make_shared< doubly_linked_node< T > >( item );
+			auto new_node = std::make_shared< doubly_linked_node< T > >( item );
 
 			if ( this->empty() )
 			{
-				this->front = newNode;
-				this->back = newNode;
+				this->front = new_node;
+				this->back = new_node;
 			}
 			else
 			{
-				newNode->previous = this->front;
+				new_node->previous = this->back;
 
-				this->front->next = newNode;
-				this->front = newNode;
+				this->back->next = new_node;
+				this->back = new_node;
 			}
 
 			++( this->nodes );
@@ -389,13 +389,13 @@ namespace dsa
 			}
 
 			T item = this->front->item;
-			auto previousNode = std::move( this->front->previous );
+			auto next_node = std::move( this->front->next );
 
-			if ( previousNode )
+			if ( next_node )
 			{
-				previousNode->next = nullptr;
+				next_node->previous = nullptr;
 
-				this->front = std::move( previousNode );
+				this->front = std::move( next_node );
 			}
 			else
 			{
@@ -417,13 +417,13 @@ namespace dsa
 			}
 
 			T item = this->back->item;
-			auto nextNode = std::move( this->back->next );
+			auto previous_node = std::move( this->back->previous );
 
-			if ( nextNode )
+			if ( previous_node )
 			{
-				nextNode->previous = nullptr;
+				previous_node->next = nullptr;
 
-				this->back = std::move( nextNode );
+				this->back = std::move( previous_node );
 			}
 			else
 			{
@@ -441,7 +441,7 @@ namespace dsa
 		{
 			while ( !this->empty() )
 			{
-				this->blank_pop_front();
+				this->pop_front();
 			}
 		}
 
@@ -555,29 +555,6 @@ namespace dsa
 
 	private:
 
-		void
-		blank_pop_front() noexcept
-		{
-			if ( !this->empty() )
-			{
-				auto previousNode = std::move( this->front->previous );
-
-				if ( previousNode )
-				{
-					previousNode->next = nullptr;
-
-					this->front = std::move( previousNode );
-				}
-				else
-				{
-					this->front = nullptr;
-					this->back = nullptr;
-				}
-
-				--( this->nodes );
-			}
-		}
-
 		bool
 		equals(
 			doubly_linked_node< T > const * const node1,
@@ -606,13 +583,13 @@ namespace dsa
 		auto
 		first() const noexcept
 		{
-			return this->back.get();
+			return this->front.get();
 		}
 
 		auto
 		last() const noexcept
 		{
-			return this->front.get();
+			return this->back.get();
 		}
 
 		auto
