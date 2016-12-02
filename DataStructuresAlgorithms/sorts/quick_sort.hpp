@@ -28,7 +28,7 @@ struct quick
 		{
 			if ( begin != end )
 			{
-				const auto size = std::distance( begin, end );
+				const auto size = static_cast< decltype( MERGE_THRESHOLD ) >( std::distance( begin, end ) );
 
 				if ( size > PARTITION_THRESHOLD )
 				{
@@ -87,7 +87,7 @@ struct quick
 		{
 			if ( begin != end )
 			{
-				const auto size = begin - end;
+				const auto size = static_cast< decltype( MERGE_THRESHOLD ) >( begin - end );
 
 				if ( size > PARTITION_THRESHOLD )
 				{

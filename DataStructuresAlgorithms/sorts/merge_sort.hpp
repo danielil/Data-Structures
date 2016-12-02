@@ -25,7 +25,7 @@ struct merge
 				Iterator begin,
 				Iterator end )
 		{
-			const auto size = std::distance( begin, end );
+			const auto size = static_cast< decltype( MERGE_THRESHOLD ) >( std::distance( begin, end ) );
 
 			if ( size > MERGE_THRESHOLD )
 			{
@@ -77,7 +77,7 @@ struct merge
 				Iterator input_end,
 				OutputIterator output )
 		{
-			const auto size = std::distance( input_begin, input_end );
+			const auto size = static_cast< decltype( MERGE_THRESHOLD ) >( std::distance( input_begin, input_end ) );
 
 			if ( size > MERGE_THRESHOLD )
 			{
