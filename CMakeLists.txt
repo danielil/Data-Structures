@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(DataStructureAlgorithms)
 
-set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror")
+set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror -pedantic")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")

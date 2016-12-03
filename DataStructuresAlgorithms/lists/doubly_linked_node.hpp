@@ -38,6 +38,6 @@ struct doubly_linked_node
 
 	T item = T();
 
-	std::shared_ptr< doubly_linked_node > previous = nullptr;
+	std::weak_ptr< doubly_linked_node > previous;
 	std::shared_ptr< doubly_linked_node > next = nullptr;
 };

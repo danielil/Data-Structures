@@ -4,18 +4,19 @@
  *
  * A doubly-linked implementation of a list combining both stack (LIFO) and queue (FIFO) operations.
  *
- * All insertions (push_front, push_back) and removals (pop_front, pop_back) are done in O(1) complexity
+ * All insertions (push_front, push_back) and removals (pop_front, pop_back) are done in constant time
  * since no traversal is done for these operations.
  *
- * Custom STL-style iterators for the list are also implemented. Mutable and const iterators share 
- * the same implementation through compile-time logic.
+ * STL-style iterators for the list are also implemented. Mutable and const iterators share
+ * the same implementation through template logic to determine constness.
  *
- * Two std::shared_ptr are used to keep track of the previous and next nodes. A better candidate for
- * one of these nodes might have been an std::weak_ptr since we don't actually need to keep track of 
- * two strong references to the same node (one strong and one weak reference would work). However,
- * trivial tasks such as forward or backward (depending on which node is the weak reference) 
- * iterations would be slowed down due to the construction of a new std::shared_ptr for every iterated
- * nodes.
+ * The previous and next links of the doubly linked list node are held by std::weak_ptr and
+ * std::shared_ptr, respectively. Since the previous link is held by a std::weak_ptr, forward
+ * iteration may be faster than reverse iteration. This is due to the construction of a new
+ * std::shared_ptr from std::weak_ptr links on every node iterated. However, this tradeoff
+ * is acceptable in contrast to potential memory leaks from not manually resetting double
+ * linkage to a single node. This would occur if the previous node were an std::shared_ptr
+ * instead of a std::weak_ptr.
  */
 
 #pragma once
@@ -30,7 +31,7 @@ namespace dsa
 	public:
 
 		// Iterator class for both mutable and const iterators.
-		template< bool is_const_iterator >
+		template< bool IsConstIterator >
 		class iterator_impl
 		{
 		public:
@@ -38,10 +39,10 @@ namespace dsa
 			using iterator_category = std::bidirectional_iterator_tag;
 			using value_type = T;
 			using difference_type = std::ptrdiff_t;
-			using pointer = typename std::conditional< is_const_iterator, T const * const, T >::type;
-			using reference = typename std::conditional< is_const_iterator, T const &, T >::type;
+			using pointer = typename std::conditional< IsConstIterator, T const * const, T >::type;
+			using reference = typename std::conditional< IsConstIterator, T const &, T >::type;
 
-			iterator_impl( doubly_linked_node< T >* const node ) :
+			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
 			{
 			}
@@ -72,7 +73,7 @@ namespace dsa
 			iterator_impl&
 			operator++()
 			{
-				this->node = this->node->next.get();
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -89,7 +90,7 @@ namespace dsa
 			iterator_impl&
 			operator--()
 			{
-				this->node = this->node->previous.get();
+				this->node = this->node->previous.lock();
 
 				return *this;
 			}
@@ -118,13 +119,13 @@ namespace dsa
 			bool
 			operator==( iterator_impl const & it ) const
 			{
-				if ( nullptr == this->node &&
-					 nullptr == it.node )
+				if ( !this->node &&
+					 !it.node )
 				{
 					return true;
 				}
 
-				if ( nullptr == it.node )
+				if ( !it.node )
 				{
 					return false;
 				}
@@ -139,11 +140,11 @@ namespace dsa
 			}
 
 		private:
-			doubly_linked_node< T >* node;
+			std::shared_ptr< doubly_linked_node< T > > node;
 		};
 
 		// Iterator class for both mutable and const reverse iterators.
-		template< bool is_const_iterator >
+		template< bool IsConstIterator >
 		class reverse_iterator_impl
 		{
 		public:
@@ -151,10 +152,10 @@ namespace dsa
 			using iterator_category = std::bidirectional_iterator_tag;
 			using value_type = T;
 			using difference_type = std::ptrdiff_t;
-			using pointer = typename std::conditional< is_const_iterator, T const * const, T >::type;
-			using reference = typename std::conditional< is_const_iterator, T const &, T >::type;
+			using pointer = typename std::conditional< IsConstIterator, T const * const, T >::type;
+			using reference = typename std::conditional< IsConstIterator, T const &, T >::type;
 
-			reverse_iterator_impl( doubly_linked_node< T >* const node ) :
+			reverse_iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
 			{
 			}
@@ -180,7 +181,7 @@ namespace dsa
 			reverse_iterator_impl&
 			operator++()
 			{
-				this->node = this->node->previous.get();
+				this->node = this->node->previous.lock();
 
 				return *this;
 			}
@@ -197,7 +198,7 @@ namespace dsa
 			reverse_iterator_impl&
 			operator--()
 			{
-				this->node = this->node->next.get();
+				this->node = this->node->next;
 
 				return *this;
 			}
@@ -226,13 +227,13 @@ namespace dsa
 			bool
 			operator==( reverse_iterator_impl const & it )
 			{
-				if ( nullptr == this->node &&
-					 nullptr == it.node )
+				if ( !this->node &&
+					 !it.node )
 				{
 					return true;
 				}
 
-				if ( nullptr == it.node )
+				if ( !it.node )
 				{
 					return false;
 				}
@@ -248,7 +249,7 @@ namespace dsa
 
 		private:
 
-			doubly_linked_node< T > * node;
+			std::shared_ptr< doubly_linked_node< T > > node;
 		};
 
 		using value_type = T;
@@ -276,15 +277,30 @@ namespace dsa
 			}
 		}
 
-		doubly_linked_list( doubly_linked_list&& other ) noexcept :
-			front( std::move( other.front ) ),
-			back( std::move( other.back ) ),
-			nodes( other.nodes )
+		doubly_linked_list( doubly_linked_list&& other ) noexcept
 		{
+			auto node = std::move( other.front );
+
+			while ( node )
+			{
+				this->push_back( node->item );
+				node = std::move( node->next );
+			}
+
+			// Since a node's previous link is a std::weak_ptr, there is always
+			// a single weak reference and a single strong reference to the
+			// front node. As a result, the front node doesn't need to be
+			// explicitly cleared. The default destructor would work here.
+			//
+			// On the other hand, since the next link of a node is a std::shared_ptr,
+			// there are always two strong references to the back node. That is, the
+			// back node itself and its previous link pointing to it. As a result,
+			// the back node needs to be explicitly cleared.
+			other.back = nullptr;
 			other.nodes = 0;
 		}
 
-		doubly_linked_list&
+		auto&
 		operator=( doubly_linked_list rhs )
 		{
 			this->swap( *this, rhs );
@@ -292,13 +308,13 @@ namespace dsa
 			return *this;
 		}
 
-		doubly_linked_list&
+		auto&
 		operator+( doubly_linked_list const & rhs )
 		{
 			return *this += rhs;
 		}
 
-		doubly_linked_list&
+		auto&
 		operator+=( doubly_linked_list const & rhs )
 		{
 			if ( !rhs.empty() )
@@ -319,7 +335,7 @@ namespace dsa
 		bool
 		operator==( doubly_linked_list const & rhs ) const noexcept
 		{
-			return this->equals( this->front.get(), rhs.front.get() );
+			return this->equals( this->front, rhs.front );
 		}
 
 		bool
@@ -380,7 +396,7 @@ namespace dsa
 			++( this->nodes );
 		}
 
-		T
+		auto
 		pop_front()
 		{
 			if ( this->empty() )
@@ -388,13 +404,11 @@ namespace dsa
 				return T();
 			}
 
-			T item = this->front->item;
-			auto next_node = std::move( this->front->next );
+			const T item = this->front->item;
+			auto& next_node = this->front->next;
 
 			if ( next_node )
 			{
-				next_node->previous = nullptr;
-
 				this->front = std::move( next_node );
 			}
 			else
@@ -408,7 +422,7 @@ namespace dsa
 			return item;
 		}
 
-		T
+		auto
 		pop_back()
 		{
 			if ( this->empty() )
@@ -416,14 +430,13 @@ namespace dsa
 				return T();
 			}
 
-			T item = this->back->item;
-			auto previous_node = std::move( this->back->previous );
+			const T item = this->back->item;
+			auto& previous_node = this->back->previous;
 
-			if ( previous_node )
+			if ( !previous_node.expired() )
 			{
-				previous_node->next = nullptr;
-
-				this->back = std::move( previous_node );
+				this->back = std::move( previous_node.lock() );
+				this->back->next = nullptr;
 			}
 			else
 			{
@@ -439,13 +452,25 @@ namespace dsa
 		void
 		clear() noexcept
 		{
-			while ( !this->empty() )
+			if ( !this->empty() )
 			{
-				this->pop_front();
+				while ( !this->front )
+				{
+					auto& next_node = this->front->next;
+
+					if ( next_node )
+					{
+						this->front = std::move( next_node );
+					}
+				}
+
+				this->front = nullptr;
+				this->back = nullptr;
+				this->nodes = 0;
 			}
 		}
 
-		T
+		auto
 		peek_front() const noexcept
 		{
 			if ( this->empty() )
@@ -456,7 +481,7 @@ namespace dsa
 			return this->front->item;
 		}
 
-		T
+		auto
 		peek_back() const noexcept
 		{
 			if ( this->empty() )
@@ -481,100 +506,98 @@ namespace dsa
 					 ( this->nodes == 0 ) );
 		}
 
-		iterator
+		auto
 		begin() noexcept
 		{
 			return iterator( this->first() );
 		}
 
-		iterator
+		auto
 		end() noexcept
 		{
 			return iterator( this->next( this->last() ) );
 		}
 
-		reverse_iterator
+		auto
 		rbegin() noexcept
 		{
 			return reverse_iterator( this->last() );
 		}
 
-		reverse_iterator
+		auto
 		rend() noexcept
 		{
 			return reverse_iterator( this->previous( this->first() ) );
 		}
 
-		const_iterator
+		auto
 		begin() const noexcept
 		{
 			return const_iterator( this->first() );
 		}
 
-		const_iterator
+		auto
 		end() const noexcept
 		{
 			return const_iterator( this->next( this->last() ) );
 		}
 
-		const_reverse_iterator
+		auto
 		rbegin() const noexcept
 		{
 			return const_reverse_iterator( this->last() );
 		}
 
-		const_reverse_iterator
+		auto
 		rend() const noexcept
 		{
 			return const_reverse_iterator( this->previous( this->first() ) );
 		}
 
-		const_iterator
+		auto
 		cbegin() const noexcept
 		{
-			return this->begin();
+			return const_iterator( this->begin() );
 		}
 
-		const_iterator
+		auto
 		cend() const noexcept
 		{
-			return this->end();
+			return const_iterator( this->end() );
 		}
 
-		const_reverse_iterator
+		auto
 		crbegin() const noexcept
 		{
-			return this->rbegin();
+			return const_reverse_iterator( this->rbegin() );
 		}
 
-		const_reverse_iterator
+		auto
 		crend() const noexcept
 		{
-			return this->rend();
+			return const_reverse_iterator( this->rend() );
 		}
 
 	private:
 
 		bool
 		equals(
-			doubly_linked_node< T > const * const node1,
-			doubly_linked_node< T > const * const node2 ) const noexcept
+			std::shared_ptr< doubly_linked_node< T > > const & node1,
+			std::shared_ptr< doubly_linked_node< T > > const & node2 ) const noexcept
 		{
-			if ( nullptr == node1 &&
-				 nullptr == node2 )
+			if ( !node1 && !node2 )
 			{
 				return true;
 			}
 
-			if ( nullptr == node1 ||
-				 nullptr == node2 )
+			if ( !node1 || !node2 )
 			{
 				return false;
 			}
 
 			if ( node1->item == node2->item )
 			{
-				return this->equals( node1->next.get(), node2->next.get() );
+				return this->equals( node1->next, node2->next );
 			}
 
 			return false;
@@ -583,25 +606,25 @@ namespace dsa
 		auto
 		first() const noexcept
 		{
-			return this->front.get();
+			return this->front;
 		}
 
 		auto
 		last() const noexcept
 		{
-			return this->back.get();
+			return this->back;
 		}
 
 		auto
-		next( doubly_linked_node< T > const * const current ) const noexcept
+		next( std::shared_ptr< doubly_linked_node< T > > const & current ) const noexcept
 		{
-			return current->next.get();
+			return current->next;
 		}
 
 		auto
-		previous( doubly_linked_node< T > const * const current ) const noexcept
+		previous( std::shared_ptr< doubly_linked_node< T > > const & current ) const noexcept
 		{
-			return current->previous.get();
+			return current->previous.lock();
 		}
 
 		std::shared_ptr< doubly_linked_node< T > > front = nullptr;
