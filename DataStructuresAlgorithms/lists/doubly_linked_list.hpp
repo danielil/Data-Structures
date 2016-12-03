@@ -30,6 +30,12 @@ namespace dsa
 	{
 	public:
 
+		using value_type = T;
+		using pointer = T*;
+		using const_pointer = T const * const;
+		using reference = T&;
+		using const_reference = T const &;
+
 		// Iterator class for both mutable and const iterators.
 		template< bool IsConstIterator >
 		class iterator_impl
@@ -37,10 +43,18 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = T;
+			using value_type = doubly_linked_list::value_type;
 			using difference_type = std::ptrdiff_t;
-			using pointer = typename std::conditional< IsConstIterator, T const * const, T >::type;
-			using reference = typename std::conditional< IsConstIterator, T const &, T >::type;
+			using pointer =
+				typename std::conditional<
+						IsConstIterator,
+						doubly_linked_list::const_pointer,
+						doubly_linked_list::pointer >::type;
+			using reference =
+				typename std::conditional<
+						IsConstIterator,
+						doubly_linked_list::const_reference,
+						doubly_linked_list::reference >::type;
 
 			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
@@ -52,11 +66,9 @@ namespace dsa
 			{
 			}
 
-			/**
-			 * Copy construction for const iterators is handled by the default
-			 * generated implementation. The copy constructor specialization for
-			 * mutable iterators allows for the conversion from mutable to const.
-			 */
+			 // Copy construction for const iterators is handled by the default
+			 // generated implementation. The copy constructor specialization for
+			 // mutable iterators allows for the conversion from mutable to const.
 			iterator_impl& operator=( iterator_impl< false > const & it )
 			{
 				this->node = it.node;
@@ -113,7 +125,7 @@ namespace dsa
 			pointer
 			operator->() const
 			{
-				return this->node;
+				return &( this->node->item );
 			}
 
 			bool
@@ -150,10 +162,18 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = T;
+			using value_type = doubly_linked_list::value_type;
 			using difference_type = std::ptrdiff_t;
-			using pointer = typename std::conditional< IsConstIterator, T const * const, T >::type;
-			using reference = typename std::conditional< IsConstIterator, T const &, T >::type;
+			using pointer =
+				typename std::conditional<
+					IsConstIterator,
+					doubly_linked_list::const_pointer,
+					doubly_linked_list::pointer >::type;
+			using reference =
+				typename std::conditional<
+					IsConstIterator,
+					doubly_linked_list::const_reference,
+					doubly_linked_list::reference >::type;
 
 			reverse_iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
@@ -221,7 +241,7 @@ namespace dsa
 			pointer
 			operator->() const
 			{
-				return this->node;
+				return &( this->node->item );
 			}
 
 			bool
@@ -251,12 +271,6 @@ namespace dsa
 
 			std::shared_ptr< doubly_linked_node< T > > node;
 		};
-
-		using value_type = T;
-		using pointer = T*;
-		using const_pointer = T const * const;
-		using reference = T&;
-		using const_reference = T const &;
 
 		using iterator = iterator_impl< false >;
 		using const_iterator = iterator_impl< true >;

@@ -469,6 +469,334 @@ namespace dsa
 		REQUIRE( list.empty() );
 	}
 
+	TEST_CASE( ( UNIT_NAME + "forward_iterator_increment" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		auto it_standard = std::begin( values );
+		auto prefix_increment_standard = ++it_standard;
+		const auto prefix_value_standard = *prefix_increment_standard;
+		auto postfix_increment_standard = prefix_increment_standard++;
+		const auto postfix_value_standard = *postfix_increment_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::begin( list );
+		auto prefix_increment_custom = ++it_custom;
+		const auto prefix_value_custom = *prefix_increment_custom;
+		auto postfix_increment_custom = prefix_increment_custom++;
+		const auto postfix_value_custom = *postfix_increment_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "const_forward_iterator_increment" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		auto it_standard = std::cbegin( values );
+		auto prefix_increment_standard = ++it_standard;
+		const auto prefix_value_standard = *prefix_increment_standard;
+		auto postfix_increment_standard = prefix_increment_standard++;
+		const auto postfix_value_standard = *postfix_increment_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::cbegin( list );
+		auto prefix_increment_custom = ++it_custom;
+		const auto prefix_value_custom = *prefix_increment_custom;
+		auto postfix_increment_custom = prefix_increment_custom++;
+		const auto postfix_value_custom = *postfix_increment_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "forward_iterator_decrement" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		const auto TARGET_POSITION = ITERATIONS / 2;
+
+		auto it_standard = std::begin( values );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_standard;
+		}
+
+		auto prefix_decrement_standard = --it_standard;
+		const auto prefix_value_standard = *prefix_decrement_standard;
+		auto postfix_decrement_standard = prefix_decrement_standard--;
+		const auto postfix_value_standard = *postfix_decrement_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::begin( list );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_custom;
+		}
+
+		auto prefix_decrement_custom = --it_custom;
+		const auto prefix_value_custom = *prefix_decrement_custom;
+		auto postfix_decrement_custom = prefix_decrement_custom--;
+		const auto postfix_value_custom = *postfix_decrement_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "const_forward_iterator_decrement" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		const auto TARGET_POSITION = ITERATIONS / 2;
+
+		auto it_standard = std::cbegin( values );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_standard;
+		}
+
+		auto prefix_decrement_standard = --it_standard;
+		const auto prefix_value_standard = *prefix_decrement_standard;
+		auto postfix_decrement_standard = prefix_decrement_standard--;
+		const auto postfix_value_standard = *postfix_decrement_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::cbegin( list );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_custom;
+		}
+
+		auto prefix_decrement_custom = --it_custom;
+		const auto prefix_value_custom = *prefix_decrement_custom;
+		auto postfix_decrement_custom = prefix_decrement_custom--;
+		const auto postfix_value_custom = *postfix_decrement_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "reverse_iterator_increment" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		auto it_standard = std::rbegin( values );
+		auto prefix_increment_standard = ++it_standard;
+		const auto prefix_value_standard = *prefix_increment_standard;
+		auto postfix_increment_standard = prefix_increment_standard++;
+		const auto postfix_value_standard = *postfix_increment_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::rbegin( list );
+		auto prefix_increment_custom = ++it_custom;
+		const auto prefix_value_custom = *prefix_increment_custom;
+		auto postfix_increment_custom = prefix_increment_custom++;
+		const auto postfix_value_custom = *postfix_increment_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "const_reverse_iterator_increment" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		auto it_standard = std::crbegin( values );
+		auto prefix_increment_standard = ++it_standard;
+		const auto prefix_value_standard = *prefix_increment_standard;
+		auto postfix_increment_standard = prefix_increment_standard++;
+		const auto postfix_value_standard = *postfix_increment_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::crbegin( list );
+		auto prefix_increment_custom = ++it_custom;
+		const auto prefix_value_custom = *prefix_increment_custom;
+		auto postfix_increment_custom = prefix_increment_custom++;
+		const auto postfix_value_custom = *postfix_increment_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "reverse_iterator_decrement" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		const auto TARGET_POSITION = ITERATIONS / 2;
+
+		auto it_standard = std::rbegin( values );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_standard;
+		}
+
+		auto prefix_decrement_standard = --it_standard;
+		const auto prefix_value_standard = *prefix_decrement_standard;
+		auto postfix_decrement_standard = prefix_decrement_standard--;
+		const auto postfix_value_standard = *postfix_decrement_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::rbegin( list );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_custom;
+		}
+
+		auto prefix_decrement_custom = --it_custom;
+		const auto prefix_value_custom = *prefix_decrement_custom;
+		auto postfix_decrement_custom = prefix_decrement_custom--;
+		const auto postfix_value_custom = *postfix_decrement_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
+	TEST_CASE( ( UNIT_NAME + "const_reverse_iterator_decrement" ).c_str() )
+	{
+		std::array< value_type, ITERATIONS > values;
+
+		generator< value_type > generator;
+		generator.fill_buffer(
+			std::begin( values ),
+			std::end( values ) );
+
+		doubly_linked_list< value_type > list;
+		std::copy(
+			std::cbegin( values ),
+			std::cend( values ),
+			std::back_inserter( list ) );
+
+		const auto TARGET_POSITION = ITERATIONS / 2;
+
+		auto it_standard = std::crbegin( values );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_standard;
+		}
+
+		auto prefix_decrement_standard = --it_standard;
+		const auto prefix_value_standard = *prefix_decrement_standard;
+		auto postfix_decrement_standard = prefix_decrement_standard--;
+		const auto postfix_value_standard = *postfix_decrement_standard;
+
+		REQUIRE( prefix_value_standard == postfix_value_standard );
+
+		auto it_custom = std::crbegin( list );
+		for ( std::size_t idx = 0; idx < TARGET_POSITION; ++idx )
+		{
+			++it_custom;
+		}
+
+		auto prefix_decrement_custom = --it_custom;
+		const auto prefix_value_custom = *prefix_decrement_custom;
+		auto postfix_decrement_custom = prefix_decrement_custom--;
+		const auto postfix_value_custom = *postfix_decrement_custom;
+
+		REQUIRE( prefix_value_custom == postfix_value_custom );
+
+		REQUIRE( prefix_value_standard == prefix_value_custom );
+		REQUIRE( postfix_value_standard == postfix_value_custom );
+	}
+
 	TEST_CASE( ( UNIT_NAME + "iterator_push_front_begin_end" ).c_str() )
 	{
 		std::array< value_type, ITERATIONS > values;
