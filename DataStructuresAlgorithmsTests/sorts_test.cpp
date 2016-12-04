@@ -15,6 +15,8 @@
 
 #include <catch.hpp>
 
+#include <array>
+
 namespace
 {
 	const std::string UNIT_NAME = "sort_";
