@@ -1,4 +1,7 @@
 /**
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
+ *
  * Utility class for generating random value from a distribution.
  */
 

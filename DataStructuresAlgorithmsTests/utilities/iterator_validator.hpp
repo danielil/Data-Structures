@@ -1,39 +1,44 @@
-template< typename OutputIterator, typename IteratorRetriever >
-bool
-is_valid_iterator(
-	OutputIterator begin,
-	OutputIterator end,
-	IteratorRetriever retriever )
+/**
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
+ *
+ * Validating iterators for generic containers.
+ */
+
+#include <iostream>
+
+namespace dsa
 {
-	const auto iterations = std::distance( begin, end );
-	std::array< value_type, iterations > values;
+	template< typename InputIterator >
+	bool
+	is_valid_iterator(
+		InputIterator begin,
+		InputIterator end )
+	{
+		const auto length = std::distance( begin, end );
 
-	generator< value_type > generator;
-	generator.fill_buffer(
-			std::begin( values ),
-			std::end( values ) );
+		// If we cannot perform std::prev( end ) because the end
+		// iterator points to null, then we must find another way
+		// to get the second-to-last element in the container.
+		const auto second_to_last = std::next( begin, length - 1 );
 
-	std::copy(
-			std::cbegin( values ),
-			std::cend( values ),
-			begin );
+		for ( auto it = begin; it != second_to_last; ++it )
+		{
+			const auto it_before_increment = it;
+			const auto postfix_increment_value = it++;
+			const auto postfix_increment_test = ( *it_before_increment == *postfix_increment_value );
 
-	auto it_standard = retriever( values );
-	auto prefix_increment_standard = ++it_standard;
-	const auto prefix_value_standard = *prefix_increment_standard;
-	auto postfix_increment_standard = prefix_increment_standard++;
-	const auto postfix_value_standard = *postfix_increment_standard;
+			const auto it_before_decrement = it;
+			const auto postfix_decrement_value = it--;
+			const auto postfix_decrement_test = ( *it_before_decrement == *postfix_decrement_value );
 
-	REQUIRE( prefix_value_standard == postfix_value_standard );
+			if ( !postfix_increment_test ||
+				 !postfix_decrement_test )
+			{
+				return false;
+			}
+		}
 
-	auto it_custom = begin;
-	auto prefix_increment_custom = ++it_custom;
-	const auto prefix_value_custom = *prefix_increment_custom;
-	auto postfix_increment_custom = prefix_increment_custom++;
-	const auto postfix_value_custom = *postfix_increment_custom;
-
-	REQUIRE( prefix_value_custom == postfix_value_custom );
-
-	REQUIRE( prefix_value_standard == prefix_value_custom );
-	REQUIRE( postfix_value_standard == postfix_value_custom );
+		return true;
+	}
 }

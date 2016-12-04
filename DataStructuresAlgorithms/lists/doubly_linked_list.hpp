@@ -47,14 +47,14 @@ namespace dsa
 			using difference_type = std::ptrdiff_t;
 			using pointer =
 				typename std::conditional<
-						IsConstIterator,
-						doubly_linked_list::const_pointer,
-						doubly_linked_list::pointer >::type;
+					IsConstIterator,
+					doubly_linked_list::const_pointer,
+					doubly_linked_list::pointer >::type;
 			using reference =
 				typename std::conditional<
-						IsConstIterator,
-						doubly_linked_list::const_reference,
-						doubly_linked_list::reference >::type;
+					IsConstIterator,
+					doubly_linked_list::const_reference,
+					doubly_linked_list::reference >::type;
 
 			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
@@ -349,7 +349,7 @@ namespace dsa
 		bool
 		operator==( doubly_linked_list const & rhs ) const noexcept
 		{
-			return this->equals( this->front, rhs.front );
+			return equals( this->front, rhs.front );
 		}
 
 		bool
@@ -594,29 +594,6 @@ namespace dsa
 
 	private:
 
-		bool
-		equals(
-			std::shared_ptr< doubly_linked_node< T > > const & node1,
-			std::shared_ptr< doubly_linked_node< T > > const & node2 ) const noexcept
-		{
-			if ( !node1 && !node2 )
-			{
-				return true;
-			}
-
-			if ( !node1 || !node2 )
-			{
-				return false;
-			}
-
-			if ( node1->item == node2->item )
-			{
-				return this->equals( node1->next, node2->next );
-			}
-
-			return false;
-		}
-
 		auto
 		first() const noexcept
 		{
@@ -629,16 +606,39 @@ namespace dsa
 			return this->back;
 		}
 
-		auto
-		next( std::shared_ptr< doubly_linked_node< T > > const & current ) const noexcept
+		static auto
+		next( std::shared_ptr< doubly_linked_node< T > > const & current ) noexcept
 		{
-			return current->next;
+			return current ? current->next : nullptr;
 		}
 
-		auto
-		previous( std::shared_ptr< doubly_linked_node< T > > const & current ) const noexcept
+		static auto
+		previous( std::shared_ptr< doubly_linked_node< T > > const & current ) noexcept
 		{
-			return current->previous.lock();
+			return current ? current->previous.lock() : nullptr;
+		}
+
+		static bool
+		equals(
+			std::shared_ptr< doubly_linked_node< T > > const & node1,
+			std::shared_ptr< doubly_linked_node< T > > const & node2 ) noexcept
+		{
+			if ( !node1 && !node2 )
+			{
+				return true;
+			}
+
+			if ( !node1 || !node2 )
+			{
+				return false;
+			}
+
+			if ( *node1 == *node2 )
+			{
+				return equals( next( node1 ), next( node2 ) );
+			}
+
+			return false;
 		}
 
 		std::shared_ptr< doubly_linked_node< T > > front = nullptr;
