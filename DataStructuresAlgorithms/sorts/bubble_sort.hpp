@@ -1,5 +1,6 @@
 /**
- * Daniel Sebastian Iliescu
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
  *
  * Implementation of bubble sort.
  */
@@ -9,42 +10,40 @@
 #include <utility>
 #include <iterator>
 
-namespace dsa {
-namespace sorts {
-
-struct bubble
+namespace dsa
 {
-	template < typename Iterator >
-	static void
-	sort(
-		Iterator begin,
-		Iterator end )
+	struct bubble
 	{
-		using std::swap;
-
-		for ( auto it = begin; it != end; ++it )
+		template < typename Iterator >
+		static void
+		sort(
+			Iterator begin,
+			Iterator end )
 		{
-			bool swapped = false;
+			using std::swap;
 
-			for ( auto shift_it = begin; shift_it != std::prev( end ); ++shift_it )
+			for ( auto it = begin; it != end; ++it )
 			{
-				auto current_item = shift_it;
-				auto next_item = std::next( shift_it );
+				bool swapped = false;
 
-				if ( *current_item > *next_item )
+				for ( auto shift_it = begin; shift_it != std::prev( end ); ++shift_it )
 				{
-					swap( *current_item, *next_item );
+					auto current_item = shift_it;
+					auto next_item = std::next( shift_it );
 
-					swapped = true;
+					if ( *current_item > *next_item )
+					{
+						swap( *current_item, *next_item );
+
+						swapped = true;
+					}
+				}
+
+				if ( !swapped )
+				{
+					break;
 				}
 			}
-
-			if ( !swapped )
-			{
-				break;
-			}
 		}
-	}
-};
-
-}}
+	};
+}

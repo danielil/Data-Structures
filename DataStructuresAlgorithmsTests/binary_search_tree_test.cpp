@@ -14,7 +14,7 @@
 
 namespace
 {
-	const std::string UNIT_NAME = "binary_search_tree";
+	const std::string UNIT_NAME = "binary_search_tree_";
 
 	using value_type = std::int32_t;
 	const auto ITERATIONS = 1000U;

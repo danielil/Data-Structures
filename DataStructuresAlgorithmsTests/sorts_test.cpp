@@ -1,5 +1,6 @@
 /**
- * Author: Daniel Sebastian Iliescu
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
  *
  * Tester for the various sorting algorithms.
  */
@@ -14,23 +15,18 @@
 
 #include <catch.hpp>
 
-#include <array>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-
 namespace
 {
-	const std::string UNIT_NAME = "sort";
+	const std::string UNIT_NAME = "sort_";
 }
 
-namespace dsa::sorts
+namespace dsa
 {
 	template< typename SortImplementation >
 	void sort_tester()
 	{
 		using value_type = std::int32_t;
-		const auto ITERATIONS = 1000U;
+		constexpr auto ITERATIONS = 1000U;
 
 		std::array< value_type, ITERATIONS > container;
 
@@ -56,7 +52,7 @@ namespace dsa::sorts
 
 	TEST_CASE( ( UNIT_NAME + "selection sort (std implementation)" ).c_str() )
 	{
-		sort_tester< selection >();
+		sort_tester< selection::std_implementation >();
 	}
 
 	TEST_CASE( ( UNIT_NAME + "selection sort (custom implementation)" ).c_str() )
@@ -66,7 +62,7 @@ namespace dsa::sorts
 
 	TEST_CASE( ( UNIT_NAME + "insertion sort (std implementation)" ).c_str() )
 	{
-		sort_tester< insertion >();
+		sort_tester< insertion::std_implementation >();
 	}
 
 	TEST_CASE( ( UNIT_NAME + "insertion sort (custom implementation)" ).c_str() )
@@ -76,7 +72,7 @@ namespace dsa::sorts
 
 	TEST_CASE( ( UNIT_NAME + "merge sort (std implementation)" ).c_str() )
 	{
-		sort_tester< merge >();
+		sort_tester< merge::std_implementation >();
 	}
 
 	TEST_CASE( ( UNIT_NAME + "merge sort (custom implementation)" ).c_str() )
@@ -86,7 +82,7 @@ namespace dsa::sorts
 
 	TEST_CASE( ( UNIT_NAME + "quick sort" ).c_str() )
 	{
-		sort_tester< quick >();
+		sort_tester< quick::std_implementation >();
 	}
 
 	TEST_CASE( ( UNIT_NAME + "quick sort (custom implementation)" ).c_str() )

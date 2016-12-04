@@ -1,5 +1,6 @@
 /**
- * Daniel Sebastian Iliescu
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
  *
  * A collection of helper functions for sorting.
  */
