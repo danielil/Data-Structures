@@ -12,6 +12,8 @@
 
 #include <catch.hpp>
 
+#include <array>
+
 namespace
 {
 	const std::string UNIT_NAME = "doubly_linked_list_";
