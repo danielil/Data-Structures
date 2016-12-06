@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/danielil/Data-Structures-Algorithms.svg?branch=master)](https://travis-ci.org/danielil/Data-Structures-Algorithms)
 
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/11074/badge.svg)](https://scan.coverity.com/projects/danielil-data-structures-algorithms)
+
 Data Structures and Algorithms
 ================
 
