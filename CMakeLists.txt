@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(DataStructureAlgorithms)
 
-if (CMAKE_CXX_COMPILER_ID MATCHES Clang) OR (CMAKE_CXX_COMPILER_ID MATCHES GNU)
+if (CMAKE_CXX_COMPILER_ID MATCHES Clang OR CMAKE_CXX_COMPILER_ID MATCHES GNU)
   set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror -pedantic")
 endif()
 
