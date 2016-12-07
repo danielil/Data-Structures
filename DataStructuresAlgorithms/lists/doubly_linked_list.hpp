@@ -30,12 +30,6 @@ namespace dsa
 	{
 	public:
 
-		using value_type = T;
-		using pointer = T*;
-		using const_pointer = T const * const;
-		using reference = T&;
-		using const_reference = T const &;
-
 		// Iterator class for both mutable and const iterators.
 		template< bool IsConstIterator >
 		class iterator_impl
@@ -43,18 +37,18 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = doubly_linked_list::value_type;
+			using value_type = T;
 			using difference_type = std::ptrdiff_t;
 			using pointer =
 				typename std::conditional<
 					IsConstIterator,
-					doubly_linked_list::const_pointer,
-					doubly_linked_list::pointer >::type;
+					T const * const,
+					T* >::type;
 			using reference =
 				typename std::conditional<
 					IsConstIterator,
-					doubly_linked_list::const_reference,
-					doubly_linked_list::reference >::type;
+					T const &,
+					T& >::type;
 
 			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
@@ -162,18 +156,18 @@ namespace dsa
 		public:
 
 			using iterator_category = std::bidirectional_iterator_tag;
-			using value_type = doubly_linked_list::value_type;
+			using value_type = T;
 			using difference_type = std::ptrdiff_t;
 			using pointer =
 				typename std::conditional<
 					IsConstIterator,
-					doubly_linked_list::const_pointer,
-					doubly_linked_list::pointer >::type;
+					T const * const,
+					T* >::type;
 			using reference =
 				typename std::conditional<
 					IsConstIterator,
-					doubly_linked_list::const_reference,
-					doubly_linked_list::reference >::type;
+					T const &,
+					T& >::type;
 
 			reverse_iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
 				node( node )
@@ -271,6 +265,15 @@ namespace dsa
 
 			std::shared_ptr< doubly_linked_node< T > > node;
 		};
+
+		using value_type = T;
+		using allocator_type = std::shared_ptr< T >;
+		using size_type = std::size_t;
+		using difference_type = std::ptrdiff_t;
+		using reference = T&;
+		using const_reference = T const &;
+		using pointer = T*;
+		using const_pointer = T const * const;
 
 		using iterator = iterator_impl< false >;
 		using const_iterator = iterator_impl< true >;
