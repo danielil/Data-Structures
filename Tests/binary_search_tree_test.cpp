@@ -14,10 +14,10 @@
 
 namespace
 {
-	const std::string UNIT_NAME = "binary_search_tree_";
+	// const std::string UNIT_NAME = "binary_search_tree_";
 
-	using value_type = std::int32_t;
-	const auto ITERATIONS = 1000U;
+	// using value_type = std::int32_t;
+	// const auto ITERATIONS = 1000U;
 }
 
 namespace dsa
