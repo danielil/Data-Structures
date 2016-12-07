@@ -15,8 +15,8 @@ namespace dsa
 	struct doubly_linked_node
 	{
 		doubly_linked_node() = default;
-		doubly_linked_node( T item ) :
-			item( item )
+		doubly_linked_node( T input_item ) :
+			item( input_item )
 		{
 		}
 		~doubly_linked_node() = default;

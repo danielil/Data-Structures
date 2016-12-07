@@ -50,8 +50,8 @@ namespace dsa
 					T const &,
 					T& >::type;
 
-			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
-				node( node )
+			iterator_impl( const std::shared_ptr< doubly_linked_node< T > > input_node ) :
+				node( input_node )
 			{
 			}
 
@@ -169,8 +169,8 @@ namespace dsa
 					T const &,
 					T& >::type;
 
-			reverse_iterator_impl( const std::shared_ptr< doubly_linked_node< T > > node ) :
-				node( node )
+			reverse_iterator_impl( const std::shared_ptr< doubly_linked_node< T > > input_node ) :
+				node( input_node )
 			{
 			}
 
