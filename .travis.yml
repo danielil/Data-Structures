@@ -47,8 +47,8 @@ addons:
       name: "danielil/Data-Structures-Algorithms"
       description: "Data Structure and Algorithms"
     notification_email: daniel.s.iliescu@gmail.com
-    build_command_prepend: "./configure"
-    build_command: "cmake make"
+    build_command_prepend: "cmake ."
+    build_command: "make"
     branch_pattern: coverity_scan
 
 script:
