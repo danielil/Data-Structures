@@ -31,14 +31,10 @@ before_install:
   - if [ "$CXX" == "clang++" ]; then sudo bash -c 'echo "deb-src http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main" >> /etc/apt/sources.list'; fi
 
   # CMake
-  - sudo mkdir ~/cmake_tmp
-  - cd ~/cmake_tmp
-  - sudo wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.1-Linux-x86_64.tar.gz
-  - sudo wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.1-Linux-x86_64.sh
+  - wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.1-Linux-x86_64.sh
   - sudo sh cmake-3.7.1-Linux-x86_64.sh --skip-license --prefix=/usr
 
   - sudo apt-get update
-  - sudo apt-get install cmake
 
 install:
   # GCC
