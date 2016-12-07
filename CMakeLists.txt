@@ -40,10 +40,11 @@ elseif( CMAKE_CXX_COMPILER_ID MATCHES MSVC )
 	target_compile_options(
 		${TEST_NAME}
 		PUBLIC ${MSVC_COMPILER_OPTIONS} )
-endif
+endif()
 
 # Specifying output settings
-set_target_properties( ${TEST_NAME}
+set_target_properties(
+	${TEST_NAME}
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
