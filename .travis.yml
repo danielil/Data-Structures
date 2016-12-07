@@ -45,7 +45,6 @@ addons:
   coverity_scan:
     project:
       name: "danielil/Data-Structures-Algorithms"
-      description: "Data Structure and Algorithms"
     notification_email: daniel.s.iliescu@gmail.com
     build_command_prepend: "cmake ."
     build_command: "make"
