@@ -5,23 +5,17 @@ env:
    - secure: "ic5Y6qMA3z97kYeSpqpjkQvpm96IfD2Pq5B96hLMiqj18tmVP1Da/vi/B7JAFVXKa/kctptn7Eupq1U+J/bvUz3O1Q6E/RpWRx6vgSbjReiZ1kAF+EkxZh4+iB3sk4VAYgr2JjMKhn7HSul2/+e8dk4auPjBVRg0J/q6UgDkQVd5jIw6Ac3lYn8x6wsjKX/1b488Rv7BXcGxhsWxXdO7H9Jih45GuZ6c7oyzlWmkRT0i2rE/OgXIQtJXdlbQbpfela2kEYQAotI1Scy+KQPoCxKgvEYuXCFCeqNiZFdzdN5mNWowA8zFwu1X7XOyLpzEPXBeJJmcju/mKz+5n4zNjWBpntzKJIGpUI4Y9IbEZwAe3HSmuSPmBuoNxK9Y+thKDxnMO6Gl8wkywoPzCBI3/+ekggMvPkY6BZm/jy/bApFZVWNMlaaa9VMCTwqMveqhbd3oDGfhYAO0xmizYABfYzHb4BjYOAyWNkTeqVSxJqYn88RBg2fM3ku66C02/iwhGqdrwhBy3asZSIfjZ92mmn4c8wObXSCLDzbo6+Esc0vpSj9EbAe+3+gR4F1EEXIuzumkXHT1Z+v+GElc9XJrQcQGCSBP0EKEkzNO1a4FUEmfk2jT4jgHbOWVvAzbiJzXn/EPbhkENtqGFGjnCfXOsxcafHusuKNa6oOjtyx3gEc="
 
 language: cpp
+
+os:
+  - linux
+
 sudo: required
+
 dist: trusty
   
 compiler:
   - gcc
   - clang
-
-matrix:
-  allow_failures:
-  - compiler: clang
-
-addons:
-  apt:
-    packages:
-      - software-properties-common
-      - python-software-properties
-      - cmake
 
 before_install:
   # Coverity
@@ -54,7 +48,7 @@ addons:
       description: "Data Structure and Algorithms"
     notification_email: daniel.s.iliescu@gmail.com
     build_command_prepend: "./configure"
-    build_command: "make"
+    build_command: "cmake make"
     branch_pattern: coverity_scan
 
 script:
