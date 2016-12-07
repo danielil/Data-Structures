@@ -1,7 +1,7 @@
 # Daniel Sebastian Iliescu, http://dansil.net
 # MIT License (MIT), http://opensource.org/licenses/MIT
 
-cmake_minimum_required( VERSION 3.2 )
+cmake_minimum_required( VERSION 3.5 )
 
 project( DataStructuresAlgorithms CXX )
 
