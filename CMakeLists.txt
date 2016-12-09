@@ -38,8 +38,12 @@ set_target_properties(
 
 # Additional compiler options
 # Remove -std=C++14 when properties above work properly
-set( CLANG_GNU_COMPILER_OPTIONS "-std=c++14" "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
-set( CLANG_COMPILER_OPTIONS "${CLANG_GNU_COMPILER_OPTIONS}" "-stdlib=libc++" )
+set( STANDARD_VERSION "-std=c++14" )
+
+set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
+
+set( GNU_COMPILER_OPTIONS ${STANDARD_VERSION} ${CLANG_GNU_COMPILER_OPTIONS} )
+set( CLANG_COMPILER_OPTIONS ${STANDARD_VERSION} "-stdlib=libc++" ${CLANG_GNU_COMPILER_OPTIONS} )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES Clang )
