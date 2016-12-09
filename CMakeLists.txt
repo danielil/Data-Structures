@@ -1,9 +1,9 @@
 # Daniel Sebastian Iliescu, http://dansil.net
 # MIT License (MIT), http://opensource.org/licenses/MIT
 
-cmake_minimum_required( VERSION 3.5 )
+cmake_minimum_required( VERSION 3.5.2 )
 
-project( DataStructuresAlgorithms )
+project( DataStructuresAlgorithms CXX )
 
 # Create the tester executable given the test source directory
 set( TEST_DIRECTORY Tests )
