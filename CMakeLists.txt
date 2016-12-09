@@ -3,7 +3,7 @@
 
 cmake_minimum_required( VERSION 3.5 )
 
-project( DataStructuresAlgorithms CXX )
+project( DataStructuresAlgorithms )
 
 # Create the tester executable given the test source directory
 set( TEST_DIRECTORY Tests )
@@ -37,13 +37,11 @@ set_target_properties(
 		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Additional compiler options
-set( CLANG_GNU_COMPILER_OPTIONS "-std=c++14" "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
-set( CLANG_COMPILER_OPTIONS "-stdlib=libc++" )
+set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
 
-if ( CMAKE_CXX_COMPILER_ID MATCHES Clang )
-	set( COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} ${CLANG_COMPILER_OPTIONS} )
-elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU )
+if ( CMAKE_CXX_COMPILER_ID MATCHES Clang OR
+	 CMAKE_CXX_COMPILER_ID MATCHES GNU )
 	set( COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} )
 elseif( CMAKE_CXX_COMPILER_ID MATCHES MSVC )
 	set( COMPILER_OPTIONS ${MSVC_COMPILER_OPTIONS} )
