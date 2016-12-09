@@ -15,37 +15,40 @@ add_executable( ${TEST_NAME} ${TEST_SOURCES} )
 set( SOURCE_HEADERS Sources/Includes )
 target_include_directories(
 	${TEST_NAME}
-	PUBLIC ${SOURCE_HEADERS} )
+	PRIVATE
+		${SOURCE_HEADERS} )
 
 # Include the external headers
 set( EXTERNAL_HEADERS External/Includes )
 target_include_directories(
 	${TEST_NAME}
-	PUBLIC ${EXTERNAL_HEADERS} )
+	PRIVATE
+		${EXTERNAL_HEADERS} )
 
-# Enforce C++14 standard
-set( CMAKE_CXX_STANDARD 14 )
-set( CMAKE_CXX_STANDARD_REQUIRED on )
+# Enforce C++14 standard and output settings
+set_target_properties(
+	${TEST_NAME}
+	PROPERTIES
+		CMAKE_CXX_STANDARD 14
+		CMAKE_CXX_STANDARD_REQUIRED on
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Additional compiler options
 set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
+set( CLANG_COMPILER_OPTIONS "-stdlib=libc++" )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
 
-if ( CMAKE_CXX_COMPILER_ID MATCHES Clang OR
-	 CMAKE_CXX_COMPILER_ID MATCHES GNU )
-	target_compile_options(
-		${TEST_NAME}
-		PUBLIC ${CLANG_GNU_COMPILER_OPTIONS} )
+if ( CMAKE_CXX_COMPILER_ID MATCHES Clang )
+	set( COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} ${CLANG_COMPILER_OPTIONS} )
+elseif( CMAKE_CXX_COMPILER_ID MATCHES GNU )
+	set( COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} )
 elseif( CMAKE_CXX_COMPILER_ID MATCHES MSVC )
-	target_compile_options(
-		${TEST_NAME}
-		PUBLIC ${MSVC_COMPILER_OPTIONS} )
+	set( COMPILER_OPTIONS ${MSVC_COMPILER_OPTIONS} )
 endif()
 
-# Specifying output settings
-set_target_properties(
-	${TEST_NAME}
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+target_compile_options(
+		${TEST_NAME}
+		PRIVATE
+			${COMPILER_OPTIONS} )
