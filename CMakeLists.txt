@@ -37,7 +37,7 @@ set_target_properties(
 		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Additional compiler options
-set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
+set( CLANG_GNU_COMPILER_OPTIONS "-std=c++14" "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
 set( CLANG_COMPILER_OPTIONS "-stdlib=libc++" )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
 
