@@ -8,8 +8,12 @@ project( DataStructuresAlgorithms CXX )
 # Create the tester executable given the test source directory
 set( TEST_DIRECTORY Tests )
 set( TEST_NAME ${PROJECT_NAME}${TEST_DIRECTORY} )
-file( GLOB_RECURSE TEST_SOURCES ${TEST_DIRECTORY}/*.cpp )
-add_executable( ${TEST_NAME} ${TEST_SOURCES} )
+add_executable(
+	${TEST_NAME}
+	${TEST_DIRECTORY}/tester.cpp
+	${TEST_DIRECTORY}/binary_search_tree_test.cpp
+	${TEST_DIRECTORY}/doubly_linked_list_test.cpp
+	${TEST_DIRECTORY}/sorts_test.cpp )
 
 # Include the source headers
 set( SOURCE_HEADERS Sources/Includes )
@@ -37,14 +41,9 @@ set_target_properties(
 		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # Additional compiler options
-# Remove -std=C++14 when properties above work properly
-set( STANDARD_VERSION "-std=c++14" )
-
 set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
-
-set( GNU_COMPILER_OPTIONS ${STANDARD_VERSION} ${CLANG_GNU_COMPILER_OPTIONS} )
-set( CLANG_COMPILER_OPTIONS ${STANDARD_VERSION} "-stdlib=libc++" ${CLANG_GNU_COMPILER_OPTIONS} )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
+set( CLANG_COMPILER_OPTIONS "-std=c++1z" ${CLANG_GNU_COMPILER_OPTIONS} "-stdlib=libc++" )
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES Clang )
 	set( COMPILER_OPTIONS ${CLANG_COMPILER_OPTIONS} )
