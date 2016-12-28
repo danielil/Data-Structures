@@ -42,8 +42,9 @@ set_target_properties(
 
 # Additional compiler options
 set( CLANG_GNU_COMPILER_OPTIONS "-Wall" "-Wextra" "-Werror" "-Wshadow" "-Wnon-virtual-dtor" "-pedantic" )
+set( CLANG_COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} )
+set( GNU_COMPILER_OPTIONS ${CLANG_GNU_COMPILER_OPTIONS} )
 set( MSVC_COMPILER_OPTIONS "/W4" "/WX" )
-set( CLANG_COMPILER_OPTIONS "-std=c++1z" ${CLANG_GNU_COMPILER_OPTIONS} "-stdlib=libc++" )
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES Clang )
 	set( COMPILER_OPTIONS ${CLANG_COMPILER_OPTIONS} )
@@ -54,6 +55,6 @@ elseif( CMAKE_CXX_COMPILER_ID MATCHES MSVC )
 endif()
 
 target_compile_options(
-		${TEST_NAME}
-		PRIVATE
-			${COMPILER_OPTIONS} )
+	${TEST_NAME}
+	PRIVATE
+		${COMPILER_OPTIONS} )
