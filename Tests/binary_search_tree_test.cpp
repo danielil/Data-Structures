@@ -1,9 +1,9 @@
 /**
-* Daniel Sebastian Iliescu, http://dansil.net
-* MIT License (MIT), http://opensource.org/licenses/MIT
-*
-* Tester for the Binary Search Tree.
-*/
+ * Daniel Sebastian Iliescu, http://dansil.net
+ * MIT License (MIT), http://opensource.org/licenses/MIT
+ *
+ * Tester for the Binary Search Tree.
+ */
 
 //#include "trees/binary_search_tree.hpp"
 
