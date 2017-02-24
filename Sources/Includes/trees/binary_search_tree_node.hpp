@@ -43,8 +43,8 @@ namespace dsa
 			return !( *this == rhs );
 		}
 
-		Key key = T();
-		Value value = T();
+		Key key = Key();
+		Value value = Value();
 
 		std::unique_ptr< binary_search_tree_node > left;
 		std::unique_ptr< binary_search_tree_node > right;
