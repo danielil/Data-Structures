@@ -189,7 +189,7 @@ namespace dsa
 		{
 			auto node = other.front_node;
 
-			while ( this->valid_node( node ) )
+			while ( other.valid_node( node ) )
 			{
 				this->push_back( node->item );
 				node = node->next;
@@ -197,6 +197,7 @@ namespace dsa
 		}
 
 		doubly_linked_list( doubly_linked_list&& other ) noexcept :
+			allocator( other.allocator ),
 			front_node( other.front_node ),
 			back_node( other.back_node ),
 			sentinel( std::move( other.sentinel ) ),
