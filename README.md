@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/danielil/Data-Structures-Algorithms.svg?branch=master)](https://travis-ci.org/danielil/Data-Structures-Algorithms) [![Build status](https://ci.appveyor.com/api/projects/status/s5u70x77ekqn5npl?svg=true)](https://ci.appveyor.com/project/danielil/data-structures-algorithms)
-
 Data Structures and Algorithms
 ================
 
-A collection of C++ data structures and algorithms (lists, trees, graphs, sorting algorithms, etc.). This collection is not intended for production use.
+A collection of C++ data structures and algorithms (lists, trees, graphs, sorting algorithms, etc.).
+
+This collection is not intended for production use. It is mostly intended for personal learning and application of newer C++ concepts.
 
 About
 ------------------
@@ -14,9 +14,11 @@ License: `MIT License (MIT), http://opensource.org/licenses/MIT`
 Requirements
 ------------------
 
-A compiler supporting a subset of C++ 14 is required.
+C++17 conforming compiler.
 
-Limitations
+Notes and Limitations
 ------------------
 
-Limited tests exist for lists and sorting algorithms. More tests are underway.
+Most of the data structures are written using pre-C++11 style. I have started refactoring them to incorporate C++11, C++14, and C++17 features.
+
+As a result, the only data structure that I consider to be modernly re-written is the doubly_linked_list. This data structure has also been updated to support iterators and allocators. It is also the only data structure with unit tests. Refactoring for the other files is in-progress.
